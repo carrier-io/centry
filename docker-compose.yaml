@@ -1,0 +1,114 @@
+version: '3'
+services:
+  traefik:
+    image: traefik:picodon
+    environment:
+      - TRAEFIK_PROVIDERS_REDIS_ENDPOINTS=redis:6379
+      - TRAEFIK_PROVIDERS_REDIS_ROOTKEY=traefik
+      - TRAEFIK_PROVIDERS_REDIS_PASSWORD=redispassword
+      - TRAEFIK_API_DASHBOARD=true
+      - TRAEFIK_PING_MANUALROUTING=true
+      - TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_HTTP_FORWARDEDHEADERS_TRUSTEDIPS=127.0.0.1/32
+      - TRAEFIK_LOG_FORMAT=common
+      - TRAEFIK_LOG_LEVEL=DEBUG
+    networks:
+      - pylon
+    ports:
+      - 80:80
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - pylon
+    container_name: carrier-redis
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_VHOST=carrier
+    networks:
+      - pylon
+    ports:
+      - 15672:15672
+      - 5672:5672
+    depends_on:
+      - redis
+
+  postgres:
+    image: postgres:12.2
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    container_name: carrier-postgres
+    volumes:
+      - postge-data:/var/lib/postgresql/data
+      - ./config/extras/postgre_schemas.sh:/docker-entrypoint-initdb.d/postgre_schemas.sh
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_SCHEMAS=$DB_POSTGRES_SCHEMAS
+      - POSTGRES_INITDB_ARGS=$POSTGRES_INITDB_ARGS
+    networks:
+      - pylon
+
+  vault:
+    image: vault:1.4.2
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    environment:
+      - 'VAULT_LOCAL_CONFIG={"disable_mlock":true,"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable": 1}},"storage":{"postgresql":{"connection_url":"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"}},"ui":false}'
+    command: vault server -config=/vault/config/local.json
+    ports:
+    - 8200:8200
+    networks:
+      - pylon
+    depends_on:
+      - postgres
+    container_name: carrier-vault
+
+  minio:
+    image: minio/minio:latest
+    command: server /data
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - 9000:9000
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+    volumes:
+      - minio-data:/data
+    networks:
+      - pylon
+    container_name: carrier-minio
+
+volumes:
+  postge-data:
+  redis-data:
+  minio-data:
+
+networks:
+  pylon:

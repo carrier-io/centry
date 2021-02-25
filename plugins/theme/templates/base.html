@@ -1,0 +1,22 @@
+{% include 'common/head.html' %}
+<!-- Too add page specific imports -->
+</head>
+<body>
+<!-- Data passed before we rendering the template -->
+{{ template_slot("navbar", payload=config)|safe }}
+
+{{ template_slot("page_content", payload=config)|safe }}
+
+{% include 'common/foot.html' %}
+<!-- Too add page specific scripts -->
+<script>
+$(document).ready(function() {
+    {% for item in config.projects %}
+    {% if item.selected %}
+    selectProject({ name: "{{item.name}}", id: {{item.id}} })
+    {% endif %}
+    {% endfor %}
+});
+</script>
+</body>
+</html>

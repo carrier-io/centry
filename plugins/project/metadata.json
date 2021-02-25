@@ -1,0 +1,8 @@
+{
+  "name": "Carrier Project RestAPI Plugin",
+  "version": "0.1",
+  "module": "plugins.project",
+  "extract": false,
+  "depends_on": ["base"],
+  "init_after": []
+}
