@@ -46,7 +46,7 @@
                             <div class="col-2"></div>
                         </div>
                         <div class="mt-3">
-                            <div id="slider"></div>
+                            <div id="vuh-slider"></div>
                         </div>
                         <div class="overflow-y small-table">
                             <span>
@@ -344,7 +344,7 @@
 <script src="{{ url_for('static', filename='vendor/wizard/wizard.js') }}"></script>
 <script>
 $(document).ready(function() {
-    noUiSlider.create($("#slider")[0], {
+    noUiSlider.create($("#vuh-slider")[0], {
         start: 500,
         range: {
             'min': 500,
@@ -355,7 +355,7 @@ $(document).ready(function() {
             decimals: 0
         })
     })
-    $("#slider")[0].noUiSlider.on('update', function (values, handle, unencoded, isTap, positions) {
+    $("#vuh-slider")[0].noUiSlider.on('update', function (values, handle, unencoded, isTap, positions) {
         var vuh = parseInt(values[handle])
         var cost = vuh === 500 ? "FREE" : `${vuh * 0.1} $`
         $("#vuh").text(vuh);

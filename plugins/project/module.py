@@ -90,7 +90,8 @@ class Module(module.ModuleModel):
         """ Init module """
         log.info("Initializing module Projects")
         init_db()
-        from .api.project import ProjectAPI, ProjectSessionAPI
+        from .api.project import ProjectAPI
+        from .api.projectsession import ProjectSessionAPI
         from .api.statistics import StatisticAPI
         from .api.quota import QuotaAPI
         add_resource_to_api(self.context.api, ProjectAPI, "/project", "/project/<int:project_id>")

@@ -55,7 +55,7 @@ def build_req_parser(rules: tuple, location=("json", "values")) -> reqparse.Requ
 
 def add_resource_to_api(api: Api, resource: Resource, *urls, **kwargs) -> None:
     # This /api/v1 thing is made here to be able to register auth endpoints for local development
-    urls = (*(f"/api/v2{url}" for url in urls), *(f"/api/v2{url}/" for url in urls))
+    urls = (*(f"/api/v1{url}" for url in urls), *(f"/api/v1{url}/" for url in urls))
     api.add_resource(resource, *urls, **kwargs)
 
 
@@ -90,18 +90,18 @@ def get(project_id, args, data_model, additional_filter=None):
 def upload_file(bucket, f, project, create_if_not_exists=True):
     name = f.filename
     content = f.read()
-    f.seek(0, 2)
-    file_size = f.tell()
-    try:
-        f.remove()
-    except:
-        pass
-    from flask import current_app
-    storage_space_quota = current_app.config["rpc"].call("project", "get_storage_space_quota", project_id=project["id"])
-    statistic = current_app.config["rpc"].call("project", "statistics", project_id=project["id"])
-
-    if storage_space_quota != -1 and statistic['storage_space'] + file_size > storage_space_quota * 1000000:
-        raise Forbidden(description="The storage space limit allowed in the project has been exceeded")
+    # f.seek(0, 2)
+    # file_size = f.tell()
+    # try:
+    #     f.remove()
+    # except:
+    #     pass
+    # from flask import current_app
+    # storage_space_quota = current_app.config["rpc"].call("project", "get_storage_space_quota", project_id=project["id"])
+    # statistic = current_app.config["rpc"].call("project", "statistics", project_id=project["id"])
+    #
+    # if storage_space_quota != -1 and statistic['storage_space'] + file_size > storage_space_quota * 1000000:
+    #     raise Forbidden(description="The storage space limit allowed in the project has been exceeded")
     if create_if_not_exists:
         if bucket not in MinioClient(project=project).list_bucket():
             MinioClient(project=project).create_bucket(bucket)
