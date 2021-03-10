@@ -11,26 +11,24 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
-
+import logging
 from json import dumps
 from typing import Optional, Union, Tuple
 from datetime import datetime
-from flask import current_app
 from flask_restful import Resource
 
 from plugins.base.utils.api_utils import build_req_parser
 from plugins.base.connectors.auth import (SessionProject, SessionUser, superadmin_required)
 
-from ..connectors.grafana import set_grafana_datasources
 from ..connectors.secrets import (initialize_project_space, remove_project_space,
                                   set_project_secrets, set_project_hidden_secrets)
 
 from ..connectors.influx import create_project_databases, drop_project_databases
 
 from plugins.base.constants import (POST_PROCESSOR_PATH, CONTROL_TOWER_PATH, APP_IP, APP_HOST,
-                                     EXTERNAL_LOKI_HOST, INFLUX_PORT, LOKI_PORT,
-                                     INFLUX_PASSWORD, INFLUX_USER, GF_API_KEY, RABBIT_USER,
-                                     RABBIT_PASSWORD, REDIS_PASSWORD)
+                                    EXTERNAL_LOKI_HOST, INFLUX_PORT, LOKI_PORT,
+                                    INFLUX_PASSWORD, INFLUX_USER, GF_API_KEY, RABBIT_USER,
+                                    RABBIT_PASSWORD, REDIS_PASSWORD)
 
 from ..models.project import Project
 from ..models.statistics import Statistic
@@ -46,16 +44,8 @@ class ProjectAPI(Resource):
     post_rules = (
         dict(name="name", type=str, location="json"),
         dict(name="owner", type=str, default=None, location="json"),
-        dict(name="dast_enabled", type=str, default=None, location="json"),
-        dict(name="sast_enabled", type=str, default=None, location="json"),
-        dict(name="performance_enabled", type=str, default=None, location="json"),
-        dict(name="package", type=str, default='custom', location="json"),
-        dict(name="perf_tests_limit", type=int, default=100, location="json"),
-        dict(name="ui_perf_tests_limit", type=int, default=100, location="json"),
-        dict(name="sast_scans_limit", type=int, default=100, location="json"),
-        dict(name="dast_scans_limit", type=int, default=100, location="json"),
-        dict(name="tasks_count_limit", type=int, default=3, location="json"),
-        dict(name="task_executions_limit", type=int, default=200, location="json"),
+        dict(name="plugins", type=list, default=None, location="json"),
+        dict(name="vuh_limit", type=int, default=500, location="json"),
         dict(name="storage_space_limit", type=int, default=100, location="json"),
         dict(name="data_retention_limit", type=int, default=30, location="json")
     )
@@ -79,41 +69,25 @@ class ProjectAPI(Resource):
         data = self._parser_post.parse_args()
         name_ = data["name"]
         owner_ = data["owner"]
-        package = data["package"].lower()
-        dast_enabled_ = False if data["dast_enabled"] == "disabled" else True
-        sast_enabled_ = False if data["sast_enabled"] == "disabled" else True
-        performance_enabled_ = False if data["performance_enabled"] == "disabled" else True
-        perf_tests_limit = data["perf_tests_limit"]
-        ui_perf_tests_limit = data["ui_perf_tests_limit"]
-        sast_scans_limit = data["sast_scans_limit"]
-        dast_scans_limit = data["dast_scans_limit"]
-        tasks_count_limit = data["tasks_count_limit"]
-        task_executions_limit = data["task_executions_limit"]
+        vuh_limit = data["vuh_limit"]
+        plugins = data["plugins"]
         storage_space_limit = data["storage_space_limit"]
         data_retention_limit = data["data_retention_limit"]
-
         project = Project(
             name=name_,
-            dast_enabled=dast_enabled_,
-            project_owner=owner_,
-            sast_enabled=sast_enabled_,
-            performance_enabled=performance_enabled_,
-            package=package
+            plugins=plugins,
+            project_owner=owner_
         )
         project_secrets = {}
         project_hidden_secrets = {}
         project.insert()
         SessionProject.set(project.id)  # Looks weird, sorry :D
-        if package == "custom":
-            getattr(quota, "custom")(project.id, perf_tests_limit, ui_perf_tests_limit, sast_scans_limit,
-                                     dast_scans_limit, -1, storage_space_limit, data_retention_limit,
-                                     tasks_count_limit, task_executions_limit)
-        else:
-            getattr(quota, package)(project.id)
+        quota.create(project.id, vuh_limit, storage_space_limit, data_retention_limit)
 
         statistic = Statistic(
             project_id=project.id,
             start_time=str(datetime.utcnow()),
+            vuh_used=0,
             performance_test_runs=0,
             sast_scans=0,
             dast_scans=0,
@@ -186,7 +160,7 @@ class ProjectAPI(Resource):
         set_project_secrets(project.id, project_secrets)
         set_project_hidden_secrets(project.id, project_hidden_secrets)
         create_project_databases(project.id)
-        set_grafana_datasources(project.id)
+        # set_grafana_datasources(project.id)
         return {"message": f"Project was successfully created"}, 200
 
     def put(self, project_id: Optional[int] = None) -> Tuple[dict, int]:
@@ -217,39 +191,3 @@ class ProjectAPI(Resource):
         Project.apply_full_delete_by_pk(pk=project_id)
         remove_project_space(project_id)
         return {"message": f"Project with id {project_id} was successfully deleted"}, 200
-
-
-class ProjectSessionAPI(Resource):
-    post_rules = (
-        dict(name="username", type=str, required=True, location="json"),
-        dict(name="groups", type=list, required=True, location="json")
-    )
-
-    def __init__(self):
-        self.__init_req_parsers()
-
-    def __init_req_parsers(self):
-        self._parser_post = build_req_parser(rules=self.post_rules)
-
-    def get(self, project_id: Optional[int] = None) -> Tuple[dict, int]:
-        if not project_id:
-            project_id = SessionProject.get()
-        if project_id:
-            project = Project.get_or_404(project_id)
-            return project.to_json(exclude_fields=Project.API_EXCLUDE_FIELDS), 200
-        return {"message": "No project selected in session"}, 404
-
-    def post(self, project_id: Optional[int] = None) -> Tuple[dict, int]:
-        args = self._parser_post.parse_args()
-        SessionUser.set(dict(username=args["username"], groups=args.get("groups")))
-        if project_id:
-            project = Project.get_or_404(project_id)
-            SessionProject.set(project.id)
-            return {"message": f"Project with id {project.id} was successfully selected"}, 200
-        return {"message": "user session configured"}, 200
-
-    def delete(self, project_id: int) -> Tuple[dict, int]:
-        project = Project.get_or_404(project_id)
-        if SessionProject.get() == project.id:
-            SessionProject.pop()
-        return {"message": f"Project with id {project.id} was successfully unselected"}, 200

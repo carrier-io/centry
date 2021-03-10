@@ -105,11 +105,28 @@ services:
     networks:
       - pylon
     container_name: carrier-minio
+  influx:
+    image: influxdb:1.7
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_META_DIR=$INFLUXDB_META_DIR
+      - INFLUXDB_DATA_DIR=$INFLUXDB_DATA_DIR
+      - INFLUXDB_DATA_WAL_DIR=$INFLUXDB_DATA_WAL_DIR
+      - INFLUXDB_HTTP_ENABLED=$INFLUXDB_HTTP_ENABLED
+    volumes:
+      - influx-data:/var/lib/influxdb/data
+    ports:
+      - 8086:8086
+    labels:
+      - 'traefik.enable=false'
+    container_name: carrier-influx
 
 volumes:
   postgre-data:
   redis-data:
   minio-data:
+  influx-data:
+  grafana-data:
 
 networks:
   pylon:

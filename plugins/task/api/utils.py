@@ -8,6 +8,7 @@ from arbiter import Arbiter
 
 from plugins.base.constants import RABBIT_HOST, RABBIT_PORT, RABBIT_USER, RABBIT_PASSWORD, RABBIT_QUEUE_NAME
 from plugins.base.utils.api_utils import upload_file
+from plugins.base.data_utils.file_utils import File
 from ..models.tasks import Task
 from ..models.results import Results
 
@@ -18,6 +19,8 @@ def get_arbiter():
 
 
 def create_task(project, file, args):
+    if isinstance(file, str):
+        file = File(file)
     filename = str(uuid4())
     filename = secure_filename(filename)
     upload_file(bucket="tasks", f=file, project=project)

@@ -3,7 +3,7 @@
 {%else%}
 {%set chapter=config.default_chapter %}
 {%endif%}
-<header class="row navbar navbar-horizontal navbar-expand-xxl bg-primary-light p-0 m-0">
+<header class="row navbar navbar-horizontal navbar-expand-xxl bg-white p-0 m-0">
     <div class="col bg-primary mt-0 logo-col">
         <div class="row">
             <div class="col logo-svg">
@@ -16,7 +16,7 @@
                      <span id="selected-chapter" class="nav-link-inner--text d-lg-inline-block navbar-brand">{{chapter}}</span>
                 </a>
                 <div id="chapter-dropdown-items" class="dropdown-menu" aria-labelledby="chapter-dropdown">
-                    {% for item in config.project_structure.chapters %}
+                    {% for item in config.chapters %}
                     {%if item.title != chapter %}
                     <a class="dropdown-item" href="{{item.link}}">{{item.title}}</a>
                     {% endif %}
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <ul class="navbar-nav main-nav">
-                {% for item in config.project_structure.chapters %}
+                {% for item in config.chapters %}
                 {%if item.title == chapter %}
                     {% for subitem in item.nav %}
                     <li class="nav-item">
@@ -86,8 +86,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="projects-dropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span id="selected-project"
-                                  class="nav-link-inner--text d-lg-inline-block">{% if config.active_project %} {{config.active_project}} {%else%} Select Project {%endif%}</span>
-                            <span id="selected-project-id" hidden>{% if config.active_project %} {{config.active_project_id}} {%endif%}</span>
+                                  class="nav-link-inner--text d-lg-inline-block">{% if config.name %} {{config.name}} {%else%} Select Project {%endif%}</span>
+                            <span id="selected-project-id" hidden>{% if config.name %} {{config.id}} {%endif%}</span>
                         </a>
                         <div id="projects-dropdown-items" class="dropdown-menu" aria-labelledby="projects-dropdown">
                             <a class="dropdown-item" href="#">Create Project</a>

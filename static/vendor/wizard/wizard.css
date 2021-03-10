@@ -30,13 +30,6 @@ figure {
 .clear {
   clear: both; }
 
-h2 {
-  font-size: 16px;
-  color: #222;
-  font-weight: bold;
-  margin: 0px;
-  padding-bottom: 5px; }
-
 body {
   font-size: 14px;
   line-height: 1.6;

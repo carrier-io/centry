@@ -25,7 +25,25 @@
             return true;
         },
         onFinished: function(event, currentIndex) {
-            alert('Submitted');
+            var plugins = []
+            $('input[type="checkbox"]:checked').each(function(index, item){
+                plugins.push(item.id)
+            })
+            var project_data = {
+                name: $("#project_name").val(),
+                owner: "",
+                vuh_limit: $("#vuh-slider")[0].noUiSlider.get(),
+                plugins: plugins
+            }
+            $.ajax({
+                url: `/api/v1/project`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(project_data),
+                success: function (result) {
+                    window.location.href = "/?chapter=Manage%20Project"
+                }
+            });
         }
     });
 

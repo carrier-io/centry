@@ -15,11 +15,45 @@
 import logging
 from typing import Optional
 from flask import abort
-from sqlalchemy import String, Column, Integer, JSON, Boolean, and_
+from sqlalchemy import String, Column, Integer, JSON, ARRAY, Text, and_
 
 from plugins.base.models.abstract_base import AbstractBaseMixin
 from plugins.base.db_manager import Base, db_session
 from plugins.base.connectors.auth import SessionProject, is_user_part_of_the_project, only_users_projects
+
+def user_is_project_admin():
+    # this one need to be implemented in user permissions
+    return True
+
+def user_is_project_contributor():
+    # this one need to be implemented in user permissions
+    return True
+
+def user_is_project_viewer():
+    # this one need to be implemented in user permissions
+    return True
+
+def whomai():
+    # Get user name from session
+    return "User"
+
+def get_enabled_regions():
+    # Get user name from project_intergations_config
+    return ["default", "us-east", "us-west", "eu-central"]
+
+def get_project_integrations():
+    # Get user name from project_intergations_config
+    return ["rp", "ado", "email"]
+
+def get_user_projects():
+    # List of groups/projects user is part of
+    return [{"name": "PMI", "id": 1}, {"name": "Alfresco", "id": 2}, {"name": "Verifone 2Checkout", "id": 3}]
+
+def last_visited_chapter():
+    return "Performance"
+
+def get_active_project():
+    return SessionProject.get()
 
 
 class Project(AbstractBaseMixin, Base):
@@ -32,16 +66,14 @@ class Project(AbstractBaseMixin, Base):
     project_owner = Column(String(256), unique=False)
     secrets_json = Column(JSON, unique=False, default={})
     worker_pool_config_json = Column(JSON, unique=False, default={})
-    package = Column(String, nullable=False, default="basic")
-    dast_enabled = Column(Boolean, nullable=False, default=False)
-    sast_enabled = Column(Boolean, nullable=False, default=False)
-    performance_enabled = Column(Boolean, nullable=False, default=False)
+    plugins = Column(ARRAY(Text), unique=False, default={})
 
     def insert(self) -> None:
         super().insert()
         from plugins.base.connectors.minio import MinioClient
-        MinioClient(project=self).create_bucket(bucket="reports")
-        MinioClient(project=self).create_bucket(bucket="tasks")
+        MinioClient(project=self.to_json()).create_bucket(bucket="reports")
+        MinioClient(project=self.to_json()).create_bucket(bucket="tasks")
+        SessionProject.set(self.id)
 
     def used_in_session(self):
         selected_id = SessionProject.get()
@@ -49,8 +81,60 @@ class Project(AbstractBaseMixin, Base):
 
     def to_json(self, exclude_fields: tuple = ()) -> dict:
         json_data = super().to_json(exclude_fields=exclude_fields)
-        json_data["used_in_session"] = self.used_in_session()
+        # json_data["used_in_session"] = self.used_in_session()
+        json_data["chapters"] = self.compile_chapters()
+        json_data["username"] = whomai()
+        json_data["projects"] = get_user_projects()
+        json_data["integrations"] = get_project_integrations()
+        json_data["regions"] = get_enabled_regions()
+        json_data["default_chapter"] = last_visited_chapter()
         return json_data
+
+    def compile_chapters(self):
+        chapters = []
+        if user_is_project_admin():
+            chapters.append({
+                "title": "Manage Project", "link": "?chapter=Manage%20Project",
+                "nav": [
+                    {"title": "Users", "link": "?chapter=Manage%20Project&module=Users&page=all", "active": True},
+                    {"title": "Quotas", "link": "?chapter=Manage%20Project&module=Quotas&page=all"},
+                    {"title": "Integrations", "link": "?chapter=Manage%20Project&module=Integrations&page=all"},
+                    {"title": "Plugins", "link": "?chapter=Manage%20Project&module=Plugins&page=all"}
+                ]
+            })
+        if 'dashboards' in self.plugins:
+            chapters.append({
+                "title": "Dashboards", "link": "?chapter=Dashboards",
+                "nav": [
+                    {"title": "Dashboards", "link": "?chapter=Dashboards&module=List&page=all", "active": True},
+                    {"title": "Data Explorer", "link": "?chapter=Dashboards&module=Explorer&page=all"},
+                    {"title": "Group Projects", "link": "?chapter=Dashboards&module=Group&page=all"},
+                ]
+            })
+        if any( plugin in ["backend", "visual"] for plugin in self.plugins):
+            nav = [{"title": "Overview", "link": "?chapter=Performance&module=Overview&page=overview", "active": True}]
+            if "backend" in self.plugins:
+                nav.append({"title": "Backend", "link": "?chapter=Performance&module=Backend&page=backend"})
+            if "visual" in self.plugins:
+                nav.append({"title": "Visual", "link": "?chapter=Performance&module=Visual&page=visual"})
+            nav.append({"title": "Results", "link": "?chapter=Performance&module=Results&page=reports"})
+            nav.append({"title": "Thresholds", "link": "?chapter=Performance&module=Thresholds&page=thresholds"})
+            chapters.append({"title": "Performance", "link": "?chapter=Performance", "nav": nav})
+        if any (plugin in ["cloud", "infra", "code", "application"] for plugin in self.plugins):
+            nav = [{"title": "Overview", "link": "?chapter=Security&module=Overview&page=overview", "active": True}]
+            if "code" in self.plugins:
+                nav.append({"title": "Code", "link": "?chapter=Security&module=Code&page=overview"})
+            if "application" in self.plugins:
+                nav.append({"title": "App", "link": "?chapter=Security&module=App&page=overview"})
+            if "cloud" in self.plugins:
+                nav.append({"title": "Cloud", "link": "?chapter=Security&module=Cloud&page=overview"})
+            if "infra" in self.plugins:
+                nav.append({"title": "Infra", "link": "?chapter=Security&module=Infra&page=overview"})
+            nav.append({"title": "Results", "link": "?chapter=Security&module=Results&page=all"})
+            nav.append({"title": "Thresholds", "link": "?chapter=Security&module=Thresholds&page=all"})
+            nav.append({"title": "Bug Bar", "link": "?chapter=Security&module=Bugbar&page=all"})
+            chapters.append({"title": "Security", "link": "?chapter=Security", "nav": nav})
+        return chapters
 
     def get_data_retention_limit(self) -> Optional[int]:
         from .quota import ProjectQuota
@@ -66,11 +150,11 @@ class Project(AbstractBaseMixin, Base):
             return project_quota.storage_space
 
     @staticmethod
-    def get_or_404(project_id):
+    def get_or_404(project_id, exclude_fields=()):
         project = Project.query.get_or_404(project_id)
         if not is_user_part_of_the_project(project.id):
             abort(404, description="User not a part of project")
-        return project.to_json()
+        return project.to_json(exclude_fields=exclude_fields)
 
     @staticmethod
     def list_projects(project_id=None, search_=None, limit_=None, offset_=None):
