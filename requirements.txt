@@ -2,4 +2,4 @@ Flask-SQLAlchemy==2.3.2
 boto3==1.10.17
 python-logging-loki==0.3.1
 influxdb==5.2.3
-pylon @ https://github.com/carrier-io/pylon.git@dev#egg=arbiter
+git+https://github.com/carrier-io/pylon.git@main
