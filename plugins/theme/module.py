@@ -16,7 +16,7 @@
 #   limitations under the License.
 
 """ Module """
-
+import logging
 import flask  # pylint: disable=E0401
 import jinja2  # pylint: disable=E0401
 
@@ -67,6 +67,7 @@ class Module(module.ModuleModel):
     def index(self):
         chapter = request.args.get('chapter', '')
         session_project = SessionProject.get()
+        logging.info(session_project)
         if not session_project:
             return redirect(url_for('theme.create_project'))
         project_config = self.context.app.config["rpc"].call("project", "get_or_404", project_id=session_project)

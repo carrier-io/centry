@@ -28,55 +28,6 @@ from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 from plugins.base.utils.api_utils import add_resource_to_api
 
-mock_config = {
-    "username": "User",
-    "default_chapter": "Manage Project",
-    "projects": [
-        {"name": "Project1", "id": "1", "selected": True},
-        {"name": "Project2", "id": "2"},
-        {"name": "Project3", "id": "3"}
-    ],
-    "project_structure": {
-        "chapters": [
-            {
-                "title": "Manage Project", "link": "?chapter=Manage%20Project",
-                "nav": [
-                    {"title": "Users", "link": "#", "active": True},
-                    {"title": "Quotas", "link": "#"},
-                    {"title": "Integrations", "link": "#"},
-                    {"title": "Plugins", "link": "#"}
-                ]
-            },
-            {
-                "title": "Dashboards", "link": "?chapter=Dashboards",
-                "nav": [
-                    {"title": "Dashboards", "link": "#"},
-                    {"title": "Data Explorer", "link": "#"},
-                    {"title": "Group Projects", "link": "#", "active": True},
-                ]
-            },
-            {
-                "title": "Security", "link": "?chapter=Security",
-                "nav": [
-                    {"title": "Overview", "link": "#", "active": True},
-                    {"title": "Planner", "link": "#"},
-                    {"title": "Results", "link": "#"},
-                    {"title": "Thresholds", "link": "#"}
-                ]
-            },
-            {
-                "title": "Performance", "link": "?chapter=Performance",
-                "nav": [
-                    {"title": "Overview", "link": "#", "active": True},
-                    {"title": "Planner", "link": "#"},
-                    {"title": "Results", "link": "#"},
-                    {"title": "Thresholds", "link": "#"}
-                ]
-            }
-        ]
-    }
-}
-
 
 class Module(module.ModuleModel):
     """ Galloper module """
