@@ -46,6 +46,8 @@ class Statistic(AbstractBaseMixin, Base):
         json_dict["storage_space"] = round(storage_space/1000000, 2)
 
         from flask import current_app
-        json_dict["tasks_count"] = len(current_app.config["rcp"].call("tasks", "list", project_id=project.id))
+        json_dict["tasks_count"] = len(
+            current_app.context.rpc_manager.call_function('tasks_list', project_id=project.id)
+        )
 
         return json_dict

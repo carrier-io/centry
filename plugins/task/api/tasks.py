@@ -51,7 +51,7 @@ class TasksApi(Resource):
     def post(self, project_id: int):
         args = self.post_parser.parse_args(strict=False)
         from flask import current_app
-        project = current_app.config["rpc"].call("project", "get_or_404", project_id=project_id)
+        project = current_app.context.rpc_manager.call_function('project_get_or_404', project_id=project_id)
         if args.get("file"):
             file = args["file"]
             if file.filename == "":
@@ -62,8 +62,11 @@ class TasksApi(Resource):
             return {"message": "Task file is not specified", "code": 400}, 400
 
         if file and allowed_file(file.filename):
-            if not current_app.config["rpc"].call("project", "check_quota",
-                                                  project_id=project["id"], quota='tasks_count'):
+            if not current_app.context.rpc_manager.call_function(
+                    'project_check_quota',
+                    project_id=project['id'],
+                    quota='tasks_count'
+            ):
                 raise Forbidden(description="The number of tasks allowed in the project has been exceeded")
         task_id = create_task(project, file, args).task_id
         return {"file": task_id, "code": 0}, 200

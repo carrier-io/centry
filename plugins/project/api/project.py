@@ -134,7 +134,7 @@ class ProjectAPI(Resource):
             })
         }
         from flask import current_app
-        pp = current_app.config["rpc"].call("task", "create", project.to_json(), POST_PROCESSOR_PATH, pp_args)
+        pp = current_app.context.rpc_manager.call_function('task_create', project.to_json(), POST_PROCESSOR_PATH, pp_args)
         cc_args = {
             "funcname": "control_tower",
             "invoke_func": "lambda.handler",
@@ -147,7 +147,7 @@ class ProjectAPI(Resource):
                 "loki_host": '{{secret.loki_host}}'
             })
         }
-        cc = current_app.config["rpc"].call("task", "create", project.to_json(), CONTROL_TOWER_PATH, cc_args)
+        cc = current_app.context.rpc_manager.call_function('task_create', project.to_json(), CONTROL_TOWER_PATH, cc_args)
         project_secrets["galloper_url"] = APP_HOST
         project_secrets["project_id"] = project.id
         project_hidden_secrets["post_processor"] = f'{APP_HOST}{pp["webhook"]}'

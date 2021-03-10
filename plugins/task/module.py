@@ -49,8 +49,10 @@ class Module(module.ModuleModel):
         add_resource_to_api(self.context.api, TaskApi, "/task/<int:project_id>/<string:task_id>")
         add_resource_to_api(self.context.api, TasksApi, "/task/<int:project_id>")
         add_resource_to_api(self.context.api, TaskUpgradeApi, "/upgrade/<int:project_id>/task")
-        from .rpc_worker import minion
-        minion.rpc(workers=1)
+
+        from .rpc_worker import list_projects, create
+        self.context.rpc_manager.register_function(list_projects, name='task_list')
+        self.context.rpc_manager.register_function(create, name='task_create')
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """
