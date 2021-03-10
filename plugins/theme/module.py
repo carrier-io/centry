@@ -16,82 +16,18 @@
 #   limitations under the License.
 
 """ Module """
-
+import logging
 import flask  # pylint: disable=E0401
 import jinja2  # pylint: disable=E0401
 
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for
 
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 
 from .components.commons.navbar import render_navbar
-from .components.commons.page import render_page
-
-
-mock_config = {
-    "username": "User",
-    "default_chapter": "Performance",
-    "regions": [
-        "default",
-        "us-east",
-        "us-west",
-        "eu-central"
-    ],
-    "active_project": "Carrier",
-    "active_project_id": 4,
-    "projects": [
-        {"name": "PMI", "id": 1},
-        {"name": "Alfresco", "id": 2},
-        {"name": "Verifone 2Checkout", "id": 3}
-    ],
-    "integrations": [
-        "rp", "ado", "email"
-    ],
-    "project_structure": {
-        "chapters": [
-            {
-                "title": "Manage Project", "link": "?chapter=Manage%20Project",
-                "nav": [
-                    {"title": "Users", "link": "#", "active": True},
-                    {"title": "Quotas", "link": "#"},
-                    {"title": "Integrations", "link": "#"},
-                    {"title": "Plugins", "link": "#"}
-                ]
-            },
-            {
-                "title": "Dashboards", "link": "?chapter=Dashboards",
-                "nav": [
-                    {"title": "Dashboards", "link": "#"},
-                    {"title": "Data Explorer", "link": "#"},
-                    {"title": "Group Projects", "link": "#", "active": True},
-                ]
-            },
-            {
-                "title": "Security", "link": "?chapter=Security",
-                "nav": [
-                    {"title": "Overview", "link": "#", "active": True},
-                    {"title": "Static", "link": "#"},
-                    {"title": "Dynamic", "link": "#"},
-                    {"title": "Infrastructure", "link": "#"},
-                    {"title": "Results", "link": "#"},
-                    {"title": "Thresholds", "link": "#"},
-                    {"title": "Bug Bar", "link": "#"}
-                ]
-            },
-            {
-                "title": "Performance", "link": "?chapter=Performance",
-                "nav": [
-                    {"title": "Overview", "link": "?chapter=Performance&module=Overview&page=overview", "active": True},
-                    {"title": "Backend", "link": "?chapter=Performance&module=Backend&page=create_test"},
-                    {"title": "Visual", "link": "?chapter=Performance&module=Visual&page=visual"},
-                    {"title": "Results", "link": "?chapter=Performance&module=Results&page=reports"},
-                    {"title": "Thresholds", "link": "?chapter=Performance&module=Thresholds&page=thresholds"}
-                ]
-            }
-        ]
-    }
-}
+from .components.commons.page import render_page, render_test
+from plugins.base.connectors.auth import SessionProject
 
 
 class Module(module.ModuleModel):
@@ -120,6 +56,7 @@ class Module(module.ModuleModel):
         # Register template slot callback
         self.context.slot_manager.register_callback("navbar", render_navbar)
         self.context.slot_manager.register_callback("page_content", render_page)
+        self.context.slot_manager.register_callback("create_backend_test", render_test)
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 
@@ -129,10 +66,12 @@ class Module(module.ModuleModel):
 
     def index(self):
         chapter = request.args.get('chapter', '')
-        return render_template("base.html", active_chapter=chapter, config=mock_config)
+        session_project = SessionProject.get()
+        logging.info(session_project)
+        if not session_project:
+            return redirect(url_for('theme.create_project'))
+        project_config = self.context.app.config["rpc"].call("project", "get_or_404", project_id=session_project)
+        return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
         return render_template("project_wizard.html")
-
-
-

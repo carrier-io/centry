@@ -1,5 +1,3 @@
-# from arbiter import Minion
-# from plugins.base import constants as c
 from plugins.project.models.project import Project
 from plugins.project.models.quota import ProjectQuota
 from plugins.project.models.statistics import Statistic
@@ -52,3 +50,15 @@ def set_secrets(project_id, secrets):
 # @minion.task(name="check_quota")
 def check_quota(project_id, quota=None):
     return ProjectQuota.check_quota_json(project_id, quota)
+
+
+@minion.task(name="project_config")
+def get_project_config(project_id=None):
+    if project_id:
+        project_id = SessionProject.get()
+    if not project_id:
+        project_id = get_user_projects()[0]["id"]
+    try:
+        return Project.query.filter_by(project_id=project_id).first().to_json()
+    except:
+        return {}

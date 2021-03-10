@@ -26,6 +26,7 @@ class Statistic(AbstractBaseMixin, Base):
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, unique=False, nullable=False)
     start_time = Column(String(128), unique=False)
+    vuh_used = Column(Integer, unique=False, default=0)
     performance_test_runs = Column(Integer, unique=False, default=0)
     sast_scans = Column(Integer, unique=False, default=0)
     dast_scans = Column(Integer, unique=False, default=0)
@@ -35,7 +36,6 @@ class Statistic(AbstractBaseMixin, Base):
 
     def to_json(self, exclude_fields: tuple = ()) -> dict:
         json_dict = super().to_json()
-
         project = Project.query.get_or_404(json_dict["project_id"])
         minio_client = MinioClient(project=project)
         buckets_list = minio_client.list_bucket()
@@ -44,10 +44,8 @@ class Statistic(AbstractBaseMixin, Base):
             for file in minio_client.list_files(bucket):
                 storage_space += file["size"]
         json_dict["storage_space"] = round(storage_space/1000000, 2)
-
         from flask import current_app
         json_dict["tasks_count"] = len(
             current_app.context.rpc_manager.call_function('tasks_list', project_id=project.id)
         )
-
         return json_dict

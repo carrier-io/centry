@@ -3,3 +3,5 @@ boto3==1.10.17
 python-logging-loki==0.3.1
 influxdb==5.2.3
 git+https://github.com/carrier-io/pylon.git@main
+python-keycloak==0.24.0
+

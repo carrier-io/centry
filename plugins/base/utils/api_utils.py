@@ -55,7 +55,7 @@ def build_req_parser(rules: tuple, location=("json", "values")) -> reqparse.Requ
 
 def add_resource_to_api(api: Api, resource: Resource, *urls, **kwargs) -> None:
     # This /api/v1 thing is made here to be able to register auth endpoints for local development
-    urls = (*(f"/api/v2{url}" for url in urls), *(f"/api/v2{url}/" for url in urls))
+    urls = (*(f"/api/v1{url}" for url in urls), *(f"/api/v1{url}/" for url in urls))
     api.add_resource(resource, *urls, **kwargs)
 
 

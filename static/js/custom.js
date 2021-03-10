@@ -44,3 +44,8 @@ $(".email").change(function() {
       $("#email_input").hide();
     }
   });
+
+
+function toggleAdvanced(id) {
+    $(`#${id}`).toggle();
+}

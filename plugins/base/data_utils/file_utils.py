@@ -1,8 +1,7 @@
 from requests import get
 import os
-from flask import current_app
 from uuid import uuid4
-
+import logging
 
 class File:
     def __init__(self, url):
@@ -12,7 +11,9 @@ class File:
 
     def read(self):
         if not self.path:
-            self.path = os.path.join(current_app.config["UPLOAD_FOLDER"], str(uuid4()))
+            self.path = os.path.join(os.environ.get("TASKS_UPLOAD_FOLDER", "/tmp/tasks"), str(uuid4()))
+            logging.info(self.path)
+            logging.info(self.url)
             r = get(self.url, allow_redirects=True)
             with open(self.path, 'wb') as f:
                 f.write(r.content)

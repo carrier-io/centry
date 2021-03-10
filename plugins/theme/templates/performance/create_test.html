@@ -1,257 +1,277 @@
-<div class="container">
-    <div class="card">
-        <div class="row">
-            <div class="col text-center">
-                <h3 class="mt-3 mb-2">Add Backend Test</h3>
-            </div>
-            <div class="col-xs">
-                <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-        <div class="row p-4">
-            <div class="col-6">
-                <div class="form-group">
-                    <label class="form-control-label" for="testname">Test Name</label>
-                    <p><small>Enter a name that describes the purpose of your test.</small></p>
-                    <input type="text" id="testname" class="form-control form-control-alternative"
-                           placeholder="Test Name">
-                </div>
-                <div class="form-group" id="testrunners">
-                    <label class="form-control-label">Test runner</label>
-                    <p><small>Choose the runner for the test.</small></p>
-                    <select class="selectpicker show-tick form-control mt-1" id="runner">
-                        <optgroup label="jMeter">
-                            <option>v5.3</option>
-                            <option>v5.2.1</option>
-                            <option>v5.2</option>
-                            <option>v5.1.1</option>
-                            <option>v5.1</option>
-                            <option>v5.0</option>
-                            <option>v4.0</option>
-                        </optgroup>
-                        <optgroup label="Gatling">
-                            <option>v3.1</option>
-                            <option>v2.3</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div class="form-group" id="compileTests">
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" id="compile" disabled>
-                        <label class="custom-control-label" for="compile">Check checkbox to compile
-                            tests. Used only for Gatling</label>
+<div class="modal fixed-left fade shadow-sm" tabindex="-1" role="dialog" id="createTestModal">
+    <div class="modal-dialog modal-dialog-aside" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col">
+                        <h3 class="ml-4 mt-3 mb-2">Add Backend Test</h3>
+                    </div>
+                    <div class="col-xs">
+                        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2"><i class="fas fa-play"></i></button>
+                        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2"><i class="fas fa-save"></i></button>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-nooutline-secondary mt-2 mr-4"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
-                <div class="form-group" id="testid" style="display:none">
-                    <label class="form-control-label" for="file">Test UUID</label>
-                    <p><small>
-                        UUID of the tests, may be used to refer it
-                    </small></p>
-                    <input type="text" id="testuuid" class="form-control form-control-alternative"
-                           disabled placeholder="">
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="parallel">Parallel runners</label>
-                    <p><small>How many test agents you need to execute test</small></p>
-                    <input type="text" id="parallel" class="form-control form-control-alternative"
-                           placeholder="# of Runners">
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="region">Worker region</label>
-                    <p><small>Region (Interceptor queue) in which to run the test</small></p>
-                    <select class="selectpicker show-tick form-control mt-1" id="region">
-                        {% for item in config.regions %}
-                        <option>{{item}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
-            <div class="col-6">
-                <label class="form-control-label" for="nav-tab">Test Sources</label>
-                <nav>
-                  <div class="nav nav-tabs source-selector" id="nav-tab" role="tablist">
-                      <a class="nav-item nav-link active" id="nav-git-tab" data-toggle="tab" href="#nav-git" role="tab" aria-controls="nav-git" aria-selected="true">Git</a>
-                      <a class="nav-item nav-link" id="nav-file-tab" data-toggle="tab" href="#nav-file" role="tab" aria-controls="nav-file" aria-selected="false">Artifact</a>
-                  </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                  <div class="tab-pane fade mt-2" id="nav-file" role="tabpanel" aria-labelledby="nav-file-tab">
-                      <div class="form-group" id="fileUpload">
-                        <label class="form-control-label" for="file">Test package</label>
-                        <p><small>
-                            Please upload .zip file with your tests. Packaging guidelines.
-                        </small></p>
-                        <input type="file" class="form-control form-control-alternative" id="file" lang="en" multiple>
-                      </div>
+            <div class="modal-body">
+                 <div class="row p-4">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="testname">Test Name</label>
+                            <p><small>Enter a name that describes the purpose of your test.</small></p>
+                            <input type="text" id="testname" class="form-control form-control-alternative"
+                                   placeholder="Test Name">
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group" id="testrunners">
+                                    <label class="form-control-label">Test runner</label>
+                                    <p><small>Choose the runner for the test.</small></p>
+                                    <select class="selectpicker show-tick form-control mt-1" id="runner">
+                                        <optgroup label="jMeter">
+                                            <option>v5.3</option>
+                                            <option>v5.2.1</option>
+                                            <option>v5.2</option>
+                                            <option>v5.1.1</option>
+                                            <option>v5.1</option>
+                                            <option>v5.0</option>
+                                            <option>v4.0</option>
+                                        </optgroup>
+                                        <optgroup label="Gatling">
+                                            <option>v3.1</option>
+                                            <option>v2.3</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="compileTests">
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="compile" disabled>
+                                        <label class="custom-control-label" for="compile">Compile tests for Gatling</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="parallel">Parallel runners</label>
+                                    <p><small>How many test agents you need</small></p>
+                                    <input type="text" id="parallel" class="form-control form-control-alternative"
+                                           placeholder="# of Runners">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="region">Worker region</label>
+                            <p><small>Region (Interceptor queue) in which to run the test</small></p>
+                            <select class="selectpicker show-tick form-control mt-1" id="region">
+                                {% for item in config.regions %}
+                                <option>{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="reporters">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label">Reporting</label>
+                                    <p><small>Specify expected report types</small></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height mb-2 {% if 'email' not in config.integrations %}d-none{% endif %}">
+                                        <input type="checkbox" class="custom-control-input email" id="email">
+                                        <label class="custom-control-label" for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="custom-control-inline mt-2 mr-2" id="email_input" style="width:100%; display: none;">
+                                        <input type="text" id="emails" class="form-control form-control-alternative" placeholder="Coma separated list of emails">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height">
+                                        <input type="checkbox" class="custom-control-input" id="junit">
+                                        <label class="custom-control-label" for="junit">jUnit</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height">
+                                        <input type="checkbox" class="custom-control-input" id="perfreports">
+                                        <label class="custom-control-label" for="perfreports">Tools</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'jira' not in config.integrations %}d-none{% endif %}">
+                                        <input type="checkbox" class="custom-control-input" id="jira">
+                                        <label class="custom-control-label" for="jira">Jira</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'rp' not in config.integrations %}d-none{% endif %}">
+                                        <input type="checkbox" class="custom-control-input" id="rp">
+                                        <label class="custom-control-label" for="rp">RP</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'ado' not in config.integrations %}d-none{% endif %}">
+                                        <input type="checkbox" class="custom-control-input" id="ado">
+                                        <label class="custom-control-label" for="ado">ADO</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline input-height">
+                                        <input type="checkbox" class="custom-control-input" id="quality">
+                                        <label class="custom-control-label" for="quality">Fail Build</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tab-pane fade mt-2 show active" id="nav-git" role="tabpanel" aria-labelledby="nav-git-tab">
-                        <div id="target_git" class="carrier-sast-target">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label" for="repo">Git Repo with Tests</label>
-                                    <input type="text" id="repo" class="form-control form-control-alternative" placeholder="Repository URL (e.g. https://github.com/carrier-io/dusty.git)">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                  <label class="form-control-label" for="repo_user">Git Username</label>
-                                  <input type="text" id="repo_user" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
-                                </div>
-                                <div class="col">
-                                  <label class="form-control-label" for="repo_pass">Git Password</label>
-                                  <input type="text" id="repo_pass" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label" for="repo_key">Git SSH private key</label>
-                                    <input type="text" id="repo_key" class="form-control form-control-alternative" placeholder="(optional, for GIT+SSH URLs)">
-                                </div>
-                                <div class="col">
-                                    <label class="form-control-label" for="repo_branch">Git Branch</label>
-                                    <input type="text" id="repo_branch" class="form-control form-control-alternative" placeholder="(optional, default - master)">
-                                </div>
-                            </div>
+                    <div class="col-6">
+                        <label class="form-control-label" for="nav-tab">Test Sources</label>
+                        <nav>
+                          <div class="nav nav-tabs source-selector" id="nav-tab" role="tablist">
+                              <a class="nav-item nav-link active" id="nav-git-tab" data-toggle="tab" href="#nav-git" role="tab" aria-controls="nav-git" aria-selected="true">Git</a>
+                              <a class="nav-item nav-link" id="nav-file-tab" data-toggle="tab" href="#nav-file" role="tab" aria-controls="nav-file" aria-selected="false">Artifact</a>
                           </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div class="tab-pane fade mt-2" id="nav-file" role="tabpanel" aria-labelledby="nav-file-tab">
+                              <div class="form-group" id="fileUpload">
+                                <label class="form-control-label" for="file">Test package</label>
+                                <p><small>
+                                    Please upload .zip file with your tests. Packaging guidelines.
+                                </small></p>
+                                <input type="file" class="form-control form-control-alternative" id="file" lang="en" multiple>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade mt-2 show active" id="nav-git" role="tabpanel" aria-labelledby="nav-git-tab">
+                                <div id="target_git" class="carrier-sast-target">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-control-label" for="repo">Git Repo with Tests</label>
+                                            <input type="text" id="repo" class="form-control form-control-alternative" placeholder="Repository URL (e.g. https://github.com/carrier-io/dusty.git)">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                          <label class="form-control-label" for="repo_user">Git Username</label>
+                                          <input type="text" id="repo_user" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-control-label" for="repo_pass">Git Password</label>
+                                          <input type="text" id="repo_pass" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-control-label" for="repo_key">Git SSH private key</label>
+                                            <input type="text" id="repo_key" class="form-control form-control-alternative" placeholder="(optional, for GIT+SSH URLs)">
+                                        </div>
+                                        <div class="col">
+                                            <label class="form-control-label" for="repo_branch">Git Branch</label>
+                                            <input type="text" id="repo_branch" class="form-control form-control-alternative" placeholder="(optional, default - master)">
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="form-control-label" for="entrypoint">Entry point</label>
+                            <p><small>File for jMeter and class for gatling</small></p>
+                            <input type="text" id="entrypoint" class="form-control form-control-alternative"
+                                   placeholder="Entrypoint (e.g. some.jmx or some.Test)">
+                        </div>
+                        <div class="card ml-0 mr-0" id="scriptCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Script params</label>
+                                    <p><small>Params for test script</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('scriptCard')"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group mt-2">
-                    <label class="form-control-label" for="entrypoint">Entry point</label>
-                    <p><small>File for jMeter and class for gatling</small></p>
-                    <input type="text" id="entrypoint" class="form-control form-control-alternative"
-                           placeholder="Entrypoint (e.g. some.jmx or some.Test)">
-                </div>
-                <div class="card ml-0 mr-0" id="scriptCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Script params</label>
-                            <p><small>Params for test script</small></p>
-                        </div>
+                <div class="row pl-4 pb-3 bg-light">
+                    <div class="col">
+                        <h4 class="mb-0">ADVANCED PARAMETERS</h4>
+                    </div>
+                    <div class="col">
                         <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('scriptCard')"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-nooutline-secondary mt-4 mr-2" onclick="toggleAdvanced('advancedBackend')"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row pl-4 pt-4 pb-0 bg-light">
-            <div class="col">
-                <h4 class="mb-0">ADVANCED PARAMETERS</h4>
-            </div>
-        </div>
-        <div class="row p-4 bg-light">
-            <div class="col-6">
-                <div class="card ml-0 mr-0" id="runnerCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Test Runner Environment</label>
-                            <p><small>Environment variables required for your test</small></p>
+                <div class="row p-4 bg-light" id="advancedBackend" style="display:none">
+                    <div class="col-6">
+                        <div class="card ml-0 mr-0" id="runnerCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Test Runner Environment</label>
+                                    <p><small>Environment variables required for your test</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('runnerCard')"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('runnerCard')"><i class="fas fa-plus"></i></button>
+                        <div class="card ml-0 mr-0" id="envCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Runner customizations</label>
+                                    <p><small>Bucket and file for your customizations</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('envCard')"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card ml-0 mr-0" id="envCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Runner customizations</label>
-                            <p><small>Bucket and file for your customizations</small></p>
-                        </div>
-                        <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('envCard')"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card ml-0 mr-0" id="distributedCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Distribution Environment</label>
-                            <p><small>Environment variables required for control tower</small></p>
-                        </div>
-                        <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('distributedCard')"><i class="fas fa-plus"></i></button>
+                        <div class="card ml-0 mr-0" id="distributedCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Distribution Environment</label>
+                                    <p><small>Environment variables required for control tower</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('distributedCard')"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="card ml-0 mr-0" id="dnsCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">DNS Override</label>
-                            <p><small>Specify alternative IP addresses for hostnames used in your test scenario</small></p>
+                    <div class="col-6">
+                        <div class="card ml-0 mr-0" id="dnsCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">DNS Override</label>
+                                    <p><small>Specify alternative IP addresses for hostnames used in your test scenario</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('dnsCard')"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xs text-right">
-                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('dnsCard')"><i class="fas fa-plus"></i></button>
+                        <div class="card ml-0 mr-0" id="networkCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Network Emulation</label>
+                                    <p><small>Simulate different types of connections from load generators</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <label class="custom-toggle mr-3">
+                                      <input type="checkbox">
+                                      <span class="custom-toggle-slider rounded-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card ml-0 mr-0" id="networkCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Network Emulation</label>
-                            <p><small>Simulate different types of connections from load generators</small></p>
+                        <div class="card ml-0 mr-0" id="webHookCard">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-control-label mt-0">Weebhook</label>
+                                    <p><small>Generate webhook to trigger test by sending POST request</small></p>
+                                </div>
+                                <div class="col-xs text-right">
+                                    <label class="custom-toggle mr-3">
+                                      <input type="checkbox">
+                                      <span class="custom-toggle-slider rounded-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xs text-right">
-                            <label class="custom-toggle mr-3">
-                              <input type="checkbox">
-                              <span class="custom-toggle-slider rounded-circle"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="card ml-0 mr-0" id="webHookCard">
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-control-label mt-0">Weebhook</label>
-                            <p><small>Generate webhook to trigger test by sending POST request</small></p>
-                        </div>
-                        <div class="col-xs text-right">
-                            <label class="custom-toggle mr-3">
-                              <input type="checkbox">
-                              <span class="custom-toggle-slider rounded-circle"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row p-4">
-            <div class="col-12">
-                <div class="form-group" id="reporters">
-                    <label class="form-control-label">Reporting</label>
-                    <p><small>Specify expected report types</small></p>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height">
-                        <input type="checkbox" class="custom-control-input" id="junit">
-                        <label class="custom-control-label" for="junit">jUnit</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height">
-                        <input type="checkbox" class="custom-control-input" id="perfreports">
-                        <label class="custom-control-label" for="perfreports">Tools</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'jira' not in config.integrations %}d-none{% endif %}">
-                        <input type="checkbox" class="custom-control-input" id="jira">
-                        <label class="custom-control-label" for="jira">Jira</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'rp' not in config.integrations %}d-none{% endif %}">
-                        <input type="checkbox" class="custom-control-input" id="rp">
-                        <label class="custom-control-label" for="rp">RP</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'ado' not in config.integrations %}d-none{% endif %}">
-                        <input type="checkbox" class="custom-control-input" id="ado">
-                        <label class="custom-control-label" for="ado">ADO</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height">
-                        <input type="checkbox" class="custom-control-input" id="quality">
-                        <label class="custom-control-label" for="quality">Fail Build</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline input-height {% if 'email' not in config.integrations %}d-none{% endif %}">
-                        <input type="checkbox" class="custom-control-input email" id="email">
-                        <label class="custom-control-label" for="email">Email</label>
-                    </div>
-                    <div class="custom-control-inline mr-2" id="email_input" style="width: calc(100vw/2.5); display: none;">
-                        <input type="text" id="emails" class="form-control form-control-alternative" placeholder="Coma separated list of emails">
                     </div>
                 </div>
             </div>

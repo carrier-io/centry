@@ -14,6 +14,7 @@
 
 import os
 from typing import Optional
+from pathlib import Path
 from .constants import LOCAL_DEV, RABBIT_HOST, RABBIT_PORT, RABBIT_USER, RABBIT_PASSWORD
 from .paterns import SingletonABC
 
@@ -26,6 +27,7 @@ class Config(metaclass=SingletonABC):
     DATABASE_VENDOR: str = os.environ.get("DATABASE_VENDOR", "postgres")
     DATABASE_URI: str = os.environ.get("DATABASE_URL") or "sqlite:////tmp/test.db"
     UPLOAD_FOLDER: str = os.environ.get("TASKS_UPLOAD_FOLDER", "/tmp/tasks")
+    Path(UPLOAD_FOLDER).mkdir(parents=True, exist_ok=True)
     DATE_TIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
     SUPERADMIN_GROUP = "/superadmin"
 

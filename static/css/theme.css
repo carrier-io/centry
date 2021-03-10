@@ -1,3 +1,24 @@
+/* common */
+@font-face {
+  font-display: swap;
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'),
+  url('../fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2'),
+  url('../fonts/source-sans-pro-v12-latin-regular.woff') format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),
+  url('../fonts/source-sans-pro-v12-latin-700.woff2') format('woff2'),
+  url('../fonts/source-sans-pro-v12-latin-700.woff') format('woff');
+}
+
 :root {
   --primary: rgb(87, 18, 176);
   --primary-light: rgba(250, 247, 252, 1.0);
@@ -6,6 +27,12 @@
   --dark: #525f7f;
   --bg: rgb(249, 250, 255);
   --background: #E5E5E5;
+  --gray: #8898aa;
+  --blue-linear: linear-gradient(165.62deg, #531DED 5%, #3A22CD 32.74%, #291893 69.1%, #2D2589 98.3%);
+  --button-blue: #3B12B0;
+  --button-blue-hover: #432FBB;
+  --secondary: #f4f5f7;
+
 
   --blue: #5e72e4;
   --indigo: #5603ad;
@@ -17,11 +44,9 @@
   --green: #2dce89;
   --teal: #11cdef;
   --cyan: #2bffc6;
-  --gray: #8898aa;
   --gray-dark: #32325d;
   --light: #ced4da;
   --lighter: #e9ecef;
-  --secondary: #f4f5f7;
   --success: #2dce89;
   --info: #11cdef;
   --warning: #fb6340;
@@ -36,6 +61,6 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-sans-serif: "Source Sans Pro", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
