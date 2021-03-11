@@ -20,16 +20,17 @@ class TaskApi(Resource):
 
     def get(self, project_id: int, task_id: str):
         from flask import current_app
-        current_app.context.rpc_manager.call_function('project_get_or_404', project_id=project_id)
+        current_app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id)
         args = self.get_parser.parse_args(strict=False)
         task = Task.query.filter_by(task_id=task_id).first()
         if args.get("exec"):
-            return current_app.context.rpc_manager.call_function('project_unsecret', value=task.to_json(), project_id=project_id)
+            return current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+                value=task.to_json(), project_id=project_id)
         return task.to_json()
 
     def post(self, project_id: int, task_id: str):
         from flask import current_app
-        project = current_app.context.rpc_manager.call_function('project_get_or_404', project_id=project_id)
+        project = current_app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id)
         task = Task.query.filter_by(task_id=task_id).first()
         event = request.get_json()
-        return run_task(project["id"], event, task.task_id)
+        return run_task(project.id, event, task.task_id)

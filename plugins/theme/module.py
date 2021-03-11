@@ -50,7 +50,7 @@ class Module(module.ModuleModel):
             jinja2.loaders.PackageLoader("plugins.theme", "templates"),
         ])
         bp.add_url_rule("/", "index", self.index)
-        bp.add_url_rule("/project/create", "create_project", self.project_wizard)
+        bp.add_url_rule("/new", "create_project", self.project_wizard)
         # Register in app
         self.context.app.register_blueprint(bp)
         # Register template slot callback
@@ -70,7 +70,7 @@ class Module(module.ModuleModel):
         logging.info(session_project)
         if not session_project:
             return redirect(url_for('theme.create_project'))
-        project_config = self.context.app.config["rpc"].call("project", "get_or_404", project_id=session_project)
+        project_config = self.context.rpc_manager.call.project_get_or_404(project_id=session_project)
         return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):

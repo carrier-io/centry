@@ -53,11 +53,13 @@ class Module(module.ModuleModel):
 
         from plugins.project.rpc_worker import (
             prj_or_404, list_projects, get_project_statistics, get_storage_quota,
-            unsecret_key, get_hidden, set_hidden, set_secrets, check_quota
+            unsecret_key, get_hidden, set_hidden, set_secrets, check_quota,
+            add_task_execution
         )
         self.context.rpc_manager.register_function(prj_or_404, name='project_get_or_404')
         self.context.rpc_manager.register_function(list_projects, name='project_list')
         self.context.rpc_manager.register_function(get_project_statistics, name='project_statistics')
+        self.context.rpc_manager.register_function(add_task_execution, name='add_task_execution')
         self.context.rpc_manager.register_function(get_storage_quota, name='project_get_storage_space_quota')
         self.context.rpc_manager.register_function(unsecret_key, name='project_unsecret')
         self.context.rpc_manager.register_function(get_hidden, name='project_get_hidden_secrets')

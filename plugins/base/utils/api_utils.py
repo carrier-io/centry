@@ -65,7 +65,7 @@ def _calcualte_limit(limit, total):
 
 def get(project_id, args, data_model, additional_filter=None):
     from flask import current_app
-    project = current_app.context.rpc_manager.call_function('project_get_ot_404', project_id=project_id)
+    project = current_app.config["CONTEXT"].rpc_manager.call.project_get_ot_404(project_id=project_id)
     limit_ = args.get("limit")
     offset_ = args.get("offset")
     if args.get("sort"):
@@ -73,7 +73,7 @@ def get(project_id, args, data_model, additional_filter=None):
     else:
         sort_rule = data_model.id.desc()
     filter_ = list()
-    filter_.append(operator.eq(data_model.project_id, project["id"]))
+    filter_.append(operator.eq(data_model.project_id, project.id))
     if additional_filter:
         for key, value in additional_filter.items():
             filter_.append(operator.eq(getattr(data_model, key), value))
@@ -97,13 +97,11 @@ def upload_file(bucket, f, project, create_if_not_exists=True):
     except:
         pass
     from flask import current_app
-    storage_space_quota = current_app.context.rpc_manager.call_function(
-        'project_get_storage_space_quota',
-        project_id=project['id']
+    storage_space_quota = current_app.config["CONTEXT"].rpc_manager.call.project_get_storage_space_quota(
+        project_id=project.id
     )
-    statistic = current_app.context.rpc_manager.call_function('project_statistics', project_id=project['id'])
-
-    if storage_space_quota != -1 and statistic['storage_space'] + file_size > storage_space_quota * 1000000:
+    statistic = current_app.config["CONTEXT"].rpc_manager.call.project_statistics(project_id=project.id)
+    if storage_space_quota != -1 and statistic["storage_space"] + file_size > storage_space_quota * 1000000:
         raise Forbidden(description="The storage space limit allowed in the project has been exceeded")
     if create_if_not_exists:
         if bucket not in MinioClient(project=project).list_bucket():

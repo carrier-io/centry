@@ -81,7 +81,7 @@ class ProjectAPI(Resource):
         project_secrets = {}
         project_hidden_secrets = {}
         project.insert()
-        SessionProject.set(project.id)  # Looks weird, sorry :D
+        # SessionProject.set(project.id)  # Looks weird, sorry :D
         quota.create(project.id, vuh_limit, storage_space_limit, data_retention_limit)
 
         statistic = Statistic(
@@ -108,7 +108,9 @@ class ProjectAPI(Resource):
             })
         }
         from flask import current_app
-        pp = current_app.context.rpc_manager.call_function('task_create', project.to_json(), POST_PROCESSOR_PATH, pp_args)
+        pp = current_app.config["CONTEXT"].rpc_manager.call.task_create(project,
+                                                                        POST_PROCESSOR_PATH,
+                                                                        pp_args)
         cc_args = {
             "funcname": "control_tower",
             "invoke_func": "lambda.handler",
@@ -121,11 +123,11 @@ class ProjectAPI(Resource):
                 "loki_host": '{{secret.loki_host}}'
             })
         }
-        cc = current_app.context.rpc_manager.call_function('task_create', project.to_json(), CONTROL_TOWER_PATH, cc_args)
+        cc = current_app.config["CONTEXT"].rpc_manager.call.task_create(project, CONTROL_TOWER_PATH, cc_args)
         project_secrets["galloper_url"] = APP_HOST
         project_secrets["project_id"] = project.id
-        project_hidden_secrets["post_processor"] = f'{APP_HOST}{pp["webhook"]}'
-        project_hidden_secrets["post_processor_id"] = pp["task_id"]
+        project_hidden_secrets["post_processor"] = f'{APP_HOST}{pp.webhook}'
+        project_hidden_secrets["post_processor_id"] = pp.task_id
         project_hidden_secrets["redis_host"] = APP_IP
         project_hidden_secrets["loki_host"] = EXTERNAL_LOKI_HOST.replace("https://", "http://")
         project_hidden_secrets["influx_ip"] = APP_IP
@@ -135,7 +137,7 @@ class ProjectAPI(Resource):
         project_hidden_secrets["rabbit_host"] = APP_IP
         project_hidden_secrets["rabbit_user"] = RABBIT_USER
         project_hidden_secrets["rabbit_password"] = RABBIT_PASSWORD
-        project_hidden_secrets["control_tower_id"] = cc["task_id"]
+        project_hidden_secrets["control_tower_id"] = cc.task_id
         project_hidden_secrets["influx_user"] = INFLUX_USER
         project_hidden_secrets["influx_password"] = INFLUX_PASSWORD
         project_hidden_secrets["jmeter_db"] = f'jmeter_{project.id}'

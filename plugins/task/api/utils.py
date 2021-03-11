@@ -3,6 +3,7 @@ from time import mktime
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import Forbidden
+from sqlalchemy import and_
 
 from arbiter import Arbiter
 
@@ -23,10 +24,12 @@ def create_task(project, file, args):
         file = File(file)
     filename = str(uuid4())
     filename = secure_filename(filename)
+    import logging
+    logging.info(args)
     upload_file(bucket="tasks", f=file, project=project)
     task = Task(
         task_id=filename,
-        project_id=project["id"],
+        project_id=project.id,
         zippath=f"tasks/{file.filename}",
         task_name=args.get("funcname"),
         task_handler=args.get("invoke_func"),
@@ -40,7 +43,7 @@ def create_task(project, file, args):
 def check_task_quota(task, project_id=None, quota='tasks_executions'):
     project_id = project_id if project_id else task["project_id"]
     from flask import current_app
-    if not current_app.context.rpc_manager.call_function('project_check_quota', project_id=project_id, quota=quota):
+    if not current_app.config["CONTEXT"].rpc_manager.call.project_check_quota(project_id=project_id, quota=quota):
         data = {"ts": int(mktime(datetime.utcnow().timetuple())), 'results': 'Forbidden',
                 'stderr': f'The number of {quota} allowed in the project has been exceeded'}
         if task:
@@ -48,8 +51,7 @@ def check_task_quota(task, project_id=None, quota='tasks_executions'):
                 "Content-Type": "application/json",
                 "Token": task['token']
             }
-            auth_token = current_app.context.rpc_manager.call_function(
-                'project_unsecret',
+            auth_token = current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
                 value="{{secret.auth_token}}",
                 project_id=task['project_id']
             )
@@ -67,34 +69,28 @@ def check_task_quota(task, project_id=None, quota='tasks_executions'):
 
 def run_task(project_id, event, task_id=None):
     from flask import current_app
-    secrets = current_app.context.rpc_manager.call_function('project_get_secrets', project_id=project_id)
+    secrets = current_app.config["CONTEXT"].rpc_manager.call.project_get_secrets(project_id=project_id)
     if "control_tower_id" not in secrets:
-        secrets = current_app.context.rpc_manager.call_function('project_get_hidden_secrets', project_id=project_id)
+        secrets = current_app.config["CONTEXT"].rpc_manager.call.project_get_hidden_secrets(project_id=project_id)
     task_id = task_id if task_id else secrets["control_tower_id"]
     task = Task.query.filter(and_(Task.task_id == task_id)).first().to_json()
     check_task_quota(task)
-    statistic = Statistic.query.filter(Statistic.project_id == task['project_id']).first()
-    setattr(statistic, 'tasks_executions', Statistic.tasks_executions + 1)
-    statistic.commit()
+    current_app.config["CONTEXT"].rpc_manager.call.add_task_execution(project_id == task['project_id'])
     arbiter = get_arbiter()
     task_kwargs = {
-        "task": current_app.context.rpc_manager.call_function(
-            'project_unsecret',
+        "task": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
             value=task,
             project_id=project_id
         ),
-        "event": current_app.context.rpc_manager.call_function(
-            'project_unsecret',
+        "event": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
             value=event,
             project_id=project_id
         ),
-        "galloper_url": current_app.context.rpc_manager.call_function(
-            'project_unsecret',
+        "galloper_url": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
             value="{{secret.galloper_url}}",
             project_id=task['project_id']
         ),
-        "token": current_app.context.rpc_manager.call_function(
-            'project_unsecret',
+        "token": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
             value="{{secret.auth_token}}",
             project_id=task['project_id']
         )

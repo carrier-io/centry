@@ -22,21 +22,21 @@ class MinioClient:
         )
 
     def extract_access_data(self) -> tuple:
-        if self.project and self.PROJECT_SECRET_KEY in (self.project["secrets_json"] or {}):
-            aws_access_json = self.project["secrets_json"][self.PROJECT_SECRET_KEY]
+        if self.project and self.PROJECT_SECRET_KEY in (self.project.secrets_json or {}):
+            aws_access_json = self.project.secrets_json[self.PROJECT_SECRET_KEY]
             aws_access_key_id = aws_access_json.get("aws_access_key_id")
             aws_secret_access_key = aws_access_json.get("aws_secret_access_key")
             return aws_access_key_id, aws_secret_access_key
         return MINIO_ACCESS, MINIO_SECRET
 
     def format_bucket_name(self, bucket: str) -> str:
-        prefix = f"p--{self.project['id']}."
+        prefix = f"p--{self.project.id}."
         if bucket == f"{prefix}{bucket}":
             return bucket.replace(prefix, "", 1)
         return f"{prefix}{bucket}"
 
     def list_bucket(self) -> list:
-        prefix = f"p--{self.project['id']}."
+        prefix = f"p--{self.project.id}."
         return [
             each["Name"].replace(prefix, "", 1)
             for each in self.s3_client.list_buckets().get("Buckets", {})

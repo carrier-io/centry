@@ -76,5 +76,5 @@ class Task(AbstractBaseMixin, Base):
         self.commit()
 
     @staticmethod
-    def list_tasks(project_id):
-        pass
+    def tasks_count(project_id):
+        return Task.query.filter_by(project_id=project_id).count()

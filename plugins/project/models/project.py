@@ -71,8 +71,8 @@ class Project(AbstractBaseMixin, Base):
     def insert(self) -> None:
         super().insert()
         from plugins.base.connectors.minio import MinioClient
-        MinioClient(project=self.to_json()).create_bucket(bucket="reports")
-        MinioClient(project=self.to_json()).create_bucket(bucket="tasks")
+        MinioClient(project=self).create_bucket(bucket="reports")
+        MinioClient(project=self).create_bucket(bucket="tasks")
         SessionProject.set(self.id)
 
     def used_in_session(self):
