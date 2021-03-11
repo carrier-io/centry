@@ -44,4 +44,8 @@ class Statistic(AbstractBaseMixin, Base):
             for file in minio_client.list_files(bucket):
                 storage_space += file["size"]
         json_dict["storage_space"] = round(storage_space/1000000, 2)
+        from flask import current_app
+        json_dict["tasks_count"] = len(
+            current_app.context.rpc_manager.call_function('tasks_list', project_id=project.id)
+        )
         return json_dict

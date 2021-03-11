@@ -18,8 +18,6 @@
 """ Module """
 from datetime import datetime
 
-from arbiter import RPCClient
-
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 
@@ -42,11 +40,7 @@ class Module(module.ModuleModel):
         log.info("Initializing module")
         self.context.app.config.from_object(Config())
         init_db()
-        init_vault()  # won't do anything is vault is not available
-        self.context.app.config['rpc'] = RPCClient(self.context.app.config["RABBIT_HOST"],
-                                                   port=self.context.app.config["RABBIT_PORT"],
-                                                   user=self.context.app.config["RABBIT_USER"],
-                                                   password=self.context.app.config["RABBIT_PASSWORD"])
+        init_vault()  # won't do anything if vault is not available
 
         @self.context.app.teardown_appcontext
         def shutdown_session(exception=None):
