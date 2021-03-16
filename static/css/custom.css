@@ -622,3 +622,8 @@ input:-webkit-autofill {
     padding-bottom: 0.5rem!important;
     padding-left: 1rem!important;
 }
+
+#chapter-dropdown-items .dropdown-item {
+    line-height: 1.5!important;
+    padding: 1rem!important;
+}

@@ -90,21 +90,21 @@ class Project(AbstractBaseMixin, Base):
         chapters = []
         if user_is_project_admin():
             chapters.append({
-                "title": "Manage Project", "link": "?chapter=Manage%20Project",
+                "title": "Configuration", "link": "?chapter=Configuration",
                 "nav": [
-                    {"title": "Users", "link": "?chapter=Manage%20Project&module=Users&page=all", "active": True},
-                    {"title": "Quotas", "link": "?chapter=Manage%20Project&module=Quotas&page=all"},
-                    {"title": "Integrations", "link": "?chapter=Manage%20Project&module=Integrations&page=all"},
-                    {"title": "Plugins", "link": "?chapter=Manage%20Project&module=Plugins&page=all"}
+                    {"title": "Users", "link": "?chapter=Configuration&module=Users&page=all", "active": True},
+                    {"title": "Quotas", "link": "?chapter=Configuration&module=Quotas&page=all"},
+                    {"title": "Integrations", "link": "?chapter=Configuration&module=Integrations&page=all"},
+                    {"title": "Plugins", "link": "?chapter=Configuration&module=Plugins&page=all"}
                 ]
             })
         if 'dashboards' in self.plugins:
             chapters.append({
-                "title": "Dashboards", "link": "?chapter=Dashboards",
+                "title": "Portfolio", "link": "?chapter=Portfolio",
                 "nav": [
-                    {"title": "Dashboards", "link": "?chapter=Dashboards&module=List&page=all", "active": True},
-                    {"title": "Data Explorer", "link": "?chapter=Dashboards&module=Explorer&page=all"},
-                    {"title": "Group Projects", "link": "?chapter=Dashboards&module=Group&page=all"},
+                    {"title": "Dashboards", "link": "?chapter=Portfolio&module=Dashboards&page=all", "active": True},
+                    {"title": "Data Explorer", "link": "?chapter=Portfolio&module=Data%20Explorer&page=all"},
+                    {"title": "Create Portfolio", "link": "?chapter=Portfolio&module=Create%20Portfolio&page=all"},
                 ]
             })
         if any( plugin in ["backend", "visual"] for plugin in self.plugins):
