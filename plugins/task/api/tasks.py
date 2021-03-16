@@ -30,6 +30,7 @@ class TasksApi(Resource):
         dict(name="funcname", type=str, location='form'),
         dict(name="invoke_func", type=str, location='form'),
         dict(name="runtime", type=str, location='form'),
+        dict(name="region", type=str, location='form'),
         dict(name="env_vars", type=str, location='form')
     )
 
@@ -60,12 +61,6 @@ class TasksApi(Resource):
             file = File(args.get("url"))
         else:
             return {"message": "Task file is not specified", "code": 400}, 400
-
-        if file and allowed_file(file.filename):
-            if not current_app.config["CONTEXT"].rpc_manager.call.project_check_quota(
-                    project_id=project.id,
-                    quota='tasks_count'
-            ):
-                raise Forbidden(description="The number of tasks allowed in the project has been exceeded")
+        # TODO: we need to check on storage quota here
         task_id = create_task(project, file, args).task_id
         return {"file": task_id, "code": 0}, 200

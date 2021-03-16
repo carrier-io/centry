@@ -7,8 +7,8 @@
                         <h3 class="ml-4 mt-3 mb-2">Add Backend Test</h3>
                     </div>
                     <div class="col-xs">
-                        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2"><i class="fas fa-play"></i></button>
-                        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2"><i class="fas fa-save"></i></button>
+                        <button type="button" id="submit" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="createTest()"><i class="fas fa-play"></i></button>
+                        <button type="button" id="save" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="createTest()"><i class="fas fa-save"></i></button>
                         <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-nooutline-secondary mt-2 mr-4"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
@@ -278,3 +278,60 @@
         </div>
     </div>
 </div>
+<script>
+function createTest() {
+      $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
+      $("#submit").addClass("disabled");
+      $("#save").addClass("disabled");
+      var checked = []
+      var params = get_script_paras();
+      $("input:checkbox:checked").each(function() {
+        if ($(this).attr("id") != "compile") {
+            checked.push($(this).attr("id"));
+        }
+      });
+      var compile = $('#compile').is(":checked")
+      var project_id = $("#selected-project-id").text();
+      event.preventDefault();
+
+      var data = new FormData();
+      git_settings = {}
+      if ($('#repo').val() != '') {
+        git_settings["repo"] = $('#repo').val()
+        git_settings["repo_user"] = $('#repo_user').val()
+        git_settings["repo_pass"] = $('#repo_pass').val()
+        git_settings["repo_key"] = $('#repo_key').val()
+        git_settings["repo_branch"] = $('#repo_branch').val()
+        data.append('git', JSON.stringify(git_settings));
+      } else if ($('#file')[0].files[0] != undefined) {
+        data.append('file', $('#file')[0].files[0], $('#file')[0].files[0].name);
+      }
+
+      data.append('name', $('#testname').val());
+      data.append('parallel', $('#parallel').val());
+      data.append('region', $('#region').val());
+      data.append('entrypoint', $('#entrypoint').val());
+      data.append('runner', $('#runner').val());
+      data.append('reporter', checked);
+      data.append('compile', compile);
+      data.append('emails', $('#emails').val());
+      data.append('params', JSON.stringify(params[0]));
+      data.append('env_vars', JSON.stringify(params[1]));
+      data.append('customization', JSON.stringify(params[2]));
+      data.append('cc_env_vars', JSON.stringify(params[3]));
+
+      $.ajax({
+          url: `/api/v1/tests/${project_id}/backend`,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          success: function(data){
+            window.location.href = "/tests?type=backend";
+          }
+        }
+      );
+    }
+
+</script>

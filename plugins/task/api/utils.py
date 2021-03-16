@@ -34,6 +34,7 @@ def create_task(project, file, args):
         task_name=args.get("funcname"),
         task_handler=args.get("invoke_func"),
         runtime=args.get("runtime"),
+        region=args.get("region"),
         env_vars=args.get("env_vars")
     )
     task.insert()

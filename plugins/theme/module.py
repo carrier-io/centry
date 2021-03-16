@@ -56,7 +56,7 @@ class Module(module.ModuleModel):
         # Register template slot callback
         self.context.slot_manager.register_callback("navbar", render_navbar)
         self.context.slot_manager.register_callback("page_content", render_page)
-        self.context.slot_manager.register_callback("create_backend_test", render_test)
+        self.context.slot_manager.register_callback("create_test", render_test)
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 
@@ -70,7 +70,7 @@ class Module(module.ModuleModel):
         logging.info(session_project)
         if not session_project:
             return redirect(url_for('theme.create_project'))
-        project_config = self.context.rpc_manager.call.project_get_or_404(project_id=session_project)
+        project_config = self.context.rpc_manager.call.project_get_or_404(project_id=session_project).to_json()
         return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):

@@ -59,6 +59,10 @@ h4, .h4 {
     margin-top: 2rem;
 }
 
+.tall {
+    min-height: calc(100vh - 120px)!important;
+    max-height: calc(100vh - 120px)!important;
+}
 
 .card-14 {
     min-height: calc(50vh - 70px);
@@ -67,8 +71,7 @@ h4, .h4 {
     padding-right: 0px!important;
 }
 .card-12 {
-    min-height: calc(100vh - 110px);
-    max-height: calc(100vh - 110px);
+    min-height: calc(50vh - 70px);
     padding-left: 0px!important;
     padding-right: 0px!important;
 }
@@ -79,6 +82,10 @@ h4, .h4 {
   height: 24px;
 }
 
+.hidden {
+  display: none!important;
+}
+
 .input-height {
     margin-top: 1.2rem;
 }
@@ -87,7 +94,7 @@ h4, .h4 {
     overflow-x: hidden;
 }
 
-nput,
+input,
 select,
 textarea {
   outline: none;
@@ -508,12 +515,47 @@ input:-webkit-autofill {
   padding: 0.5rem;
 }
 
+.btn-secondary {
+    background-color: var(--bg);
+    color: var(--primary);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary);
+}
+
+
+.navbar-nav .nav-link {
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.btn-nooutline-secondary:focus,
+.btn-nooutline-secondary:not(:disabled):not(.disabled):active:focus,
+.btn-nooutline-secondary:not(:disabled):not(.disabled).active:focus {
+    box-shadow: none;
+}
+
+
+
 .table {
     font-size: 0.8rem!important;
 }
 
-.table-borderless {
+.table-borderless, .borderless {
     border: 0!important;
+}
+
+.btn-tooltip:hover {
+    box-shadow: none;
+}
+
+.tooltip {
+    z-index: 2000;
+}
+
+.tooltip-inner {
+    max-width: 350px;
+    text-align: justify;
 }
 
 .thead-light th {
@@ -555,3 +597,28 @@ input:-webkit-autofill {
 .modal.fixed-left .modal-dialog-aside{ margin-left:auto;  transform: translateX(100%); }
 .modal.fixed-right .modal-dialog-aside{ margin-right:auto; transform: translateX(-100%); }
 .modal.show .modal-dialog-aside{ transform: translateX(0);  }
+
+.btn-light, .btn-light:hover, .btn-light:active, .btn-light:focus{
+    background-color: var(--white);
+    border-color: var(--white);
+    color: var(--dark)!important;
+    text-transform: none;
+    font-weight: 400;
+    box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
+}
+
+.bootstrap-select .dropdown-toggle:focus, .bootstrap-select>select.mobile-device:focus+.dropdown-toggle {
+    outline: none!important;
+}
+
+.btn-light.dropdown-toggle::after {
+    border-top-color: var(--dark);
+}
+
+.dropdown-menu .dropdown-item {
+    line-height: 1!important;
+    padding-top: 0.5rem!important;
+    padding-right: 1rem!important;
+    padding-bottom: 0.5rem!important;
+    padding-left: 1rem!important;
+}

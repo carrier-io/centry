@@ -101,6 +101,7 @@ class ProjectAPI(Resource):
             "funcname": "post_processor",
             "invoke_func": "lambda_function.lambda_handler",
             "runtime": "Python 3.7",
+            "region": "default",
             "env_vars": dumps({
                 "jmeter_db": "{{secret.jmeter_db}}",
                 "gatling_db": "{{secret.gatling_db}}",
@@ -115,6 +116,7 @@ class ProjectAPI(Resource):
             "funcname": "control_tower",
             "invoke_func": "lambda.handler",
             "runtime": "Python 3.7",
+            "region": "default",
             "env_vars": dumps({
                 "token": "{{secret.auth_token}}",
                 "galloper_url": "{{secret.galloper_url}}",
@@ -157,6 +159,9 @@ class ProjectAPI(Resource):
         project.secrets_json = {
             "vault_auth_role_id": project_vault_data["auth_role_id"],
             "vault_auth_secret_id": project_vault_data["auth_secret_id"],
+        }
+        project.worker_pool_config_json = {
+            "regions": ["default"]
         }
         project.commit()
         set_project_secrets(project.id, project_secrets)

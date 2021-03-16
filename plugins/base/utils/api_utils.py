@@ -60,12 +60,12 @@ def add_resource_to_api(api: Api, resource: Resource, *urls, **kwargs) -> None:
 
 
 def _calcualte_limit(limit, total):
-    return len(total) if limit == 'All' else limit
+    return total if limit == 'All' or limit == 0 else limit
 
 
 def get(project_id, args, data_model, additional_filter=None):
     from flask import current_app
-    project = current_app.config["CONTEXT"].rpc_manager.call.project_get_ot_404(project_id=project_id)
+    project = current_app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id)
     limit_ = args.get("limit")
     offset_ = args.get("offset")
     if args.get("sort"):

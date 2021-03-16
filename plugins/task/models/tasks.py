@@ -30,46 +30,17 @@ class Task(AbstractBaseMixin, Base):
     task_name = Column(String(128), unique=False, nullable=False)
     task_handler = Column(String(128), unique=False, nullable=False)
     runtime = Column(String(128), unique=False, nullable=False)
-    schedule = Column(String(128), unique=False, nullable=True)
-    next_run = Column(Integer, unique=False, nullable=True)
+    region = Column(String(128), unique=False, nullable=False)
     webhook = Column(String(128), unique=False, nullable=True)
     last_run = Column(Integer, unique=False, nullable=True)
-    status = Column(String(128), unique=False, nullable=True)
-    token = Column(String(128), unique=False, nullable=True)
-    func_args = Column(Text, unique=False, nullable=True)
     env_vars = Column(Text, unique=False, nullable=True)
-    callback = Column(String(128), unique=False, nullable=True)
-
-    def to_json(self, exclude_fields: tuple = ()) -> dict:
-        json_dict = super().to_json(exclude_fields=exclude_fields or ("schedule", "callback"))
-        json_dict["schedule"] = self.schedule if self.schedule not in ("None", "none", "") else None
-        json_dict["callback"] = self.callback if self.callback not in ("None", "none", "") else None
-        return json_dict
 
     def insert(self):
-        if self.schedule and self.schedule in ("None", "none", ""):
-            self.schedule = None
-        if self.callback and self.callback in ("None", "none", ""):
-            self.callback = None
         if not self.webhook:
             self.webhook = f"/task/{self.task_id}"
-        if not self.status:
-            self.status = "suspended"
-        if not self.token:
-            self.token = str(uuid4())
-        if not self.func_args:
-            self.func_args = "{}"
         if not self.env_vars:
             self.env_vars = "{}"
         super().insert()
-
-    def suspend(self):
-        self.status = "suspended"
-        self.commit()
-
-    def activate(self):
-        self.status = "active"
-        self.commit()
 
     def set_last_run(self, ts):
         self.last_run = ts
@@ -78,3 +49,7 @@ class Task(AbstractBaseMixin, Base):
     @staticmethod
     def tasks_count(project_id):
         return Task.query.filter_by(project_id=project_id).count()
+
+    @staticmethod
+    def list_tasks(project_id):
+        return Task.query.filter_by(project_id=project_id)

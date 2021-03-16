@@ -50,9 +50,10 @@ class Module(module.ModuleModel):
         add_resource_to_api(self.context.api, TasksApi, "/task/<int:project_id>")
         add_resource_to_api(self.context.api, TaskUpgradeApi, "/upgrade/<int:project_id>/task")
 
-        from .rpc_worker import tasks_count, create
-        self.context.rpc_manager.register_function(tasks_count, name='tasks_count')
+        from .rpc_worker import tasks_count, create, list_tasks
         self.context.rpc_manager.register_function(create, name='task_create')
+        self.context.rpc_manager.register_function(list_tasks)
+        self.context.rpc_manager.register_function(tasks_count)
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """

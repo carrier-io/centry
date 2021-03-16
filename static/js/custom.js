@@ -12,6 +12,9 @@ $(".select-project").on("click", function(ev) {
     selectProject({name: ev.target.textContent, id: ev.target.getAttribute("project-id")})
 })
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 // Test planner
 function addParam(id) {
@@ -35,6 +38,18 @@ function removeParam(ev) {
         ev.target.parentNode.parentNode.parentNode.remove();
     }
 
+}
+
+function getSelectedProjectId() {
+    return parseInt($("#selected-project-id").text())
+}
+
+function toggleRows(id) {
+    if ($(`#${id} .row.hidden`).length == 0) {
+        $(`#${id} .row`).slice(1,).addClass("hidden")
+    } else {
+        $(`#${id} .row.hidden`).removeClass("hidden")
+    }
 }
 
 $(".email").change(function() {

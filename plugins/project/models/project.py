@@ -37,10 +37,6 @@ def whomai():
     # Get user name from session
     return "User"
 
-def get_enabled_regions():
-    # Get user name from project_intergations_config
-    return ["default", "us-east", "us-west", "eu-central"]
-
 def get_project_integrations():
     # Get user name from project_intergations_config
     return ["rp", "ado", "email"]
@@ -86,7 +82,7 @@ class Project(AbstractBaseMixin, Base):
         json_data["username"] = whomai()
         json_data["projects"] = get_user_projects()
         json_data["integrations"] = get_project_integrations()
-        json_data["regions"] = get_enabled_regions()
+        json_data["regions"] = self.worker_pool_config_json.get("regions", ["default"])
         json_data["default_chapter"] = last_visited_chapter()
         return json_data
 
@@ -154,7 +150,7 @@ class Project(AbstractBaseMixin, Base):
         project = Project.query.get_or_404(project_id)
         if not is_user_part_of_the_project(project.id):
             abort(404, description="User not a part of project")
-        return project.to_json(exclude_fields=exclude_fields)
+        return project
 
     @staticmethod
     def list_projects(project_id=None, search_=None, limit_=None, offset_=None):
