@@ -43,9 +43,7 @@ class Module(module.ModuleModel):
         init_db()
         from .api.tasks import TasksApi
         from .api.task_upgrade_api import TaskUpgradeApi
-        from .api.task_action_api import TaskActionApi
         from .api.task import TaskApi
-        add_resource_to_api(self.context.api, TaskActionApi, "/task/<string:task_id>/<string:action>")
         add_resource_to_api(self.context.api, TaskApi, "/task/<int:project_id>/<string:task_id>")
         add_resource_to_api(self.context.api, TasksApi, "/task/<int:project_id>")
         add_resource_to_api(self.context.api, TaskUpgradeApi, "/upgrade/<int:project_id>/task")

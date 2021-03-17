@@ -92,16 +92,9 @@
                         <div id="projects-dropdown-items" class="dropdown-menu" aria-labelledby="projects-dropdown">
                             <a class="dropdown-item" href="#">Create Project</a>
                             {% for item in config.projects %}
-                                <a class="dropdown-item select-project" href="#" project_id="{{item.id}}">{{item.name}}</a>
+                            <a class="dropdown-item select-project" href="#" project_id="{{item.id}}">{{item.name}}</a>
                             {% endfor %}
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-icon" href="?chapter=Tasks&module=list">
-                            <i class="fas fa-clipboard-list"></i>
-                            <span class="nav-link-inner--text d-lg-none">Tasks</span>
-                        </a>
-
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-icon" href="#">
