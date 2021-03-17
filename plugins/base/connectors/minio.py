@@ -113,3 +113,12 @@ class MinioClient:
 
     def get_bucket_lifecycle(self, bucket: str) -> dict:
         return self.s3_client.get_bucket_lifecycle(Bucket=self.format_bucket_name(bucket))
+
+    def get_bucket_size(self, bucket: str) -> int:
+        total_size = 0
+        for each in self.s3_client.list_objects_v2(
+                Bucket=self.format_bucket_name(bucket)
+        ).get('Contents', {}):
+            total_size += each["Size"]
+        return total_size
+

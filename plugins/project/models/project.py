@@ -92,9 +92,11 @@ class Project(AbstractBaseMixin, Base):
             chapters.append({
                 "title": "Configuration", "link": "?chapter=Configuration&module=Tasks&page=list",
                 "nav": [
-                    {"title": "Tasks", "link": "?chapter=Configuration&module=Tasks&page=list", "active": True},
                     {"title": "Users", "link": "?chapter=Configuration&module=Users&page=all"},
                     {"title": "Quotas", "link": "?chapter=Configuration&module=Quotas&page=all"},
+                    {"title": "Tasks", "link": "?chapter=Configuration&module=Tasks&page=list", "active": True},
+                    {"title": "Secrets", "link": "?chapter=Configuration&module=Secrets&page=list"},
+                    {"title": "Artifacts", "link": "?chapter=Configuration&module=Artifacts&page=list"},
                     {"title": "Integrations", "link": "?chapter=Configuration&module=Integrations&page=all"},
                     {"title": "Plugins", "link": "?chapter=Configuration&module=Plugins&page=all"}
                 ]

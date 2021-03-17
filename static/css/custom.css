@@ -83,6 +83,12 @@ h4, .h4 {
     margin-left: -25px;
 }
 
+.tall-table {
+  min-height: calc(100vh - 310px)!important;
+  max-height: calc(100vh - 310px)!important;
+  overflow-y: scroll;
+}
+
 .max-scrollable-y {
   max-height: calc(100vh - 230px)!important;
   overflow-y: scroll;
