@@ -40,6 +40,7 @@ h3, .h3 {
     font-weight: bold;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    text-transform: capitalize;
 }
 
 .card-header {
@@ -70,16 +71,31 @@ h4, .h4 {
     padding-left: 0px!important;
     padding-right: 0px!important;
 }
+
 .card-12 {
     min-height: calc(50vh - 70px);
     padding-left: 0px!important;
     padding-right: 0px!important;
 }
 
+.m--25{
+    margin-right: -25px;
+    margin-left: -25px;
+}
+
+.max-scrollable-y {
+  max-height: calc(100vh - 230px)!important;
+  overflow-y: scroll;
+}
+
 .vl {
   border-left: 1px solid var(--primary);
   min-height: 24px;
   height: 24px;
+}
+
+.container {
+    min-width: 1200px;
 }
 
 .hidden {
@@ -626,4 +642,26 @@ input:-webkit-autofill {
 #chapter-dropdown-items .dropdown-item {
     line-height: 1.5!important;
     padding: 1rem!important;
+}
+
+.table tr td:first-child, .table tr th:first-child {
+    padding-left: 30px;
+    width: auto!important;
+}
+.table tr td:last-child, .table tr th:last-child {
+    padding-right: 30px!important;
+    width: auto!important;
+}
+
+.col-13 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    min-width: 400px!important;
+}
+
+.col-23 {
+    min-width: 800px!important;
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
 }

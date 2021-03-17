@@ -17,13 +17,13 @@ $(function () {
 })
 
 // Test planner
-function addParam(id) {
+function addParam(id, key="", value="") {
     $(`#${id}`).append(`<div class="row mt-2">
     <div class="col">
-        <input type="text" class="form-control" placeholder="Variable name">
+        <input type="text" class="form-control" placeholder="Variable name" value="${key}">
     </div>
     <div class="col">
-        <input type="text" class="form-control" placeholder="Value">
+        <input type="text" class="form-control" placeholder="Value" value="${value}">
     </div>
     <div class="col-xs text-right">
         <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>

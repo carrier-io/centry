@@ -9,6 +9,7 @@ from plugins.base.constants import POST_PROCESSOR_PATH, CONTROL_TOWER_PATH, APP_
 
 from ..models.tasks import Task
 
+
 class TaskUpgradeApi(Resource):
     _get_rules = (dict(name="name", type=str, location="args"),)
 

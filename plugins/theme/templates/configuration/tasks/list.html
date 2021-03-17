@@ -1,0 +1,211 @@
+{% set runtimes = ['Python 3.8', 'Python 3.7', 'Python 3.6', 'Go 1.x', 'Java 11', 'Node.js 6.10', 'Node.js 8.10', 'Ruby 2.5', 'Node.js 12.x', 'Java 8', 'Python 2.7', 'Node.js 10.x', '.NET Core 2.1 (C#/PowerShell)', '.NET Core 2.0 (C#)'] %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-13 pr-1 pl-5">
+            <div class="card card-14 tall shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="results">Tasks</h3>
+                        </div>
+                        <div class="col">
+                            <ul id="results-control" class="nav nav-pills justify-content-end">
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <button type="button" id="create-task" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#createTaskModal">
+                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
+                                    </button>
+                                </li>
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <button type="button" id="remove-task" onclick="deleteTask(event)" class="btn btn-secondary btn-sm">
+                                        <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush table-borderless"
+                        id="results-list"
+                        data-toggle="table"
+                        data-click-to-select="true"
+                        data-single-select="true"
+                        data-url="/api/v1/task/{{config.id}}"
+                        data-virtual-scroll="true">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" data-checkbox="true" style="display:none"></th>
+                                <th data-visible="false" data-field="id">index</th>
+                                <th scope="col" data-sortable="true" data-field="task_name">Name</th>
+                                <th scope="col" data-sortable="true" data-field="runtime">Runtime</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="card-footer py-4 border-0">
+                </div>
+            </div>
+        </div>
+        <div class="col-23 pr-5 pl-1">
+            <div class="card card-14 tall shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="task-name"></h3>
+                            <span class="text-gray hidden" id="task-id"></span>
+                        </div>
+                        <div class="col">
+                            <ul id="task-control" class="nav nav-pills justify-content-end">
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <button type="button" id="run-task" class="btn btn-secondary btn-sm" onclick="runTask(event)">
+                                        <span class="btn-inner--icon"><i class="fa fa-play"></i></span>
+                                    </button>
+                                </li>
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <button id="update-task" class="btn btn-secondary btn-sm" onclick="updateTask(event)">
+                                        <span class="btn-inner--icon"><i class="fa fa-save"></i></span>
+                                    </button>
+                                </li>
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <a id="delete-task" href="/tests/backend" class="btn btn-secondary btn-sm" onclick="deleteTask(event)">
+                                        <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <nav>
+                      <div class="nav nav-tabs source-selector" id="nav-task" role="tablist">
+                          <a class="nav-item nav-link active" id="nav-task-stats" data-toggle="tab" href="#task-stats" role="tab" aria-controls="task-stats" aria-selected="true">Stats</a>
+                          <a class="nav-item nav-link" id="nav-task-config" data-toggle="tab" href="#task-config" role="tab" aria-controls="task-config" aria-selected="false">Config</a>
+                      </div>
+                    </nav>
+                    <div class="tab-content">
+                      <div class="tab-pane fade m--25 mt-2 max-scrollable-y show active" id="task-stats" role="tabpanel" aria-labelledby="nav-task-stats">
+                          <div></div>
+                      </div>
+                      <div class="tab-pane fade m--25 mt-2 max-scrollable-y" id="task-config" role="tabpanel" aria-labelledby="nav-task-config">
+                          <div class="row p-4">
+                            <div class="col-2">
+                                <label class="form-control-label" for="webhook">Webhook</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" id="webhook" class="form-control form-control-alternative" disabled>
+                                <small>
+                                    To call a task using REST you need to pass
+                                    <br>
+                                    <code>token</code> - header with auth token
+                                    <br>
+                                    <code>body</code> - in case of POST request body is JSON with parameters to handler
+                                </small>
+                            </div>
+                          </div>
+                          <div class="row p-4">
+                            <div class="col-2">
+                                <label class="form-control-label" for="runtime_name">Runtime</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" id="runtime_name" class="form-control form-control-alternative" disabled>
+                            </div>
+                            <div class="col-5">
+                                <small>
+                                    Language runtime where your task is executed
+                                </small>
+                            </div>
+                          </div>
+                          <div class="row p-4">
+                            <div class="col-2">
+                                <label class="form-control-label" for="handler_name">Handler</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" id="handler_name" class="form-control form-control-alternative">
+                            </div>
+                            <div class="col-5">
+                                <small>
+                                    Function in your code,
+                                    that Galloper can invoke when the service executes your code.
+                                    Use the following general syntax structure - <code> handler(event, context) </code>
+                                </small>
+                            </div>
+                          </div>
+                          <div class="row p-4">
+                            <div class="col-2">
+                                <label class="form-control-label" for="exec-region">Region</label>
+                            </div>
+                            <div class="col">
+                                <select class="selectpicker show-tick form-control" id="exec-region">
+                                    {% for item in config.regions %}
+                                    <option>{{item}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <small>Region (Interceptor queue) in which to run the task</small>
+                            </div>
+                          </div>
+                          <div class="row p-4 bg-light">
+                            <div class="col-6">
+                                <div class="card ml-0 mr-0" id="envVars-config">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-control-label mt-0">Environment variables</label>
+                                            <p><small>Environment variables for your task</small></p>
+                                        </div>
+                                        <div class="col-xs text-right">
+                                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="addParam('envVars-config')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card ml-0 mr-0" id="runtimeConfig-config">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-control-label mt-0">Runtime Configuration</label>
+                                            <p><small>Specific tasks runtime configurations</small></p>
+                                        </div>
+                                        <div class="col-xs text-right">
+                                            <label class="custom-toggle mr-3">
+                                              <input type="checkbox" onchange="toggleRows('runtimeConfig-config')">
+                                              <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 hidden">
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Variable name" value="FUNCTION_TIMEOUT" disabled>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Value" id="FUNCTION_TIMEOUT" value="7200">
+                                        </div>
+                                        <div class="col-xs text-right">
+                                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" data-toggle="tooltip" data-html="true" title="{{timeout_tooltip}}"><i class="fas fa-question-circle"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 hidden">
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Variable name" value="FUNCTION_MEMORY_SIZE" disabled>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Value" id="FUNCTION_MEMORY_SIZE" value="256">
+                                        </div>
+                                        <div class="col-xs text-right">
+                                            <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" data-toggle="tooltip" data-html="true" title="{{memsize_tooltip}}"><i class="fas fa-question-circle"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ template_slot("create_test", payload=config)|safe }}
+
+<script src="{{ url_for('static', filename='js/components/tasks.js') }}" type="text/javascript"></script>

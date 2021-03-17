@@ -2,6 +2,42 @@ $('#createTaskModal').on('hide.bs.modal', function(e) {
     clearTaskModal()
 });
 
+
+function updateTask(event) {
+  event.preventDefault();
+  var data = new FormData();
+  let task_id = $('#task-id').text()
+  $("#update-task").html(`<span class="spinner-border spinner-border-sm"></span>`);
+  $("#update-task").addClass("disabled");
+  data.append('region', $('#exec-region').val());
+  data.append('invoke_func', $('#handler_name').val());
+  var env_vars = {}
+  $("#runtimeConfig-config .row").slice(1,).each(function(_,item){
+    var inp = $(item).find('input[type=text]')
+    env_vars[inp[0].value] = inp[1].value
+  })
+  $("#envVars-config .row").slice(1,).each(function(_,item){
+    var inp = $(item).find('input[type=text]')
+    env_vars[inp[0].value] = inp[1].value
+  })
+  data.append('env_vars', JSON.stringify(env_vars));
+  $.ajax(
+    {
+      url:`/api/v1/task/${getSelectedProjectId()}/${task_id}`,
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'PUT',
+      success: function(data){
+          $("#update-task").html(`<span class="btn-inner--icon"><i class="fa fa-save"></i></span>`);
+          $("#update-task").removeClass("disabled");
+          $('#results-list').bootstrapTable('refresh');
+      }
+    }
+  );
+}
+
 function createTask(event) {
     event.preventDefault();
     $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
@@ -48,6 +84,23 @@ function createTask(event) {
       );
     }
 
+function deleteTask(){
+    event.preventDefault();
+    let task_id = $('#task-id').text()
+    $.ajax(
+    {
+      url:`/api/v1/task/${getSelectedProjectId()}/${task_id}`,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'DELETE',
+      success: function(data){
+          $('#results-list').bootstrapTable('refresh');
+      }
+    }
+  );
+}
+
 function clearTaskModal(){
   $("#submit").html(`<span class="btn-inner--icon"><i class="fa fa-plus"></i></span>`);
   $("#submit").removeClass("disabled");
@@ -75,5 +128,30 @@ function clearTaskModal(){
 }
 
 $("#results-list").on('check.bs.table', function(e, row, element) {
-    console.log(row);
+    $("#envVars-config .row").slice(1,).each(function(_, item){
+        item.remove();
+    })
+    if($('#runtimeConfig-config input[type="checkbox"]').prop('checked')) {
+        $('#runtimeConfig-config input[type="checkbox"]').prop('checked', false);
+        $('#runtimeConfig-config input[type="checkbox"]').trigger("change");
+      }
+    $("#task-name").text(row.task_name);
+    $("#task-id").text(row.task_id);
+    $("#webhook").val(row.webhook);
+    $("#runtime_name").val(row.runtime);
+    $("#handler_name").val(row.task_handler);
+    $('#exec-region').val(row.region);
+    $('#exec-region').selectpicker('refresh');
+    let envVars = JSON.parse(row.env_vars);
+    Object.keys(envVars).forEach(function(key){
+        if (["FUNCTION_TIMEOUT", "FUNCTION_MEMORY_SIZE"].indexOf(key) > -1) {
+            $(`#${key}`).val(envVars[key])
+        } else {
+            addParam('envVars-config', key, envVars[key])
+        }
+    })
+})
+
+$("#results-list").on('load-success.bs.table', function(e, data, status, type) {
+    $("#results-list").bootstrapTable('check', 0);
 })

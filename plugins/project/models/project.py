@@ -90,9 +90,10 @@ class Project(AbstractBaseMixin, Base):
         chapters = []
         if user_is_project_admin():
             chapters.append({
-                "title": "Configuration", "link": "?chapter=Configuration",
+                "title": "Configuration", "link": "?chapter=Configuration&module=Tasks&page=list",
                 "nav": [
-                    {"title": "Users", "link": "?chapter=Configuration&module=Users&page=all", "active": True},
+                    {"title": "Tasks", "link": "?chapter=Configuration&module=Tasks&page=list", "active": True},
+                    {"title": "Users", "link": "?chapter=Configuration&module=Users&page=all"},
                     {"title": "Quotas", "link": "?chapter=Configuration&module=Quotas&page=all"},
                     {"title": "Integrations", "link": "?chapter=Configuration&module=Integrations&page=all"},
                     {"title": "Plugins", "link": "?chapter=Configuration&module=Plugins&page=all"}
@@ -110,7 +111,7 @@ class Project(AbstractBaseMixin, Base):
         if any( plugin in ["backend", "visual"] for plugin in self.plugins):
             nav = [{"title": "Overview", "link": "?chapter=Performance&module=Overview&page=overview", "active": True}]
             if "backend" in self.plugins:
-                nav.append({"title": "Backend", "link": "?chapter=Performance&module=Backend&page=backend"})
+                nav.append({"title": "Backend", "link": "?chapter=Performance&module=Backend&page=list"})
             if "visual" in self.plugins:
                 nav.append({"title": "Visual", "link": "?chapter=Performance&module=Visual&page=visual"})
             nav.append({"title": "Results", "link": "?chapter=Performance&module=Results&page=reports"})
