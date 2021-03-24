@@ -122,13 +122,13 @@ class Project(AbstractBaseMixin, Base):
         if any (plugin in ["cloud", "infra", "code", "application"] for plugin in self.plugins):
             nav = [{"title": "Overview", "link": "?chapter=Security&module=Overview&page=overview", "active": True}]
             if "code" in self.plugins:
-                nav.append({"title": "Code", "link": "?chapter=Security&module=Code&page=overview"})
+                nav.append({"title": "Code", "link": "?chapter=Security&module=Code&page=list"})
             if "application" in self.plugins:
-                nav.append({"title": "App", "link": "?chapter=Security&module=App&page=overview"})
+                nav.append({"title": "App", "link": "?chapter=Security&module=App&page=list"})
             if "cloud" in self.plugins:
-                nav.append({"title": "Cloud", "link": "?chapter=Security&module=Cloud&page=overview"})
+                nav.append({"title": "Cloud", "link": "?chapter=Security&module=Cloud&page=list"})
             if "infra" in self.plugins:
-                nav.append({"title": "Infra", "link": "?chapter=Security&module=Infra&page=overview"})
+                nav.append({"title": "Infra", "link": "?chapter=Security&module=Infra&page=list"})
             nav.append({"title": "Results", "link": "?chapter=Security&module=Results&page=all"})
             nav.append({"title": "Thresholds", "link": "?chapter=Security&module=Thresholds&page=all"})
             nav.append({"title": "Bug Bar", "link": "?chapter=Security&module=Bugbar&page=all"})

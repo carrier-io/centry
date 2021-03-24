@@ -473,7 +473,7 @@ input:-webkit-autofill {
 
 [class*="btn-nooutline-"] {
   border: 0;
-  color: var(--background);
+  color: var(--dark);
 }
 
 .btn-nooutline-secondary:hover {
@@ -650,12 +650,24 @@ input:-webkit-autofill {
     padding: 1rem!important;
 }
 
-.table tr td:first-child, .table tr th:first-child {
-    padding-left: 30px;
+.table tr td:first-child, .table tr th:first-child, .table-list tr td:nth-child(2), .table-list tr th:nth-child(2) {
+    padding-left: 30px!important;
     width: auto!important;
 }
-.table tr td:last-child, .table tr th:last-child {
+
+.table tr th:first-child .th-inner, .table-list tr th:nth-child(2) .th-inner {
+    padding-left: 0px!important;
+}
+
+.table tr td:last-child {
     padding-right: 30px!important;
+    margin-right: 0!important;
+    width: auto!important;
+}
+
+.table tr th:last-child {
+    padding-right: 20px!important;
+    margin-right: 0!important;
     width: auto!important;
 }
 
@@ -670,4 +682,22 @@ input:-webkit-autofill {
     flex-basis: 0;
     flex-grow: 1;
     max-width: 100%;
+}
+
+.table-list .bs-checkbox {
+    display: none;
+}
+
+.popover {
+    max-width: 400px;
+    box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
+    background-color: var(--secondary);
+}
+
+.popover textarea {
+    border-color: var(--gray);
+}
+
+.bs-popover-left>.arrow::after, .bs-popover-auto[x-placement^="left"]>.arrow::after{
+    border-left-color: var(--secondary);
 }

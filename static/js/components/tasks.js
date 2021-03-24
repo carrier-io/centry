@@ -155,3 +155,10 @@ $("#results-list").on('check.bs.table', function(e, row, element) {
 $("#results-list").on('load-success.bs.table', function(e, data, status, type) {
     $("#results-list").bootstrapTable('check', 0);
 })
+
+
+$(document).ready(function() {
+    $("[data-toggle=popover]").popover({
+        sanitizeFn: function(content) {return content}
+    });
+});

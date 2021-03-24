@@ -28,3 +28,7 @@ def render_test(context, slot, payload):  # pylint: disable=R0201,W0613
         return render_template(f"{chapter.lower()}/create.html", active_chapter=chapter, config=payload)
     except:
         return render_template(f"common/empty.html", active_chapter=chapter, config=payload)
+
+
+def reporting_config(context, slot, payload):
+    return render_template(f"common/reporting-config.html", config=payload)

@@ -62,43 +62,24 @@
     </div>
     <div class="col-xs">
         <div class="left-side d-flex">
-            <div class="collapse-close mt-03">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-sub" aria-controls="navbar-sub" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-            </div>
-            <div id="navbar-sub" class="collapse navbar-collapse">
-                <div class="navbar-collapse-header">
-                    <div class="row">
-                        <div class="col-6 collapse-brand">
-                            <a href="javascript:void(0)">Shortcuts</a>
-                        </div>
-                        <div class="col-6 collapse-close">
-                            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-sub" aria-controls="navbar-sub" aria-expanded="false" aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <ul class="navbar-nav ml-lg-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="projects-dropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span id="selected-project"
-                                  class="nav-link-inner--text d-lg-inline-block">{% if config.name %} {{config.name}} {%else%} Select Project {%endif%}</span>
-                            <span id="selected-project-id" hidden>{% if config.name %} {{config.id}} {%endif%}</span>
-                        </a>
-                        <div id="projects-dropdown-items" class="dropdown-menu" aria-labelledby="projects-dropdown">
-                            <a class="dropdown-item" href="#">Create Project</a>
-                            {% for item in config.projects %}
-                            <a class="dropdown-item select-project" href="#" project_id="{{item.id}}">{{item.name}}</a>
-                            {% endfor %}
-                        </div>
-                    </li>
-                </ul>
+            <a  class="dropdown-toggle dark" href="#" id="projects-dropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="selected-project"
+                      class="nav-link-inner--text d-lg-inline-block">{% if config.name %} {{config.name}} {%else%} Select Project {%endif%}</span>
+                <span id="selected-project-id" hidden>{% if config.name %} {{config.id}} {%endif%}</span>
+            </a>
+            <div id="projects-dropdown-items" class="dropdown-menu dropdown-menu-right" aria-labelledby="projects-dropdown">
+                <a class="dropdown-item" href="/new">Create Project</a>
+                {% for item in config.projects %}
+                <a class="dropdown-item select-project" href="#" project_id="{{item.id}}">{{item.name}}</a>
+                {% endfor %}
             </div>
         </div>
+        <ul class="navbar-nav ml-lg-auto">
+            <li class="nav-item dropdown">
+
+            </li>
+        </ul>
     </div>
     <div class="col-xs mr-3">
         <div class="left-side d-flex">

@@ -1,0 +1,85 @@
+<div class="row p-0 pl-4">
+    <div class="col">
+        <h4 class="mb-0 mt-0">Reporting</h4>
+    </div>
+</div>
+<div class="row p-4">
+    <div class="col-6">
+        <div class="card ml-0 mr-0" id="emailCard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mt-0">Email</label>
+                    <p><small>Enable email notifications after test is done</small></p>
+                </div>
+                <div class="col-xs text-right">
+                    <label class="custom-toggle mr-3 align-middle">
+                      <input type="checkbox" id="email" onclick="toggleRows('emailCard')">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card ml-0 mr-0" id="jiraCard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mt-0">Jira</label>
+                    <p><small>Issues automatically imported into Jira</small></p>
+                </div>
+                <div class="col-xs text-right">
+                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('jiraCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle">
+                      <input type="checkbox" id="jira">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card ml-0 mr-0" id="CICard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mt-0">CI/CD Integration</label>
+                    <p><small>Enables jUnit type of reports and quality gate</small></p>
+                </div>
+                <div class="col-xs text-right">
+                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('CICard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle">
+                      <input type="checkbox" id="ci">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card ml-0 mr-0" id="ADOCard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mt-0">Azure DevOps</label>
+                    <p><small>Report results automatically into ADO as work items</small></p>
+                </div>
+                <div class="col-xs text-right">
+                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('ADOCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle">
+                      <input type="checkbox" id="ado">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card ml-0 mr-0" id="RPCard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mt-0">Report Portal</label>
+                    <p><small>Report results into Report Portal as test items</small></p>
+                </div>
+                <div class="col-xs text-right">
+                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('RPCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle">
+                      <input type="checkbox" id="rp">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
