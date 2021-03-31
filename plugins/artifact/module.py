@@ -35,8 +35,14 @@ class Module(module.ModuleModel):
         log.info("Initializing module Tasks")
         from .api.buckets import Buckets
         from .api.artifacts import Artifacts
+        from .api.artifact import Artifact
+
         add_resource_to_api(self.context.api, Buckets, "/artifact/<int:project_id>")
         add_resource_to_api(self.context.api, Artifacts, "/artifact/<int:project_id>/<string:bucket>")
+        add_resource_to_api(self.context.api, Artifact, "/artifact/<int:project_id>/<string:bucket>/<string:filename>")
+        #TODO: rename in interceptor
+        add_resource_to_api(self.context.api, Artifact, "/artifacts/<int:project_id>/<string:bucket>/<string:filename>",
+                            endpoint="artifact_old")
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """
