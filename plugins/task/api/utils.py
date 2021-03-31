@@ -42,56 +42,34 @@ def create_task(project, file, args):
 
 
 def check_task_quota(task, project_id=None, quota='tasks_executions'):
-    project_id = project_id if project_id else task["project_id"]
-    from flask import current_app
-    if not current_app.config["CONTEXT"].rpc_manager.call.project_check_quota(project_id=project_id, quota=quota):
-        data = {"ts": int(mktime(datetime.utcnow().timetuple())), 'results': 'Forbidden',
-                'stderr': f'The number of {quota} allowed in the project has been exceeded'}
-        if task:
-            headers = {
-                "Content-Type": "application/json",
-                "Token": task['token']
-            }
-            auth_token = current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
-                value="{{secret.auth_token}}",
-                project_id=task['project_id']
-            )
-            if auth_token:
-                headers['Authorization'] = f'bearer {auth_token}'
-
-            task.set_last_run(data["ts"])
-            result = Results(task_id=task["id"], project_id=project_id, ts=data["ts"], results=data["results"],
-                             log=data["stderr"])
-            result.insert()
-        raise Forbidden(description=f"The number of {quota} allowed in the project has been exceeded")
-    else:
-        return {"message", "ok"}
+    # TODO: we need to calculate it based on VUH, if we haven't used VUH quota then run
+    return {"message", "ok"}
 
 
 def run_task(project_id, event, task_id=None):
     from flask import current_app
-    secrets = current_app.config["CONTEXT"].rpc_manager.call.project_get_secrets(project_id=project_id)
+    secrets = current_app.config["CONTEXT"].rpc_manager.call.get_secrets(project_id=project_id)
     if "control_tower_id" not in secrets:
-        secrets = current_app.config["CONTEXT"].rpc_manager.call.project_get_hidden_secrets(project_id=project_id)
+        secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project_id)
     task_id = task_id if task_id else secrets["control_tower_id"]
     task = Task.query.filter(and_(Task.task_id == task_id)).first().to_json()
     check_task_quota(task)
-    current_app.config["CONTEXT"].rpc_manager.call.add_task_execution(project_id == task['project_id'])
+    current_app.config["CONTEXT"].rpc_manager.call.add_task_execution(project_id=task['project_id'])
     arbiter = get_arbiter()
     task_kwargs = {
-        "task": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+        "task": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value=task,
             project_id=project_id
         ),
-        "event": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+        "event": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value=event,
             project_id=project_id
         ),
-        "galloper_url": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+        "galloper_url": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value="{{secret.galloper_url}}",
             project_id=task['project_id']
         ),
-        "token": current_app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+        "token": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value="{{secret.auth_token}}",
             project_id=task['project_id']
         )

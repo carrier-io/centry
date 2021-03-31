@@ -38,6 +38,35 @@ function updateTask(event) {
   );
 }
 
+
+function runTask(ev) {
+    $('label[for="event"]').parent().find('span').remove()
+    var task_id = $("#task-id").text()
+    var event_json = $("#event").val()
+    try {
+        JSON.parse(event_json)
+    } catch (error) {
+        $('label[for="event"]').append('<span class="badge badge-danger ml-3">Event should be in valid JSON format</span>');
+        return;
+    }
+    if (event_json.length === 0) {
+      event_json = "{}"
+    }
+    $.ajax(
+      {
+        url: `/api/v1/task/${getSelectedProjectId()}/${task_id}`,
+        data: event_json,
+        cache: false,
+        contentType: "application/json",
+        processData: false,
+        method: 'POST',
+        success: function(data){
+          $('label[for="event"]').parent().parent().popover("hide");
+        }
+      }
+    )
+}
+
 function createTask(event) {
     event.preventDefault();
     $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);

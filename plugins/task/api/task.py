@@ -35,7 +35,7 @@ class TaskApi(Resource):
         args = self.get_parser.parse_args(strict=False)
         project, task = self._get_task(project_id, task_id)
         if args.get("exec"):
-            return self.app.config["CONTEXT"].rpc_manager.call.project_unsecret(
+            return self.app.config["CONTEXT"].rpc_manager.call.unsecret_key(
                 value=task.to_json(), project_id=project_id)
         return task.to_json()
 

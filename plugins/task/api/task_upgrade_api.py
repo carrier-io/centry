@@ -39,7 +39,7 @@ class TaskUpgradeApi(Resource):
         args = self.get_parser.parse_args(strict=False)
         if args['name'] not in ['post_processor', 'control_tower', 'all']:
             return {"message": "You shall not pass", "code": 400}, 400
-        secrets = current_app.config["CONTEXT"].rpc_manager.call.project_get_hidden_secrets(project_id=project.id)
+        secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project.id)
         project_secrets = {}
         if args['name'] == 'post_processor':
             self.create_pp_task(project)
