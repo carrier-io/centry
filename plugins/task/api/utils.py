@@ -1,6 +1,5 @@
 from uuid import uuid4
-from time import mktime
-from datetime import datetime
+from json import dumps
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import Forbidden
 from sqlalchemy import and_
@@ -48,9 +47,8 @@ def check_task_quota(task, project_id=None, quota='tasks_executions'):
 
 def run_task(project_id, event, task_id=None):
     from flask import current_app
-    secrets = current_app.config["CONTEXT"].rpc_manager.call.get_secrets(project_id=project_id)
-    if "control_tower_id" not in secrets:
-        secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project_id)
+    secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project_id)
+    secrets.update(current_app.config["CONTEXT"].rpc_manager.call.get_secrets(project_id=project_id))
     task_id = task_id if task_id else secrets["control_tower_id"]
     task = Task.query.filter(and_(Task.task_id == task_id)).first().to_json()
     check_task_quota(task)
@@ -59,18 +57,22 @@ def run_task(project_id, event, task_id=None):
     task_kwargs = {
         "task": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value=task,
+            secrets=secrets,
             project_id=project_id
         ),
         "event": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value=event,
+            secrets=secrets,
             project_id=project_id
         ),
         "galloper_url": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value="{{secret.galloper_url}}",
+            secrets=secrets,
             project_id=task['project_id']
         ),
         "token": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
             value="{{secret.auth_token}}",
+            secrets=secrets,
             project_id=task['project_id']
         )
     }

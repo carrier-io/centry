@@ -27,7 +27,7 @@ def get_storage_quota(project_id):
 
 
 def unsecret_key(value, secrets=None, project_id=None):
-    unsecret(value, secrets=secrets, project_id=project_id)
+    return unsecret(value, secrets=secrets, project_id=project_id)
 
 
 def get_hidden(project_id):
