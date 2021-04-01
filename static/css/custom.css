@@ -72,6 +72,11 @@ h4, .h4 {
     padding-right: 0px!important;
 }
 
+.card-1 {
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+}
+
 .card-12 {
     min-height: calc(50vh - 70px);
     padding-left: 0px!important;
@@ -82,6 +87,7 @@ h4, .h4 {
     margin-right: -25px;
     margin-left: -25px;
 }
+
 
 .tall-table {
   min-height: calc(100vh - 310px)!important;
@@ -690,6 +696,7 @@ input:-webkit-autofill {
 
 .popover {
     max-width: 400px;
+    min-width: 300px;
     box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
     background-color: var(--secondary);
 }
