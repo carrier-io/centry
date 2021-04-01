@@ -11,20 +11,16 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
-import logging
 from json import dumps
 from typing import Optional, Union, Tuple
 from datetime import datetime
-from flask_restful import Resource
 
 from plugins.base.utils.api_utils import build_req_parser
 from plugins.base.connectors.auth import (SessionProject, SessionUser, superadmin_required)
 
-from ..connectors.secrets import (initialize_project_space, remove_project_space,
-                                  set_project_secrets, set_project_hidden_secrets)
-
 from ..connectors.influx import create_project_databases, drop_project_databases
 
+from plugins.base.utils.restApi import RestResource
 from plugins.base.constants import (POST_PROCESSOR_PATH, CONTROL_TOWER_PATH, APP_IP, APP_HOST,
                                     EXTERNAL_LOKI_HOST, INFLUX_PORT, LOKI_PORT,
                                     INFLUX_PASSWORD, INFLUX_USER, GF_API_KEY, RABBIT_USER,
@@ -35,7 +31,7 @@ from ..models.statistics import Statistic
 from ..models import quota
 
 
-class ProjectAPI(Resource):
+class ProjectAPI(RestResource):
     get_rules = (
         dict(name="offset", type=int, default=None, location="args"),
         dict(name="limit", type=int, default=None, location="args"),
@@ -51,7 +47,9 @@ class ProjectAPI(Resource):
     )
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
+
 
     def __init_req_parsers(self):
         self._parser_get = build_req_parser(rules=self.get_rules)
@@ -108,10 +106,7 @@ class ProjectAPI(Resource):
                 "comparison_db": "{{secret.comparison_db}}"
             })
         }
-        from flask import current_app
-        pp = current_app.config["CONTEXT"].rpc_manager.call.task_create(project,
-                                                                        POST_PROCESSOR_PATH,
-                                                                        pp_args)
+        pp = self.rcp.task_create(project, POST_PROCESSOR_PATH, pp_args)
         cc_args = {
             "funcname": "control_tower",
             "invoke_func": "lambda.handler",
@@ -125,7 +120,7 @@ class ProjectAPI(Resource):
                 "loki_host": '{{secret.loki_host}}'
             })
         }
-        cc = current_app.config["CONTEXT"].rpc_manager.call.task_create(project, CONTROL_TOWER_PATH, cc_args)
+        cc = self.rcp.task_create(project, CONTROL_TOWER_PATH, cc_args)
         project_secrets["galloper_url"] = APP_HOST
         project_secrets["project_id"] = project.id
         project_hidden_secrets["post_processor"] = f'{APP_HOST}{pp.webhook}'
@@ -153,9 +148,9 @@ class ProjectAPI(Resource):
             "auth_secret_id": ""
         }
         try:
-            project_vault_data = initialize_project_space(project.id)
+            project_vault_data = self.rcp.init_project_space(project.id)
         except:
-            current_app.logger.warning("Vault is not configured")
+            self.logger.warning("Vault is not configured")
         project.secrets_json = {
             "vault_auth_role_id": project_vault_data["auth_role_id"],
             "vault_auth_secret_id": project_vault_data["auth_secret_id"],
@@ -164,8 +159,9 @@ class ProjectAPI(Resource):
             "regions": ["default"]
         }
         project.commit()
-        set_project_secrets(project.id, project_secrets)
-        set_project_hidden_secrets(project.id, project_hidden_secrets)
+
+        self.rpc.set_project_secrets(project.id, project_secrets)
+        self.rpc.set_project_hidden_secrets(project.id, project_hidden_secrets)
         create_project_databases(project.id)
         # set_grafana_datasources(project.id)
         return {"message": f"Project was successfully created"}, 200
@@ -196,5 +192,5 @@ class ProjectAPI(Resource):
     def delete(self, project_id: int) -> Tuple[dict, int]:
         drop_project_databases(project_id)
         Project.apply_full_delete_by_pk(pk=project_id)
-        remove_project_space(project_id)
+        self.rpc.remove_project_space(project_id)
         return {"message": f"Project with id {project_id} was successfully deleted"}, 200

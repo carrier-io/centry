@@ -1,13 +1,13 @@
 from flask import request
-from flask_restful import Resource
 
+from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, str2bool
 
 from .utils import run_task
 from ..models.tasks import Task
 
 
-class TaskApi(Resource):
+class TaskApi(RestResource):
     _get_rules = (
         dict(name="exec", type=str2bool, default=False, location="args"),
     )
@@ -19,16 +19,15 @@ class TaskApi(Resource):
     )
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
-        from flask import current_app
-        self.app = current_app
 
     def __init_req_parsers(self):
         self.get_parser = build_req_parser(rules=self._get_rules)
         self.put_parser = build_req_parser(rules=self._put_rules)
 
     def _get_task(self, project_id, task_id):
-        return self.app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id), \
+        return self.rpc.project_get_or_404(project_id=project_id), \
                Task.query.filter_by(task_id=task_id).first()
 
     def get(self, project_id: int, task_id: str):

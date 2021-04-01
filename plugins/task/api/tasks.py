@@ -1,19 +1,14 @@
-from flask_restful import Resource
-
-from werkzeug.exceptions import Forbidden
 from werkzeug.datastructures import FileStorage
 
-from plugins.base.constants import allowed_file
+from plugins.base.utils.restApi import RestResource
 from plugins.base.data_utils.file_utils import File
-from plugins.base.utils.api_utils import build_req_parser
-
-from plugins.base.utils.api_utils import get
+from plugins.base.utils.api_utils import build_req_parser, get
 from plugins.task.models.tasks import Task
 
 from .utils import create_task
 
 
-class TasksApi(Resource):
+class TasksApi(RestResource):
     _get_rules = (
         dict(name="offset", type=int, default=0, location="args"),
         dict(name="limit", type=int, default=0, location="args"),
@@ -35,6 +30,7 @@ class TasksApi(Resource):
     )
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
 
     def __init_req_parsers(self):
@@ -51,8 +47,7 @@ class TasksApi(Resource):
 
     def post(self, project_id: int):
         args = self.post_parser.parse_args(strict=False)
-        from flask import current_app
-        project = current_app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id)
+        project = self.rpc.project_get_or_404(project_id=project_id)
         if args.get("file"):
             file = args["file"]
             if file.filename == "":

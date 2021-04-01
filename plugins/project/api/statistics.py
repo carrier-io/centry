@@ -1,11 +1,11 @@
-from flask_restful import Resource
+from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser
 
 from ..models.statistics import Statistic
 from ..models.quota import ProjectQuota
 
 
-class StatisticAPI(Resource):
+class StatisticAPI(RestResource):
     result_rules = (
         dict(name="ts", type=int, location="json"),
         dict(name="results", type=str, location="json"),
@@ -13,6 +13,7 @@ class StatisticAPI(Resource):
     )
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
 
     def __init_req_parsers(self):

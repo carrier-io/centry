@@ -1,19 +1,19 @@
-from flask_restful import Resource
 from sqlalchemy import and_
 
+from plugins.base.utils.restApi import RestResource
 from plugins.base.data_utils.file_utils import File
-from plugins.base.utils.api_utils import upload_file
-from plugins.base.utils.api_utils import build_req_parser
+from plugins.base.utils.api_utils import upload_file, build_req_parser
 from plugins.base.constants import POST_PROCESSOR_PATH, CONTROL_TOWER_PATH, APP_HOST, REDIS_PASSWORD, \
     APP_IP, EXTERNAL_LOKI_HOST, INFLUX_PORT, LOKI_PORT, RABBIT_USER, RABBIT_PASSWORD, INFLUX_PASSWORD, INFLUX_USER
 
 from ..models.tasks import Task
 
 
-class TaskUpgradeApi(Resource):
+class TaskUpgradeApi(RestResource):
     _get_rules = (dict(name="name", type=str, location="args"),)
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
 
     def __init_req_parsers(self):
@@ -34,12 +34,11 @@ class TaskUpgradeApi(Resource):
         task.commit()
 
     def get(self, project_id):
-        from flask import current_app
-        project = current_app.config["CONTEXT"].rpc_manager.call.project_get_or_404(project_id=project_id)
+        project = self.rpc.project_get_or_404(project_id=project_id)
         args = self.get_parser.parse_args(strict=False)
         if args['name'] not in ['post_processor', 'control_tower', 'all']:
             return {"message": "You shall not pass", "code": 400}, 400
-        secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project.id)
+        secrets = self.rpc.get_hidden(project_id=project.id)
         project_secrets = {}
         if args['name'] == 'post_processor':
             self.create_pp_task(project)
@@ -61,13 +60,13 @@ class TaskUpgradeApi(Resource):
             secrets["rabbit_host"] = APP_IP
             secrets["rabbit_user"] = RABBIT_USER
             secrets["rabbit_password"] = RABBIT_PASSWORD
-            secrets = current_app.config["CONTEXT"].rpc_manager.call.project_set_secrets(
+            secrets = self.rpc.project_set_secrets(
                 project_id=project.id,
                 secrets=project_secrets
             )
         else:
             return {"message": "go away", "code": 400}, 400
-        current_app.config["CONTEXT"].rpc_manager.call.project_set_hidden_secrets(
+        self.rpc.project_set_hidden_secrets(
             project_id=project.id,
             secrets=secrets
         )

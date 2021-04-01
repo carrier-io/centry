@@ -12,7 +12,7 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 from typing import Optional, Tuple
-from flask_restful import Resource
+from plugins.base.utils.restApi import RestResource
 
 from plugins.base.utils.api_utils import build_req_parser
 from plugins.base.connectors.auth import (SessionProject, SessionUser)
@@ -20,13 +20,14 @@ from plugins.base.connectors.auth import (SessionProject, SessionUser)
 from ..models.project import Project
 
 
-class ProjectSessionAPI(Resource):
+class ProjectSessionAPI(RestResource):
     post_rules = (
         dict(name="username", type=str, required=True, location="json"),
         dict(name="groups", type=list, required=True, location="json")
     )
 
     def __init__(self):
+        super().__init__()
         self.__init_req_parsers()
 
     def __init_req_parsers(self):

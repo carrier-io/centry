@@ -23,8 +23,6 @@ def create_task(project, file, args):
         file = File(file)
     filename = str(uuid4())
     filename = secure_filename(filename)
-    import logging
-    logging.info(args)
     upload_file(bucket="tasks", f=file, project=project)
     task = Task(
         task_id=filename,
@@ -47,34 +45,20 @@ def check_task_quota(task, project_id=None, quota='tasks_executions'):
 
 def run_task(project_id, event, task_id=None):
     from flask import current_app
-    secrets = current_app.config["CONTEXT"].rpc_manager.call.get_hidden(project_id=project_id)
-    secrets.update(current_app.config["CONTEXT"].rpc_manager.call.get_secrets(project_id=project_id))
+    rpc = current_app.config["CONTEXT"].rpc_manager.call
+    secrets = rpc.get_hidden(project_id=project_id)
+    secrets.update(rpc.get_secrets(project_id=project_id))
     task_id = task_id if task_id else secrets["control_tower_id"]
     task = Task.query.filter(and_(Task.task_id == task_id)).first().to_json()
     check_task_quota(task)
-    current_app.config["CONTEXT"].rpc_manager.call.add_task_execution(project_id=task['project_id'])
+    rpc.add_task_execution(project_id=task['project_id'])
     arbiter = get_arbiter()
     task_kwargs = {
-        "task": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
-            value=task,
-            secrets=secrets,
-            project_id=project_id
-        ),
-        "event": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
-            value=event,
-            secrets=secrets,
-            project_id=project_id
-        ),
-        "galloper_url": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
-            value="{{secret.galloper_url}}",
-            secrets=secrets,
-            project_id=task['project_id']
-        ),
-        "token": current_app.config["CONTEXT"].rpc_manager.call.unsecret_key(
-            value="{{secret.auth_token}}",
-            secrets=secrets,
-            project_id=task['project_id']
-        )
+        "task": rpc.unsecret_key(value=task, secrets=secrets, project_id=project_id),
+        "event": rpc.unsecret_key(value=event, secrets=secrets, project_id=project_id),
+        "galloper_url": rpc.unsecret_key(value="{{secret.galloper_url}}", secrets=secrets,
+                                         project_id=task['project_id']),
+        "token": rpc.unsecret_key(value="{{secret.auth_token}}", secrets=secrets, project_id=task['project_id'])
     }
     arbiter.apply("execute_lambda", queue=RABBIT_QUEUE_NAME, task_kwargs=task_kwargs)
     arbiter.close()
