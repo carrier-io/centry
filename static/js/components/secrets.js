@@ -1,9 +1,48 @@
 function addSecret(ev) {
-    var secret_data = {
-        secret: $("#secret_value").val()
-    }
+    _updateSecret($("#secret_key").val(), $("#secret_value").val())
+
     $.ajax({
         url: `/api/v1/secrets/${getSelectedProjectId()}/${$("#secret_key").val()}`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(secret_data),
+        success: function (result) {
+            $("#secret_value").val("");
+            $("#secret_key").val("");
+            $('label[for="event"]').parent().parent().popover("hide");
+            $("#secrets").bootstrapTable('refresh');
+        }
+    });
+}
+
+function editSecret(key) {
+    var cell = $(`#${key}`).parent();
+    $(`#${key}`).hide();
+    cell.prepend(`<form class="form-inline">
+<input type="text" class="form-control form-control-sm form-control-alternative w-75" id="edit_value" placeholder="Secret">
+<button type="button" class="btn btn-nooutline-secondary ml-4 mt-2 mr-2" onclick="updateSecret('${key}')"><i class="fas fa-save"></i></button>
+<button type="button" class="btn btn-nooutline-secondary mt-2 mr-4" onclick="cancelUpdate('${key}')"><i class="fas fa-times"></i></button>
+</form>`)
+}
+
+
+function cancelUpdate(key) {
+    $(`#${key}`).parent().find("form").remove();
+    $(`#${key}`).show();
+}
+
+function updateSecret(key) {
+    var value = $("#edit_value").val()
+    cancelUpdate(key)
+    _updateSecret(key, value)
+}
+
+function _updateSecret(key, value) {
+    var secret_data = {
+        secret: value
+    }
+    $.ajax({
+        url: `/api/v1/secrets/${getSelectedProjectId()}/${key}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(secret_data),
@@ -44,10 +83,6 @@ function deleteSecret(key) {
             $("#secrets").bootstrapTable('refresh');
         }
     });
-}
-
-function editSecret(key) {
-    return ""
 }
 
 function viewValue(value, row, index) {
