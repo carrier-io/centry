@@ -1,6 +1,5 @@
 function addSecret(ev) {
     _updateSecret($("#secret_key").val(), $("#secret_value").val())
-
     $.ajax({
         url: `/api/v1/secrets/${getSelectedProjectId()}/${$("#secret_key").val()}`,
         type: 'POST',

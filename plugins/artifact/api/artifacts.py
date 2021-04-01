@@ -34,6 +34,9 @@ class Artifacts(RestResource):
     def delete(self, project_id: int, bucket: str):
         args = self._parser_delete.parse_args(strict=False)
         project = self.rpc.project_get_or_404(project_id=project_id)
-        for filename in args.get("fname[]", ()) or ():
-            MinioClient(project=project).remove_file(bucket, filename)
+        if not args.get("fname[]"):
+            MinioClient(project=project).remove_bucket(bucket)
+        else:
+            for filename in args.get("fname[]", ()) or ():
+                MinioClient(project=project).remove_file(bucket, filename)
         return {"message": "Deleted", "code": 200}

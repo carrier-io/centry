@@ -10,12 +10,15 @@
                         <div class="col">
                             <ul id="results-control" class="nav nav-pills justify-content-end">
                                 <li class="nav-item mr-2 mr-md-0">
-                                    <button type="button" id="create-task" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#createBucket">
-                                        <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                            data-container="body"  data-placement="left"
+                                            data-toggle="popover" data-html="true"
+                                            data-content='<label for="event" class="h3">Create bucket</label><input class="form-control form-control-sm form-control-alternative mb-2" id="bucketName" name="bucket" placeholder="Bucket name"><form class="form-inline pt-2 mb-0"><input type="number" min="1" class="form-control form-control-sm form-control-alternative" id="expiration-value" name="expiration_value" placeholder="Retention period (def. 1)"><select id="expiration-measure" class="custom-select custom-select-sm form-control-alternative ml-3"><option value="days" selected>Days</option><option value="weeks">Weeks</option><option value="months">Months</option><option value="years">Years</option></select></form><button type="button" onclick="createBucket(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3">Create</button>'>
+                                        <span class="btn-inner--icon"><i class="fas fa-plus"></i></span>
                                     </button>
                                 </li>
                                 <li class="nav-item mr-2 mr-md-0">
-                                    <button type="button" id="remove-task" onclick="deleteTask(event)" class="btn btn-secondary btn-sm">
+                                    <button type="button" id="remove-task" onclick="deleteBucket(event)" class="btn btn-secondary btn-sm">
                                         <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
                                     </button>
                                 </li>
@@ -62,15 +65,15 @@
                                     </button>
                                 </li>
                                 <li class="nav-item mr-2 mr-md-0">
-                                    <a id="delete-task" href="/tests/backend" class="btn btn-secondary btn-sm" onclick="deleteFile(event)">
+                                    <button id="delete-task" class="btn btn-secondary btn-sm" onclick="deleteFiles(event)">
                                         <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive table-list tall-table">
+                <div class="table-responsive table-list tall-table" ondrop="uploadFiles(event)" ondragover="allowDrop(event)">
                     <table class="table align-items-center table-flush table-borderless"
                         id="artifact-list"
                         data-toggle="table"
