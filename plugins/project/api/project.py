@@ -106,7 +106,7 @@ class ProjectAPI(RestResource):
                 "comparison_db": "{{secret.comparison_db}}"
             })
         }
-        pp = self.rcp.task_create(project, POST_PROCESSOR_PATH, pp_args)
+        pp = self.rpc.task_create(project, POST_PROCESSOR_PATH, pp_args)
         cc_args = {
             "funcname": "control_tower",
             "invoke_func": "lambda.handler",
@@ -120,7 +120,7 @@ class ProjectAPI(RestResource):
                 "loki_host": '{{secret.loki_host}}'
             })
         }
-        cc = self.rcp.task_create(project, CONTROL_TOWER_PATH, cc_args)
+        cc = self.rpc.task_create(project, CONTROL_TOWER_PATH, cc_args)
         project_secrets["galloper_url"] = APP_HOST
         project_secrets["project_id"] = project.id
         project_hidden_secrets["post_processor"] = f'{APP_HOST}{pp.webhook}'
@@ -148,7 +148,7 @@ class ProjectAPI(RestResource):
             "auth_secret_id": ""
         }
         try:
-            project_vault_data = self.rcp.init_project_space(project.id)
+            project_vault_data = self.rpc.init_project_space(project.id)
         except:
             self.logger.warning("Vault is not configured")
         project.secrets_json = {
