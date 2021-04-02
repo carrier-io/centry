@@ -16,6 +16,10 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+function closePopover(e) {
+    $('label[for="event"]').parent().parent().popover("hide");
+}
+
 // Test planner
 function addParam(id, key="", value="") {
     $(`#${id}`).append(`<div class="row mt-2">

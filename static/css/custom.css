@@ -695,16 +695,31 @@ input:-webkit-autofill {
 }
 
 .popover {
-    max-width: 400px;
+    max-width: 425px;
     min-width: 300px;
     box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
-    background-color: var(--secondary);
+    background-color: var(--white);
+    border: 1px solid rgba(0,0,0,.05)!important;
+    padding: 1rem;
+}
+
+.popover .h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.popover label {
+    color: var(--gray);
+    font-weight: 400;
+    font-size: 14px;
 }
 
 .popover textarea {
-    border-color: var(--gray);
+    border: 1px solid rgba(0,0,0,.2)!important;
+    color: var(--gray);
 }
 
-.bs-popover-left>.arrow::after, .bs-popover-auto[x-placement^="left"]>.arrow::after{
-    border-left-color: var(--secondary);
-}
+
