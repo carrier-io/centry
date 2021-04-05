@@ -61,23 +61,12 @@ h4, .h4 {
     text-transform: uppercase;
 }
 
-h5, .h5 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--gray);
-    line-height: 24px;
-}
-
 span {
     font-size: 18px;
     font-weight: 400;
     line-width: 24px;
 }
 
-.card-stats {
-   margin: 15px 15px 0px 0px;
-   padding: 6px 20px;
-}
 
 p {
     font-size: 14px;
@@ -438,51 +427,6 @@ div-content .row {
 label {
   width: 100%;
   font-size: 1rem;
-}
-
-.card-input-element+.card {
-  color: var(--primary);
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border: 0.0625rem solid rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
-
-.card-input-element+.card:hover {
-  cursor: pointer;
-}
-
-.card-input-element:checked+.card {
-  border: 0.0625rem solid var(--primary);
-  -webkit-transition: border .3s;
-  -o-transition: border .3s;
-  transition: border .3s;
-}
-
-.card-input-element:checked+.card h5 {
-    color: var(--primary)!important;
-}
-
-@-webkit-keyframes fadeInCheckbox {
-  from {
-    opacity: 0;
-    -webkit-transform: rotateZ(-20deg);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: rotateZ(0deg);
-  }
-}
-
-@keyframes fadeInCheckbox {
-  from {
-    opacity: 0;
-    transform: rotateZ(-20deg);
-  }
-  to {
-    opacity: 1;
-    transform: rotateZ(0deg);
-  }
 }
 
 .input-group-append.form-control {
