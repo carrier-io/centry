@@ -26,7 +26,13 @@ from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 
 from .components.commons.navbar import render_navbar
-from .components.commons.page import render_page, render_test, reporting_config
+from .components.commons.page import (
+    render_page,
+    render_test,
+    reporting_config,
+    scanners_dast_config,
+    processing_dast
+)
 from plugins.base.connectors.auth import SessionProject
 
 
@@ -58,6 +64,8 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("page_content", render_page)
         self.context.slot_manager.register_callback("create_test", render_test)
         self.context.slot_manager.register_callback("reporting_config", reporting_config)
+        self.context.slot_manager.register_callback("scanners_dast_config", scanners_dast_config)
+        self.context.slot_manager.register_callback("processing_dast", processing_dast)
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 
