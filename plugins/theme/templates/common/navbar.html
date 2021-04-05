@@ -71,7 +71,7 @@
             <div id="projects-dropdown-items" class="dropdown-menu dropdown-menu-right" aria-labelledby="projects-dropdown">
                 <a class="dropdown-item" href="/new">Create Project</a>
                 {% for item in config.projects %}
-                <a class="dropdown-item select-project" href="#" project_id="{{item.id}}">{{item.name}}</a>
+                <a class="dropdown-item select-project" href="#" onclick="selectProject(this)" project_id="{{item.id}}">{{item.name}}</a>
                 {% endfor %}
             </div>
         </div>

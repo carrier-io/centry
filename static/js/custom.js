@@ -68,3 +68,15 @@ $(".email").change(function() {
 function toggleAdvanced(id) {
     $(`#${id}`).toggle();
 }
+
+function selectProject(ev){
+    $.ajax({
+        url: `/api/v1/project-session/${ev.getAttribute('project_id')}`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: {},
+        success: function (result) {
+            window.location.href = '/';
+        }
+    })
+}

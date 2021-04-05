@@ -78,12 +78,13 @@ class Project(AbstractBaseMixin, Base):
     def to_json(self, exclude_fields: tuple = ()) -> dict:
         json_data = super().to_json(exclude_fields=exclude_fields)
         # json_data["used_in_session"] = self.used_in_session()
-        json_data["chapters"] = self.compile_chapters()
-        json_data["username"] = whomai()
-        json_data["projects"] = get_user_projects()
-        json_data["integrations"] = get_project_integrations()
-        json_data["regions"] = self.worker_pool_config_json.get("regions", ["default"])
-        json_data["default_chapter"] = last_visited_chapter()
+        if 'extended_out' not in exclude_fields:
+            json_data["chapters"] = self.compile_chapters()
+            json_data["username"] = whomai()
+            json_data["projects"] = self.list_projects(offset_=0)
+            json_data["integrations"] = get_project_integrations()
+            json_data["regions"] = self.worker_pool_config_json.get("regions", ["default"])
+            json_data["default_chapter"] = last_visited_chapter()
         return json_data
 
     def compile_chapters(self):
@@ -158,6 +159,7 @@ class Project(AbstractBaseMixin, Base):
     @staticmethod
     def list_projects(project_id=None, search_=None, limit_=None, offset_=None):
         allowed_project_ids = only_users_projects()
+        excluded_fields = Project.API_EXCLUDE_FIELDS + ('extended_out',)
         _filter = None
         if "all" not in allowed_project_ids:
             _filter = Project.id.in_(allowed_project_ids)
@@ -174,7 +176,7 @@ class Project(AbstractBaseMixin, Base):
                 projects = Project.query.filter(_filter).limit(limit_).offset(offset_).all()
             else:
                 projects = Project.query.limit(limit_).offset(offset_).all()
-        return [project.to_json(exclude_fields=Project.API_EXCLUDE_FIELDS) for project in projects]
+        return [project.to_json(exclude_fields=excluded_fields) for project in projects]
 
     # TODO: think on how to get that back
     # @classmethod

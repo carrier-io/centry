@@ -42,8 +42,8 @@ class ProjectSessionAPI(RestResource):
         return {"message": "No project selected in session"}, 404
 
     def post(self, project_id: Optional[int] = None) -> Tuple[dict, int]:
-        args = self._parser_post.parse_args()
-        SessionUser.set(dict(username=args["username"], groups=args.get("groups")))
+        # args = self._parser_post.parse_args()
+        # SessionUser.set(dict(username=args["username"], groups=args.get("groups")))
         if project_id:
             project = Project.get_or_404(project_id)
             SessionProject.set(project.id)

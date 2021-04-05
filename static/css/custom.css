@@ -703,6 +703,14 @@ input:-webkit-autofill {
     padding: 1rem;
 }
 
+h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
 .popover .h4 {
     margin: 0;
     padding: 0;
@@ -722,4 +730,7 @@ input:-webkit-autofill {
     color: var(--gray);
 }
 
-
+.list-group-item-sm {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8rem;
+}

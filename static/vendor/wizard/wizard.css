@@ -559,3 +559,10 @@ label {
 .noUi-value.noUi-value-horizontal.noUi-value-large {
     top: -5!important;
 }
+
+
+.scrollable-list-group {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+}
