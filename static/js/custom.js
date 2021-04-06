@@ -23,14 +23,14 @@ function closePopover(e) {
 // Test planner
 function addParam(id, key="", value="") {
     $(`#${id}`).append(`<div class="row mt-2">
-    <div class="col ml-0 pl-0">
+    <div class="col ml-0">
         <input type="text" class="form-control" placeholder="Variable name" value="${key}">
     </div>
     <div class="col">
         <input type="text" class="form-control" placeholder="Value" value="${value}">
     </div>
-    <div class="col-xs text-right">
-        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+    <div class="col-xs pt-1 text-right">
+        <button type="button" class="btn btn-nooutline-secondary mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
     </div>
 </div>`)
 }

@@ -346,10 +346,6 @@ input:-webkit-autofill {
   }
 }
 
-.d-flex {
-  display: flex;
-}
-
 .mt-04 {
     margin-top: 0.4rem !important
 }
