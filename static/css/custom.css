@@ -701,6 +701,7 @@ input:-webkit-autofill {
     background-color: var(--white);
     border: 1px solid rgba(0,0,0,.05)!important;
     padding: 1rem;
+    z-index: 1100;
 }
 
 h3 {
