@@ -65,7 +65,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(project_data),
                 success: function (result) {
-                    window.location.href = "/?chapter=Manage%20Project"
+                    window.location.href = "/?chapter=Configuration&module=Tasks&page=list"
                 }
             });
         }

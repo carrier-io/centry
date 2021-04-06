@@ -23,7 +23,7 @@ function closePopover(e) {
 // Test planner
 function addParam(id, key="", value="") {
     $(`#${id}`).append(`<div class="row mt-2">
-    <div class="col">
+    <div class="col ml-0 pl-0">
         <input type="text" class="form-control" placeholder="Variable name" value="${key}">
     </div>
     <div class="col">
@@ -33,6 +33,42 @@ function addParam(id, key="", value="") {
         <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
     </div>
 </div>`)
+}
+
+function addThreeParam(id, condition="", key="", value="") {
+    $(`#${id}`).append(`<div class="row mt-2">
+    <div class="col ml-0 pl-0">
+        <input type="text" class="form-control" placeholder="Condition" value="${condition}">
+    </div>
+    <div class="col">
+        <input type="text" class="form-control" placeholder="Variable name" value="${key}">
+    </div>
+    <div class="col">
+        <input type="text" class="form-control" placeholder="Value" value="${value}">
+    </div>
+    <div class="col-xs text-right">
+        <button type="button" class="btn btn-nooutline-secondary mt-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+    </div>
+</div>`)
+}
+
+function addNewURL(id, value_="e.g.https://mysiteaddress.com"){
+    $(`#${id}`).append(`<div class="row mt-2 ml-3">
+    <div class="col pl-0 pr-0">
+        <input type="text" class="form-control" placeholder="${value_}">
+    </div>
+    <div class="col-xs text-right">
+        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+    </div>
+</div>`)
+//    $(`#${id}`).append(`
+//    <div class="form-group pl-1 mb-0 mt-0">
+//        <input type="text" class="form-control" placeholder="${value_}">
+//    </div>
+//    <div class="col-xs text-right">
+//        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+//    </div>
+//`)
 }
 
 function removeParam(ev) {

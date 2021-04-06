@@ -32,3 +32,17 @@ def render_test(context, slot, payload):  # pylint: disable=R0201,W0613
 
 def reporting_config(context, slot, payload):
     return render_template(f"common/reporting-config.html", config=payload)
+
+
+def scanners_dast_config(context, slot, payload):
+    # templates = [
+    #     {"name": "Template_1", "id": 1},
+    #     {"name": "Template_2", "id": 2},
+    #     {"name": "Template_3", "id": 3},
+    # ]
+    # payload["templates"] = templates
+    return render_template(f"security/app/scanners-dast.html", config=payload)
+
+
+def processing_dast(context, slot, payload):
+    return render_template(f"security/app/processing-dast.html", config=payload)

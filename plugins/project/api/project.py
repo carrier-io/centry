@@ -171,22 +171,13 @@ class ProjectAPI(RestResource):
         if not project_id:
             return {"message": "Specify project id"}, 400
         project = Project.get_or_404(project_id)
-        project.name = data["name"]
-        project.project_owner = data["owner"]
-        package = data["package"].lower()
-        project.dast_enabled = False if data["dast_enabled"] == "disabled" else True
-        project.sast_enabled = False if data["sast_enabled"] == "disabled" else True
-        project.performance_enabled = False if data["performance_enabled"] == "disabled" else True
-        project.package = package
+        if data["name"]:
+            project.name = data["name"]
+        if data["owner"]:
+            project.project_owner = data["owner"]
+        if data["plugins"]:
+            project.plugins = data["plugins"]
         project.commit()
-        if package == "custom":
-            getattr(quota, "custom")(project.id, data["perf_tests_limit"], data["ui_perf_tests_limit"],
-                                     data["sast_scans_limit"], data["dast_scans_limit"], -1,
-                                     data["storage_space_limit"], data["data_retention_limit"],
-                                     data["tasks_count_limit"], data["task_executions_limit"])
-        else:
-            getattr(quota, package)(project.id)
-
         return project.to_json(exclude_fields=Project.API_EXCLUDE_FIELDS)
 
     def delete(self, project_id: int) -> Tuple[dict, int]:
