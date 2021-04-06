@@ -1,0 +1,66 @@
+<div class="modal fixed-left fade shadow-sm" tabindex="-1" role="dialog" id="createApplicationTest">
+    <div class="modal-dialog modal-dialog-aside" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col">
+                        <h3 class="ml-4 mt-3 mb-2">Add Application Test</h3>
+                    </div>
+                    <div class="col-xs">
+                        <button type="button" id="submit" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="createTest()"><i class="fas fa-play"></i></button>
+                        <button type="button" id="save" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="createTest()"><i class="fas fa-save"></i></button>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-nooutline-secondary mt-2 mr-4"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+            </div>
+                <div class="modal-body">
+                     <div class="row p-12">
+                        <div class="col-6">
+                            <div class="form-group pl-4">
+                                <label class="form-control-label" for="testname">Test Name</label>
+                                <p><small>Enter a name that describes the purpose of your test.</small></p>
+                                <input type="text" id="testname" class="form-control form-control-alternative"
+                                       placeholder="test template">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group pl-0" id="url_to_scan">
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="form-control-label">URL to scan</label>
+                                        <p><small>Enter the URL to scan</small></p>
+                                    </div>
+                                    <div class="col-xs text-right pt-3">
+                                        <div class="col-xs text-right">
+                                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addNewURL('url_to_scan')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pl-0" id="exclusions">
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="form-control-label" for="exclusions">URL to scan</label>
+                                        <p><small>Enter the URLs exclusion</small></p>
+                                    </div>
+                                    <div class="col-xs text-right pt-3">
+                                        <div class="col-xs text-right">
+                                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addNewURL('exclusions')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+
+                    {{ template_slot("scanners_dast_config", payload=config) | safe }}
+
+                    {{ template_slot("processing_dast", payload=config) | safe }}
+
+                    {{ template_slot("reporting_config", payload=config) | safe }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
