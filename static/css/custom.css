@@ -789,3 +789,7 @@ h5, .h5 {
     color: var(--gray);
     line-height: 24px;
 }
+
+.modal .card p {
+    margin-bottom: 0;
+}
