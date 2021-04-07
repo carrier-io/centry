@@ -695,8 +695,9 @@ input:-webkit-autofill {
 }
 
 .popover {
-    max-width: 425px;
-    min-width: 300px;
+    max-width: 400px;
+    min-width: 150px;
+    min-height: 100px;
     box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
     background-color: var(--white);
     border: 1px solid rgba(0,0,0,.05)!important;

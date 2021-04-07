@@ -26,9 +26,11 @@
                         <div class="col-6">
                             <div class="form-group pl-0" id="url_to_scan">
                                 <div class="row">
-                                    <div class="col">
-                                        <label class="form-control-label">URL to scan</label>
+                                    <div class="col pl-0">
+                                        <label class="form-control-label" for="scanURL">URL to scan</label>
                                         <p><small>Enter the URL to scan</small></p>
+                                        <input type="text" id="scanURL" class="form-control form-control-alternative pr-0"
+                                       placeholder="e.g.https://mysiteaddress.com">
                                     </div>
                                     <div class="col-xs text-right pt-3">
                                         <div class="col-xs text-right">
@@ -39,8 +41,8 @@
                             </div>
                             <div class="form-group pl-0" id="exclusions">
                                 <div class="row">
-                                    <div class="col">
-                                        <label class="form-control-label" for="exclusions">URL to scan</label>
+                                    <div class="col pl-0">
+                                        <label class="form-control-label" for="exclusions">Exclusions</label>
                                         <p><small>Enter the URLs exclusion</small></p>
                                     </div>
                                     <div class="col-xs text-right pt-3">
@@ -53,9 +55,9 @@
                         </div>
                      </div>
 
-                    {{ template_slot("scanners_dast_config", payload=config) | safe }}
+                    {{ template_slot("application_scanners_config", payload=config) | safe }}
 
-                    {{ template_slot("processing_dast", payload=config) | safe }}
+                    {{ template_slot("findings_processing", payload=config) | safe }}
 
                     {{ template_slot("reporting_config", payload=config) | safe }}
 

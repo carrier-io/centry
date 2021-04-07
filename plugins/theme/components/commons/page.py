@@ -34,15 +34,15 @@ def reporting_config(context, slot, payload):
     return render_template(f"common/reporting-config.html", config=payload)
 
 
-def scanners_dast_config(context, slot, payload):
+def applications_scanners_config(context, slot, payload):
     # templates = [
     #     {"name": "Template_1", "id": 1},
     #     {"name": "Template_2", "id": 2},
     #     {"name": "Template_3", "id": 3},
     # ]
     # payload["templates"] = templates
-    return render_template(f"security/app/scanners-dast.html", config=payload)
+    return render_template(f"security/app/application-scanners.html", config=payload)
 
 
-def processing_dast(context, slot, payload):
-    return render_template(f"security/app/processing-dast.html", config=payload)
+def findings_processing(context, slot, payload):
+    return render_template(f"security/app/findings-processing.html", config=payload)

@@ -3,48 +3,48 @@
         <h4 class="mb-0 mt-0">Reporting</h4>
     </div>
 </div>
-<div class="row p-4">
+<div class="row pr-4 pl-4 pt-0 pb-4">
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="emailCard">
+        <div class="card m-0 mb-3 mt-2 p-1" id="emailCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Email</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Email</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('emailCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleRows('emailCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="email">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="jiraCard">
+        <div class="card m-0 mb-3 mt-2 p-1" id="jiraCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Jira</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Jira</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" data-toggle="collapse" data-target="#jiraSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" data-toggle="collapse" data-target="#jiraSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="jira">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
-            <div class="collapse" id="jiraSettings">
+            <div class="collapse ml-3 mr-3 mb-3" id="jiraSettings">
                 <div class="form-group mb-0 mt-0">
-                    <label class="form-control-label">ADVANSED SETTINGS</label>
+                    <h5 id="advanced_settings" class="text-gray mb-0">ADVANSED SETTINGS</h5>
                 </div>
 
                 <div class="form-group" id="jira_fields">
                     <div class="row">
                         <div class="col ml-0 pl-0">
                             <label class="form-control-label" for="jira_fields">Jira fields</label>
-                            <p><small>For all</small></p>
+                            <br><small>For all</small>
                         </div>
 
-                        <div class="col-xs text-right pt-3">
+                        <div class="col-xs text-right mt-3 pt-1">
                             <div class="col-xs text-right">
                                 <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('jira_fields', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
                             </div>
@@ -54,38 +54,38 @@
 
                 <div class="form-group mb-0 mt-0">
                     <label class="form-control-label">Change priority mapping</label>
-                        <br><small>Description</small></br>
+                        <br><small>Description</small>
 
 
-                    <div class="row">
+                    <div class="row mr-3">
                         <div class="col ml-0 pl-0">
-                            <label class="form-control-label">Critical</label><br>
+                            <label class="form-control-label mt-1">Critical</label><br>
                             <input type="text" class="form-control"
                                        placeholder="Blocker">
                         </div>
                         <div class="col">
-                            <label class="form-control-label">Low</label><br>
+                            <label class="form-control-label mt-1">Low</label><br>
                             <input type="text" class="form-control"
                                        placeholder="Minor">
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mr-3">
                         <div class="col ml-0 pl-0">
-                            <label class="form-control-label">High</label><br>
+                            <label class="form-control-label mt-1">High</label><br>
                             <input type="text" class="form-control"
                                        placeholder="Major">
                         </div>
                         <div class="col">
-                            <label class="form-control-label">Info</label><br>
+                            <label class="form-control-label mt-1">Info</label><br>
                             <input type="text" class="form-control"
                                        placeholder="Trivial">
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mr-3">
                         <div class="col ml-0 pl-0">
-                            <label class="form-control-label">Medium</label><br>
+                            <label class="form-control-label mt-1">Medium</label><br>
                             <input type="text" class="form-control"
                                        placeholder="Medium"></br>
                         </div>
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mb-0 mt-0">
+                <div class="form-group mb-0 mt-0 mr-3">
                     <label class="form-control-label">Limits</label><br>
                         <small>Description</small>
                     <div class="row">
@@ -109,25 +109,26 @@
                                        placeholder="Value">
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group mt-0" id="dynamic_fields">
-                        <div class="row">
-                            <div class="col ml-0 pl-0">
-                                <label class="form-control-label" for="dynamic_fields">Dynamic fields</label><br>
-                                <small>Description</small>
-                            </div>
+                <div class="form-group mb-3 mt-0" id="dynamic_fields">
+                    <div class="row">
+                        <div class="col ml-0 pl-0">
+                            <label class="form-control-label" for="dynamic_fields">Dynamic fields</label><br>
+                            <small>Description</small>
+                        </div>
 
-                            <div class="col-xs text-right pt-3">
-                                <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addThreeParam('dynamic_fields', 'Condition', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
-                                </div>
+                        <div class="col-xs text-right mt-3 pt-1">
+                            <div class="col-xs text-right">
+                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addThreeParam('dynamic_fields', 'Condition', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+
                 <div class="form-group">
-                    <input type="checkbox" name="epic" id="epic_linkage_checkbox" onclick="checkBox()" style="vertical-align: middle"> Separated epic linkage
+                    <input type="checkbox" name="epic" id="epic_linkage_checkbox" onclick="checkBox()" style="vertical-align: middle"> <label for="epic_linkage_checkbox"><b> Separated epic linkage</b></label>
                     <div class="form-group" id="epic_linkage" style="display:none">
                         <label class="form-control-label" for="epic_filed_key">Epic field key</label>
                             <input type="text" id="epic_filed_key" class="form-control form-control-alternative"
@@ -136,7 +137,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" name="jira" id="use_another_jira" style="vertical-align: middle"> Use another Jira
+                    <input type="checkbox" name="jira" id="use_another_jira" style="vertical-align: middle"> <label for="use_another_jira"><b>Use another Jira</b></label>
                     <div class="form-group mt-0 pt-0" id="another_jira" style="display:none">
                         <div class="row">
                         <label class="form-control-label" for="url_another_jira">URL</label>
@@ -158,18 +159,18 @@
                     </div>
                 </div>
 
-                <input type="checkbox" name="reopen_jira" id="reopen" style="vertical-align: middle"> Reopen if closed
+                <input type="checkbox" name="reopen_jira" id="reopen" style="vertical-align: middle"> <label for="reopen"><b> Reopen if closed</b></label>
 
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="QualityGateCart">
+        <div class="card m-0 mb-3 mt-2 p-1" id="QualityGateCart">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">QualityGate</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">QualityGate</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('QualityGateCart')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleRows('QualityGateCart')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="qg">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -178,42 +179,42 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="JUreportCart">
+        <div class="card m-0 mb-3 mt-2 p-1" id="JUreportCart">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">jUnit Report</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">jUnit Report</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('JUreportCart')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleRows('JUreportCart')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="jUnit">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="ReportPortalCart">
+        <div class="card m-0 mb-3 mt-2 p-1" id="ReportPortalCart">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Report Portal</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Report Portal</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('ReportPortalCart')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleRows('ReportPortalCart')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="rp">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="ADOCard">
+        <div class="card m-0 mb-3 mt-2 p-1" id="ADOCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Azure DevOps</label>
+                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Azure DevOps</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-0" onclick="toggleRows('ADOCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleRows('ADOCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 align-middle mb-0">
                       <input type="checkbox" id="ado">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -222,21 +223,3 @@
         </div>
     </div>
 </div>
-
-<script>
-$('#use_another_jira').click(function(){
-    if ($(this).is(':checked')){
-        $('#another_jira').show();
-    } else {
-        $('#another_jira').hide();
-    }
-});
-
-$('#epic_linkage_checkbox').click(function(){
-    if ($(this).is(':checked')){
-        $('#epic_linkage').show();
-    } else {
-        $('#epic_linkage').hide();
-    }
-});
-</script>

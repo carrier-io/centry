@@ -30,8 +30,8 @@ from .components.commons.page import (
     render_page,
     render_test,
     reporting_config,
-    scanners_dast_config,
-    processing_dast
+    applications_scanners_config,
+    findings_processing
 )
 from plugins.base.connectors.auth import SessionProject
 
@@ -64,8 +64,8 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("page_content", render_page)
         self.context.slot_manager.register_callback("create_test", render_test)
         self.context.slot_manager.register_callback("reporting_config", reporting_config)
-        self.context.slot_manager.register_callback("scanners_dast_config", scanners_dast_config)
-        self.context.slot_manager.register_callback("processing_dast", processing_dast)
+        self.context.slot_manager.register_callback("application_scanners_config", applications_scanners_config)
+        self.context.slot_manager.register_callback("findings_processing", findings_processing)
         # Register event listener
         # self.context.event_manager.register_listener("base.index", self.base_event)
 

@@ -37,24 +37,24 @@ function addParam(id, key="", value="") {
 
 function addThreeParam(id, condition="", key="", value="") {
     $(`#${id}`).append(`<div class="row mt-2">
-    <div class="col ml-0 pl-0">
+    <div class="col ml-0 pl-0 pr-1">
         <input type="text" class="form-control" placeholder="Condition" value="${condition}">
     </div>
-    <div class="col">
+    <div class="col pl-0 pr-1">
         <input type="text" class="form-control" placeholder="Variable name" value="${key}">
     </div>
-    <div class="col">
+    <div class="col pl-0 pr-1">
         <input type="text" class="form-control" placeholder="Value" value="${value}">
     </div>
     <div class="col-xs text-right">
-        <button type="button" class="btn btn-nooutline-secondary mt-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+        <button type="button" class="btn btn-nooutline-secondary mt-2 mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
     </div>
 </div>`)
 }
 
 function addNewURL(id, value_="e.g.https://mysiteaddress.com"){
-    $(`#${id}`).append(`<div class="row mt-2 ml-3">
-    <div class="col pl-0 pr-0">
+    $(`#${id}`).append(`<div class="row mt-2">
+    <div class="col pl-0">
         <input type="text" class="form-control" placeholder="${value_}">
     </div>
     <div class="col-xs text-right">
@@ -116,3 +116,19 @@ function selectProject(ev){
         }
     })
 }
+
+$('#epic_linkage_checkbox').click(function(){
+    if ($(this).is(':checked')){
+        $('#epic_linkage').show();
+    } else {
+        $('#epic_linkage').hide();
+    }
+})
+
+$('#use_another_jira').click(function(){
+    if ($(this).is(':checked')){
+        $('#another_jira').show();
+    } else {
+        $('#another_jira').hide();
+    }
+})
