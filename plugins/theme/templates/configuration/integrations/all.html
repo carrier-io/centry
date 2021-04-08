@@ -1,0 +1,11 @@
+<div class="container">
+    <div class="card card-1 shadow-sm">
+        {{ template_slot("scanners_dast_config", payload=config) | safe }}
+    </div>
+    <div class="card card-1 shadow-sm">
+        {{ template_slot("processing_dast", payload=config) | safe }}
+    </div>
+    <div class="card card-1 shadow-sm">
+        {{ template_slot("reporting_config", payload=config) | safe }}
+    </div>
+</div>

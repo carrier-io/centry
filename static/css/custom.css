@@ -346,10 +346,6 @@ input:-webkit-autofill {
   }
 }
 
-.d-flex {
-  display: flex;
-}
-
 .mt-04 {
     margin-top: 0.4rem !important
 }
@@ -792,4 +788,8 @@ h5, .h5 {
     font-weight: 700;
     color: var(--gray);
     line-height: 24px;
+}
+
+.modal .card p {
+    margin-bottom: 0;
 }

@@ -5,8 +5,8 @@
     </div>
     <div class="col mr-3">
         <ul id="results-control" class="nav nav-pills justify-content-end">
-            <li class="nav-item mr-2 mr-md-0">
-                <a class="dropdown-toggle dark ml-4 pr-4" href="#" id="template-dropdown" role="button"
+            <li class="nav-item mr-2 mr-mb-0">
+                <a class="form-control-label dark" href="#" id="template-dropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span id="selected-template"
                           class="nav-link-inner--text d-lg-inline-block"><small><b>{% if config.template_name %} {{config.template_name}} {%else%} Apply template {%endif%}</b></small></span>
@@ -18,86 +18,71 @@
                     {% endfor %}
                 </div>
             </li>
-            <li class="nav-item mr-2 mr-md-0">
-                <button type="button" class="btn btn-secondary btn-sm"
-                        data-container="body"  data-placement="left"
-                        data-toggle="popover" data-html="true"
-                        data-content='<label for="event" class="h3">Add Secret</label><div class="row"><div class="col"><label class="form-control-label" for="secret_key">Name</label><input type="text" id="secret_key" class="form-control form-control-alternative"></div></div><div class="row"><div class="col"><label class="form-control-label" for="repo_key">Secret</label><input type="text" id="secret_value" class="form-control form-control-alternative"></div></div><button type="button" id="remove-task" onclick="addSecret(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3">Add</button>'>
-                    Save as template
-                </button>
+            <li class="nav-item mr-2 mr-mb-0">
+                <a class="form-control-label dark"
+                   href="#"
+                   role="button"
+                   data-placement="bottom"
+                   data-toggle="popover"
+                   data-container="body"
+                   data-html="true"
+                   style="text-transform: none"
+                   data-content='
+                   <label class="form-control-label" for="event"><b>Template name</b></label>
+                       <input type="text" id="template_name" class="form-control form-control-sm" placeholder="Regular">
+                   <button type="button" id="save-template" onclick="saveTemplate(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3 text-capitalize">Save</button>
+                   <button type="button" id="remove-template" onclick="closePopover(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3 text-capitalize">Cancel</button>
+                    '>
+                    <span id="save-template"
+                          class="nav-link-inner--text d-lg-inline-block"><small><b>Save as template</b></small></span>
+                </a>
             </li>
         </ul>
     </div>
-
-
-<!--    <div class="col" align="right">-->
-<!--        <a class="dropdown-toggle dark ml-4 pr-4" href="#" id="template-dropdown" role="button"-->
-<!--           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--            <span id="selected-template"-->
-<!--                  class="nav-link-inner&#45;&#45;text d-lg-inline-block"><small><b>{% if config.template_name %} {{config.template_name}} {%else%} Apply template {%endif%}</b></small></span>-->
-<!--            <span id="selected-template-id" hidden>{% if config.template_name %} {{config.template_id}} {%endif%}</span>-->
-<!--        </a>-->
-<!--        <div id="templates-dropdown-items" class="dropdown-menu dropdown-menu-right" aria-labelledby="templates-dropdown">-->
-<!--            {% for item in config.templates %}-->
-<!--            <a class="dropdown-item select-template" href="#" template_id="{{item.id}}">{{item.name}}</a>-->
-<!--            {% endfor %}-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div clas="col">-->
-<!--        <button type="button"-->
-<!--                class="btn btn-nooutline-secondary pt-0 mr-3"-->
-<!--                data-container="body"  data-placement="bottom"-->
-<!--                data-toggle="popover"-->
-<!--                data-html="true"-->
-<!--                data-content='Hello'>-->
-<!--            <small>Save as template</small>-->
-<!--        </button>-->
-<!--    </div>-->
 </div>
-<div class="row p-4">
+<div class="row pl-4 pr-4 mb-3">
     <div class="col-6">
         <div class="card ml-0 mr-0" id="qualysCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Qualys</label>
+                    <label class="form-control-label mb-0 mt-1">Qualys</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-0 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="qualys">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
-            <div class="collapse" id="qualysSettings">
+            <div class="collapse ml-3 mr-3" id="qualysSettings">
                 <div class="form-group mb-0 mt-0">
-                    <label class="form-control-label">ADVANSED SETTINGS</label>
+                    <h5 id="advanced_settings" class="text-gray mb-0">ADVANSED SETTINGS</h5>
                 </div>
 
-                <div class="form-group mb-0 mt-0">
+                <div class="form-group mb-0 mt-0 pr-4">
                     <label class="form-control-label" for="profile_id">Option Profile ID</label>
                     <input type="text" id="profile_id" class="form-control form-control-alternative"
                            placeholder="Profile ID">
                 </div>
 
-                <div class="form-group mb-0 mt-0">
+                <div class="form-group mb-0 mt-0 pr-4">
                     <label class="form-control-label" for="template_id">Report template ID</label>
                     <input type="text" id="template_id" class="form-control form-control-alternative"
                            placeholder="Template ID">
                 </div>
 
-                <div class="form-group mb-0 mt-0">
+                <div class="form-group mb-0 mt-0 pr-4">
                     <label class="form-control-label">Scanner type</label><br>
 
                         <input type="radio" id="scannerType1"
                             name="scanner_type" value="external" style="vertical-align: middle">
-                        <label for="scannerType1">External</label><br>
+                        <label for="scannerType1"><b>External</b></label><br>
 
 
                         <input type="radio" id="scannerType2"
                             name="scanner_type" value="internal" style="vertical-align: middle">
-                        <label for="scannerType2">Internal</label>
+                        <label for="scannerType2"><b>Internal</b></label>
 
                 </div>
 
@@ -115,15 +100,15 @@
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="w3afCard">
+        <div class="card ml-0 mr-0" id="owaspzapCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">W3af</label>
+                    <label class="form-control-label mb-0 mt-1">OWASP ZAP</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('w3afCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-0 align-middle">
-                      <input type="checkbox" id="w3af">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('owaspzapCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
+                      <input type="checkbox" id="owaspzap">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
@@ -132,11 +117,11 @@
         <div class="card ml-0 mr-0" id="niktoCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Nikto</label>
+                    <label class="form-control-label mb-0 mt-1">Nikto</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-0 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="nikto">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -146,11 +131,11 @@
         <div class="card ml-0 mr-0" id="nmapCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">NMap</label>
+                    <label class="form-control-label mb-0 mt-1">NMap</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('nmapCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-0 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('nmapCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="nmap">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -162,11 +147,11 @@
         <div class="card ml-0 mr-0" id="masscanCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">Masscan</label>
+                    <label class="form-control-label mb-0 mt-1">Masscan</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('masscanCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('masscanCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="masscan">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -176,11 +161,11 @@
         <div class="card ml-0 mr-0" id="SSLyzeCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">SSLyze</label>
+                    <label class="form-control-label mb-0 mt-1">SSLyze</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('SSLyzeCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('SSLyzeCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="SSLyze">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -190,12 +175,26 @@
         <div class="card ml-0 mr-0" id="AEMhackerCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label mt-0">AEM Hacker</label>
+                    <label class="form-control-label mb-0 mt-1">AEM Hacker</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary pt-0 mr-0" onclick="toggleCardsRows('AEMhackerCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle">
+                    <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('AEMhackerCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="AEMhacker">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card ml-0 mr-0" id="w3afCard">
+            <div class="row">
+                <div class="col">
+                    <label class="form-control-label mb-0 mt-1">W3af</label>
+                </div>
+                <div class="col-xs text-right">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('w3afCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
+                      <input type="checkbox" id="w3af">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
