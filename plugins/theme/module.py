@@ -30,9 +30,9 @@ from .components.commons.page import (
     render_page,
     render_test,
     reporting_config,
-    applications_scanners_config,
-    findings_processing
 )
+from .components.security.application import applications_scanners_config
+from .components.security.common import findings_processing
 from plugins.base.connectors.auth import SessionProject
 
 
