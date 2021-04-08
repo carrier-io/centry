@@ -36,37 +36,20 @@
                     <span id="save-template"
                           class="nav-link-inner--text d-lg-inline-block"><small><b>Save as template</b></small></span>
                 </a>
-<!--                <button type="button" class="btn btn-nooutline-secondary"-->
-<!--                        data-container="body"-->
-<!--                        data-placement="bottom"-->
-<!--                        data-toggle="popover"-->
-<!--                        data-html="true"-->
-<!--                        style="text-transform: none"-->
-<!--                        data-content='-->
-<!--                   <label class="form-control-label" for="event">Template name</label>-->
-<!--                       <input type="text" id="template_name" class="form-control form-control-alternative">-->
-<!--                   <button type="button" id="save-template" onclick="saveTemplate(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3">Save</button>-->
-<!--                   <button type="button" id="remove-template" onclick="closePopover(event)" class="btn btn-nooutline-secondary btn-sm float-right mt-3 mb-3">Cancel</button>-->
-<!--'>-->
-<!--                    <span id="save-template"-->
-<!--                          class="nav-link-inner&#45;&#45;text d-lg-inline-block">-->
-<!--                        <small><b>Save as template</b></small>-->
-<!--                    </span>-->
-<!--                </button>-->
             </li>
         </ul>
     </div>
 </div>
-<div class="row pr-4 pl-4 pt-1 pb-4">
+<div class="row pl-4 pr-4 mb-3">
     <div class="col-6">
-        <div class="card m-0 mb-3 mt-2 p-1" id="qualysCard">
+        <div class="card ml-0 mr-0" id="qualysCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Qualys</label>
+                    <label class="form-control-label mb-0 mt-1">Qualys</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="qualys">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -117,42 +100,42 @@
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-3 mt-2 p-1" id="owaspzapCard">
+        <div class="card ml-0 mr-0" id="owaspzapCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">OWASP ZAP</label>
+                    <label class="form-control-label mb-0 mt-1">OWASP ZAP</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('owaspzapCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('owaspzapCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="owaspzap">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-3 mt-2 p-1" id="niktoCard">
+        <div class="card ml-0 mr-0" id="niktoCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Nikto</label>
+                    <label class="form-control-label mb-0 mt-1">Nikto</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="nikto">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-2 mt-3 p-1" id="nmapCard">
+        <div class="card ml-0 mr-0" id="nmapCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">NMap</label>
+                    <label class="form-control-label mb-0 mt-1">NMap</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('nmapCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('nmapCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="nmap">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
@@ -161,56 +144,56 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="card m-0 mb-3 mt-2 p-1" id="masscanCard">
+        <div class="card ml-0 mr-0" id="masscanCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">Masscan</label>
+                    <label class="form-control-label mb-0 mt-1">Masscan</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('masscanCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('masscanCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="masscan">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-3 mt-2 p-1" id="SSLyzeCard">
+        <div class="card ml-0 mr-0" id="SSLyzeCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">SSLyze</label> <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small>
+                    <label class="form-control-label mb-0 mt-1">SSLyze</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('SSLyzeCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('SSLyzeCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="SSLyze">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-3 mt-2 p-1" id="AEMhackerCard">
+        <div class="card ml-0 mr-0" id="AEMhackerCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">AEM Hacker</label> <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small>
+                    <label class="form-control-label mb-0 mt-1">AEM Hacker</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('AEMhackerCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <span style="color: #FFD700">&#9888;</span><small>Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('AEMhackerCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="AEMhacker">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card m-0 mb-3 mt-2 p-1" id="w3afCard">
+        <div class="card ml-0 mr-0" id="w3afCard">
             <div class="row">
                 <div class="col">
-                    <label class="form-control-label pt-1 pb-1 mt-0 mb-0">W3af</label>
+                    <label class="form-control-label mb-0 mt-1">W3af</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary mr-0 p-0 pr-2" onclick="toggleCardsRows('w3afCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 align-middle mb-0">
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('w3afCard')"><i class="fas fa-cog"></i></button>
+                    <label class="custom-toggle mr-3 mb-0 align-middle">
                       <input type="checkbox" id="w3af">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
