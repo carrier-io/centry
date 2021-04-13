@@ -66,8 +66,8 @@ h4, .h4 {
 }
 
 .card-14 {
-    min-height: calc(50vh - 70px);
-    max-height: calc(50vh - 70px);
+    min-height: 330px;
+    max-height: 330px;
     padding-left: 0px!important;
     padding-right: 0px!important;
 }
@@ -78,7 +78,8 @@ h4, .h4 {
 }
 
 .card-12 {
-    min-height: calc(50vh - 70px);
+    min-height: 330px;
+    height: calc(100vh - 450px);
     padding-left: 0px!important;
     padding-right: 0px!important;
 }
