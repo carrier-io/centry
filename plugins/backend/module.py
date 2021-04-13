@@ -41,8 +41,8 @@ class Module(module.ModuleModel):
         """ Init module """
         log.info("Initializing module Tasks")
         init_db()
-        from .rpc_worker import minion
-        minion.rpc(workers=1)
+        from .api.tests import TestsApi
+        add_resource_to_api(self.context.api, TestsApi, "/backend/<int:project_id>")
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """

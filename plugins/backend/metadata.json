@@ -3,6 +3,6 @@
   "version": "0.1",
   "module": "plugins.backend",
   "extract": false,
-  "depends_on": ["project"],
+  "depends_on": ["base"],
   "init_after": []
 }
