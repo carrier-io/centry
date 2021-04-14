@@ -30,23 +30,24 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush table-borderless"
-                        id="test-list"
+                        id="tests-list"
                         data-toggle="table"
                         data-side-pagination="server"
-                        data-virtual-scroll="true">
+                        data-url="/api/v1/backend/{{config.id}}"
+                        data-page-size=5
+                        data-pagination="true"
+                    >
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" data-checkbox="true"></th>
                                 <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="test_uid">UUID</th>
-                                <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runner</th>
-                                <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>
+                                <th scope="col" data-sortable="true" data-cell-style="nameStyle"  data-field="name">Name</th>
+                                <th scope="col" data-align="center" data-sortable="true" data-formatter=lgFormatter>Runner</th>
+                                <th scope="col" data-align="center" data-sortable="true" data-field="last_run">Last run</th>
+                                <th scope="col" data-align="right" data-cell-style="cellStyle" data-formatter=actionFormatter>Actions</th>
                             </tr>
                         </thead>
                     </table>
-                </div>
-                <div class="card-footer py-4 border-0">
                 </div>
             </div>
         </div>
@@ -152,6 +153,6 @@
     </div>
 </div>
 {{ template_slot("create_test", payload=config)|safe }}
-
+<script src="{{ url_for('static', filename='vendor/nouislider/nouislider.js') }}"></script>
 <script src="{{ url_for('static', filename='js/components/performanceBackend.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/components/reporting.js') }}" type="text/javascript"></script>

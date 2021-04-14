@@ -15,11 +15,12 @@ import string
 from os import path
 from uuid import uuid4
 from json import dumps
-from sqlalchemy import Column, Integer, String, Text, JSON, ARRAY
+from sqlalchemy import Column, Integer, String, JSON, ARRAY
 
 from plugins.base.db_manager import Base
 from plugins.base.models.abstract_base import AbstractBaseMixin
-from plugins.base.constants import JOB_CONTAINER_MAPPING, CURRENT_RELEASE
+from plugins.base.constants import CURRENT_RELEASE
+from ..constants import JOB_CONTAINER_MAPPING
 from ..models import unsecret
 
 
@@ -35,8 +36,8 @@ class ApiTests(AbstractBaseMixin, Base):
     file = Column(String(128), nullable=False)
     entrypoint = Column(String(128), nullable=False)
     runner = Column(String(128), nullable=False)
-    reporting = Column(ARRAY(String), nullable=False)
-    emails = Column(Text)
+    reporting = Column(ARRAY(JSON), nullable=False)
+    local_path = Column(String(128))
     params = Column(JSON)
     env_vars = Column(JSON)
     customization = Column(JSON)
@@ -195,6 +196,8 @@ class ApiTests(AbstractBaseMixin, Base):
                 execution_json["execution_params"]["additional_files"][key] = value
         if self.git:
             execution_json["git"] = self.git
+        if self.local_path:
+            execution_json["local_path"] = self.local_path
         if self.job_type == "perfgun":
             execution_json["execution_params"]['test'] = self.entrypoint
             execution_json["execution_params"]["GATLING_TEST_PARAMS"] = ""

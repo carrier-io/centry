@@ -73,8 +73,10 @@
                         <label class="form-control-label" for="nav-tab">Test Sources</label>
                         <nav>
                           <div class="nav nav-tabs source-selector" id="nav-tab" role="tablist">
-                              <a class="nav-item nav-link active" id="nav-git-tab" data-toggle="tab" href="#nav-git" role="tab" aria-controls="nav-git" aria-selected="true">Git</a>
+                              <a class="nav-item nav-link active" id="nav-git-tab" data-toggle="tab" href="#nav-git" role="tab" aria-controls="nav-git" aria-selected="true">Git (ssh)</a>
+                              <a class="nav-item nav-link" id="nav-git-https-tab" data-toggle="tab" href="#nav-git-https" role="tab" aria-controls="nav-git-https">Git (https)</a>
                               <a class="nav-item nav-link" id="nav-file-tab" data-toggle="tab" href="#nav-file" role="tab" aria-controls="nav-file" aria-selected="false">Artifact</a>
+                              <a class="nav-item nav-link" id="nav-local-file-tab" data-toggle="tab" href="#nav-local-file" role="tab" aria-controls="nav-local-file" aria-selected="false">Local</a>
                           </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
@@ -87,30 +89,54 @@
                                 <input type="file" class="form-control form-control-alternative" id="file" lang="en" multiple>
                               </div>
                             </div>
+                          <div class="tab-pane fade mt-2" id="nav-local-file" role="tabpanel" aria-labelledby="nav-local-file-tab">
+                              <div class="carrier-sast-target">
+                                    <div class="row">
+                                        <div class="col p-0">
+                                            <label class="form-control-label" for="repo">Path to control-tower mount of tests</label>
+                                            <input type="text" id="local_file" class="form-control form-control-alternative" placeholder="e.g. /tmp/test_code">
+                                        </div>
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade mt-2" id="nav-git-https" role="tabpanel" aria-labelledby="nav-git-https">
+                                <div id="target_git_https" class="carrier-sast-target">
+                                    <div class="row">
+                                        <div class="col p-0">
+                                            <label class="form-control-label" for="repo_https">Git Repo with Tests</label>
+                                            <input type="text" id="repo_https" class="form-control form-control-alternative" placeholder="e.g. https://github.com/carrier-io/dusty.git">
+                                        </div>
+                                        <div class="col p-0">
+                                            <label class="form-control-label" for="repo_branch_https">Git Branch</label>
+                                            <input type="text" id="repo_branch_https" class="form-control form-control-alternative" placeholder="(optional, default - master)">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col p-0">
+                                          <label class="form-control-label" for="repo_user">Git Username</label>
+                                          <input type="text" id="repo_user" class="form-control form-control-alternative" placeholder="(optional)">
+                                        </div>
+                                        <div class="col p-0">
+                                          <label class="form-control-label" for="repo_pass">Git Password</label>
+                                          <input type="text" id="repo_pass" class="form-control form-control-alternative" placeholder="(optional)">
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
                             <div class="tab-pane fade mt-2 show active" id="nav-git" role="tabpanel" aria-labelledby="nav-git-tab">
                                 <div id="target_git" class="carrier-sast-target">
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col p-0">
                                             <label class="form-control-label" for="repo">Git Repo with Tests</label>
-                                            <input type="text" id="repo" class="form-control form-control-alternative" placeholder="Repository URL (e.g. https://github.com/carrier-io/dusty.git)">
+                                            <input type="text" id="repo" class="form-control form-control-alternative" placeholder="e.g. git@github.com/carrier-io/dusty.git">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
-                                          <label class="form-control-label" for="repo_user">Git Username</label>
-                                          <input type="text" id="repo_user" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
-                                        </div>
-                                        <div class="col">
-                                          <label class="form-control-label" for="repo_pass">Git Password</label>
-                                          <input type="text" id="repo_pass" class="form-control form-control-alternative" placeholder="(optional, for HTTPS URLs)">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
+                                        <div class="col p-0">
                                             <label class="form-control-label" for="repo_key">Git SSH private key</label>
-                                            <input type="text" id="repo_key" class="form-control form-control-alternative" placeholder="(optional, for GIT+SSH URLs)">
+                                            <input type="text" id="repo_key" class="form-control form-control-alternative" placeholder="(optional)">
                                         </div>
-                                        <div class="col">
+                                        <div class="col p-0">
                                             <label class="form-control-label" for="repo_branch">Git Branch</label>
                                             <input type="text" id="repo_branch" class="form-control form-control-alternative" placeholder="(optional, default - master)">
                                         </div>
@@ -151,14 +177,14 @@
                 </div>
                 <div class="row pr-4 pl-4 bg-light" id="advancedBackend" style="display:none">
                     <div class="col-6">
-                        <div class="card ml-0 mr-0" id="envCard">
+                        <div class="card ml-0 mr-0" id="extCard">
                             <div class="row">
                                 <div class="col">
                                     <label class="form-control-label mt-0">Custom plugins and extensions</label>
                                     <p><small>Bucket and file for your customizations</small></p>
                                 </div>
                                 <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('envCard')"><i class="fas fa-plus"></i></button>
+                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('extCard', 'bucket/file', 'path/to/file')"><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -183,20 +209,6 @@
                                 </div>
                                 <div class="col-xs text-right">
                                     <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addDNSOverride('dnsCard')"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card ml-0 mr-0" id="networkCard">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-control-label mt-0">Network Emulation</label>
-                                    <p><small>Simulate different types of connections from load generators</small></p>
-                                </div>
-                                <div class="col-xs text-right">
-                                    <label class="custom-toggle mr-3">
-                                      <input type="checkbox">
-                                      <span class="custom-toggle-slider rounded-circle"></span>
-                                    </label>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,5 @@
 from uuid import uuid4
-from json import dumps
 from werkzeug.utils import secure_filename
-from werkzeug.exceptions import Forbidden
 from sqlalchemy import and_
 
 from arbiter import Arbiter
@@ -10,7 +8,6 @@ from plugins.base.constants import RABBIT_HOST, RABBIT_PORT, RABBIT_USER, RABBIT
 from plugins.base.utils.api_utils import upload_file
 from plugins.base.data_utils.file_utils import File
 from ..models.tasks import Task
-from ..models.results import Results
 
 
 def get_arbiter():
