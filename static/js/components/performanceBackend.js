@@ -2,6 +2,10 @@ $('#createTestModal').on('hide.bs.modal', function(e) {
     createTestModal()
 });
 
+$('#runTestModal').on('hide.bs.modal', function(e) {
+    createTestModal()
+});
+
 function createTestModal() {
     $('#repo').val($('#repo')[0].defaultValue)
     $('#repo_https').val($('#repo_https')[0].defaultValue)
@@ -143,10 +147,18 @@ function lgFormatter(value, row, index) {
 }
 
 function actionFormatter(value, row, index) {
-    return `<a class="mr-1 btn btn-sx" href="javascript:void(0)" onclick="showTestConfigModal(this, '${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></a>
-    <a class="mr-1 btn btn-sx" href="javascript:void(0)" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></a>
-    <a class="mr-1 btn btn-sx" href="javascript:void(0)" onclick="copyToClipboard('${row.test_uid}')" data-toggle="tooltip" data-placement="top" title="Copy Test ID to clipboard"><i class="fas fa-cube"></i></a>
-    <a class="btn btn-sx" href="javascript:void(0)" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></a>`
+    return `<button class="mr-1 btn btn-sx" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
+    <button class="mr-1 btn btn-sx" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
+    <div class="dropdown">
+        <button class="mr-1 btn btn-sx" id="cidrop"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cube"></i></button>
+        <div class="dropdown-menu" aria-labelledby="cidrop">
+            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip"  data-placement="left" title="Copy docker execution command to clipboard" type="button">Docker command</button>
+            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy Jenkins stage to clipboard"  type="button">Jenkins stage</button>
+            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy ADO yaml to clipboard"  type="button">Azure DevOps yaml</button>
+            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy unique test id to clipboard"  onclick="copyToClipboard('${row.test_uid}')" type="button">Test UID</button>
+          </div>
+    </div>
+    <button class="btn btn-sx" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></button>`
 }
 
 function copyToClipboard(text) {
@@ -169,4 +181,10 @@ function cellStyle(value, row, index) {
 
 function nameStyle(value, row, index) {
     return {css: {"max-width": "140px", "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap"}}
+}
+
+function runTestModal(test_id) {
+    var test_data = $('#tests-list').bootstrapTable('getRowByUniqueId', test_id);
+    console.log(test_data);
+    $("#runTestModal").modal('show');
 }
