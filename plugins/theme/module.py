@@ -30,6 +30,7 @@ from .components.commons.page import (
     render_page,
     render_test,
     reporting_config,
+    render_run_test
 )
 from .components.security.application import applications_scanners_config
 from .components.security.common import findings_processing
@@ -63,6 +64,8 @@ class Module(module.ModuleModel):
         self.context.slot_manager.register_callback("navbar", render_navbar)
         self.context.slot_manager.register_callback("page_content", render_page)
         self.context.slot_manager.register_callback("create_test", render_test)
+        self.context.slot_manager.register_callback("edit_test", render_test)
+        self.context.slot_manager.register_callback("run_test", render_run_test)
         self.context.slot_manager.register_callback("reporting_config", reporting_config)
         self.context.slot_manager.register_callback("application_scanners_config", applications_scanners_config)
         self.context.slot_manager.register_callback("findings_processing", findings_processing)

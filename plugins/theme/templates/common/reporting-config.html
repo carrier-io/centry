@@ -6,45 +6,49 @@
 </div>
 <div class="row pl-4 pr-4 mb-3">
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="emailCard">
+        <div class="card ml-0 mr-0" id="{{config.name}}_emailCard">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">Email</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('emailCard')"><i class="fas fa-cog"></i></button>
+                    {% if config.cogs %}
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('{{config.name}}_emailCard')"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="email">
+                      <input type="checkbox" id="{{config.name}}_email">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="jiraCard">
+        <div class="card ml-0 mr-0" id="{{config.name}}_jiraCard">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">Jira</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#jiraSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
+                    {% if config.cogs %}
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#{{config.name}}_jiraSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="jira">
+                      <input type="checkbox" id="{{config.name}}_jira">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
-            <div class="collapse ml-3 mr-3 mb-3" id="jiraSettings">
+            <div class="collapse ml-3 mr-3 mb-3" id="{{config.name}}_jiraSettings">
 
-                <div class="form-group" id="jira_fields">
+                <div class="form-group" id="{{config.name}}_jira_fields">
                     <div class="row">
                         <div class="col ml-0 pl-0">
-                            <label class="form-control-label" for="jira_fields">Jira fields</label>
+                            <label class="form-control-label" for="{{config.name}}_jira_fields">Jira fields</label>
                             <br><small>For all</small>
                         </div>
 
                         <div class="col-xs text-right mt-3 pt-1">
                             <div class="col-xs text-right">
-                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('jira_fields', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addParam('{{config.name}}_jira_fields', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -109,16 +113,16 @@
                     </div>
                 </div>
 
-                <div class="form-group mb-3 mt-0" id="dynamic_fields">
+                <div class="form-group mb-3 mt-0" id="{{config.name}}_dynamic_fields">
                     <div class="row">
                         <div class="col ml-0 pl-0">
-                            <label class="form-control-label" for="dynamic_fields">Dynamic fields</label><br>
+                            <label class="form-control-label" for="{{config.name}}_dynamic_fields">Dynamic fields</label><br>
                             <small>Description</small>
                         </div>
 
                         <div class="col-xs text-right mt-3 pt-1">
                             <div class="col-xs text-right">
-                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addThreeParam('dynamic_fields', 'Condition', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addThreeParam('{{config.name}}_dynamic_fields', 'Condition', 'Key', 'Value')"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -126,50 +130,53 @@
 
 
                 <div class="form-group">
-                    <input type="checkbox" name="epic" id="epic_linkage_checkbox" onclick="checkBox()" style="vertical-align: middle"> <label for="epic_linkage_checkbox"><b> Separated epic linkage</b></label>
-                    <div class="form-group" id="epic_linkage" style="display:none">
-                        <label class="form-control-label" for="epic_filed_key">Epic field key</label>
-                            <input type="text" id="epic_filed_key" class="form-control form-control-alternative"
+                    <input type="checkbox" name="epic" id="{{config.name}}_epic_linkage_checkbox" onclick="checkBox()" style="vertical-align: middle">
+                    <label for="{{config.name}}_epic_linkage_checkbox"><b> Separated epic linkage</b></label>
+                    <div class="form-group" id="{{config.name}}_epic_linkage" style="display:none">
+                        <label class="form-control-label" for="{{config.name}}_epic_filed_key">Epic field key</label>
+                            <input type="text" id="{{config.name}}_epic_filed_key" class="form-control form-control-alternative"
                                    placeholder="Key">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" name="jira" id="use_another_jira" style="vertical-align: middle"> <label for="use_another_jira"><b>Use another Jira</b></label>
-                    <div class="form-group mt-0 pt-0" id="another_jira" style="display:none">
+                    <input type="checkbox" name="jira" id="{{config.name}}_use_another_jira" style="vertical-align: middle"> <label for="{{config.name}}_use_another_jira"><b>Use another Jira</b></label>
+                    <div class="form-group mt-0 pt-0" id="{{config.name}}_another_jira" style="display:none">
                         <div class="row">
-                        <label class="form-control-label" for="url_another_jira">URL</label>
-                            <input type="text" id="url_another_jira" class="form-control form-control-alternative"
+                        <label class="form-control-label" for="{{config.name}}_url_another_jira">URL</label>
+                            <input type="text" id="{{config.name}}_url_another_jira" class="form-control form-control-alternative"
                                    placeholder="URL to another Jira">
                         </div>
                         <div class="row">
                             <div class="col ml-0 pl-0">
-                                <label class="form-control-label" for="login_another_jira">Login</label>
-                                <input type="text" id="login_another_jira" class="form-control form-control-alternative"
+                                <label class="form-control-label" for="{{config.name}}_login_another_jira">Login</label>
+                                <input type="text" id="{{config.name}}_login_another_jira" class="form-control form-control-alternative"
                                        placeholder="Login to another Jira">
                             </div>
                             <div class="col ml-0 pl-0">
-                                <label class="form-control-label" for="password_another_jira">Password</label>
-                                <input type="text" id="password_another_jira" class="form-control form-control-alternative"
+                                <label class="form-control-label" for="{{config.name}}_password_another_jira">Password</label>
+                                <input type="text" id="{{config.name}}_password_another_jira" class="form-control form-control-alternative"
                                        placeholder="Login to another Jira">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <input type="checkbox" name="reopen_jira" id="reopen" style="vertical-align: middle"> <label for="reopen"><b> Reopen if closed</b></label>
+                <input type="checkbox" name="reopen_jira" id="{{config.name}}_reopen" style="vertical-align: middle"> <label for="{{config.name}}_reopen"><b> Reopen if closed</b></label>
 
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="QualityGateCart">
+        <div class="card ml-0 mr-0" id="{{config.name}}_QualityGateCart">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">QualityGate</label>
                 </div>
                 <div class="col-xs text-right">
+                    {% if config.cogs %}
                     <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('QualityGateCart')"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="qg">
+                      <input type="checkbox" id="{{config.name}}_qg">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
@@ -177,43 +184,49 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="JUreportCart">
+        <div class="card ml-0 mr-0" id="{{config.name}}_JUreportCart">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">jUnit Report</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('JUreportCart')"><i class="fas fa-cog"></i></button>
+                    {% if config.cogs %}
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('{{config.name}}_JUreportCart')"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="jUnit">
+                      <input type="checkbox" id="{{config.name}}_jUnit">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="ReportPortalCart">
+        <div class="card ml-0 mr-0" id="{{config.name}}_ReportPortalCart">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">Report Portal</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('ReportPortalCart')"><i class="fas fa-cog"></i></button>
+                    {% if config.cogs %}
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('{{config.name}}_ReportPortalCart')"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="rp">
+                      <input type="checkbox" id="{{config.name}}_rp">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card ml-0 mr-0" id="ADOCard">
+        <div class="card ml-0 mr-0" id="{{config.name}}_ADOCard">
             <div class="row">
                 <div class="col">
                     <label class="form-control-label mb-0 mt-1">Azure DevOps</label>
                 </div>
                 <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('ADOCard')"><i class="fas fa-cog"></i></button>
+                    {% if config.cogs %}
+                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleRows('{{config.name}}_ADOCard')"><i class="fas fa-cog"></i></button>
+                    {% endif %}
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="ado">
+                      <input type="checkbox" id="{{config.name}}_ado">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>

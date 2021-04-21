@@ -163,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                {{ template_slot("reporting_config", payload=config) | safe }}
+                {{ template_slot("reporting_config", payload={"name": "createTestModal", "cogs": True}) | safe }}
                 <div class="row pl-4 bg-light">
                     <div class="col">
                         <h4 class="mb-0">ADVANCED PARAMETERS</h4>

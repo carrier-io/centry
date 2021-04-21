@@ -602,6 +602,11 @@ input:-webkit-autofill {
 	transform: translate(0);
 	transition: transform .2s;
 }
+
+.modal .modal-dialog-aside-sm{
+	width: 800px!important;
+}
+
 .modal .modal-dialog-aside .modal-body{
  padding: 0;
 }
