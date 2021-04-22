@@ -12,6 +12,129 @@ $('#severity_filter').click(function() {
     }
 })
 
+$('#createApplicationTest').on('hide.bs.modal', function(e) {
+    cleanAppTestModal()
+});
+
+function cleanAppTestModal() {
+    $("#testname").val($("#testname")[0].defaultValue)
+    $('#url_to_scan .row').slice(1,).each(function(_, item) {
+        item.remove()
+    })
+    $("#scanURL").val($("#scanURL")[0].defaultValue)
+    $('#exclusions .row').slice(1,).each(function(_, item) {
+        item.remove()
+    })
+    $("#scanner_pool .row").slice(1,).each(function(_, item){
+      item.remove();
+    })
+    var uncheck_flags = document.getElementsByTagName('input');
+    for(var i=0;i<uncheck_flags.length;i++)
+    {
+        if(uncheck_flags[i].type=='checkbox' || uncheck_flags[i].type=='radio') {  // uncheck all checkboxes and radio buttons
+            uncheck_flags[i].checked=false;
+        }
+    }
+//    $("#qualys_checkbox").prop("checked", false)
+}
+
+function actions_buttons(value, row, index) {
+    return [
+        '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
+        '<button id="test_settings" class="settings btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-cog fa-lg"></i></span></button>',
+        '<button id="integrations" class="integrations btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-share-alt-square fa-lg"></i></span></button>',
+        '<button id="delete" class="trash btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-trash fa-lg"></i></span></button>'
+    ].join(' ')
+}
+
+function fillCardSettings(card_name, data) {
+    if (card_name === "qualys"){
+        $('#qualys_profile_id').val(data["qualys_profile_id"]);
+        $('#qualys_template_id').val(data["qualys_template_id"]);
+
+        if (data["scanner_type"] == "internal"){
+            $("#QualysScannerType2").prop("checked",true);
+        }
+        else {
+            $("#QualysScannerType1").prop("checked", true);
+        }
+
+        compareLength(data["scanner_pool"], "#scanner_pool")
+
+        for (var indx=0; indx < data["scanner_pool"].length; indx++) {
+            $($("#scanner_pool .row").slice(1, ).find('input[type=text]')[indx]).val(data["scanner_pool"][indx])
+        }
+
+    }
+}
+
+function compareLength(array, block_name){
+    var list_ids = ["#exclusions", "#scanner_pool"]  // list of (blocks)IDs where we need to exclude first .row
+    if (list_ids.find((i) => i === block_name) === block_name) {
+        var block_length = $(block_name).length - 1
+    }
+    else {
+        var block_length = $(block_name).length
+    }
+
+    if (array.length === block_length) {
+        return true
+    }
+    else {
+        block_name = block_name.slice(1,)
+        for (var row_indx=0; row_indx<array.length-block_length; row_indx++){
+            addNewURL(block_name)
+        }
+    }
+}
+
+var status_events = {
+    "click .run": function (e, value, row, index) {
+        alert('You click RUN action')
+    },
+    "click .settings": function (e, value, row, index) {
+        $("#createApplicationTest").modal('show');
+
+//        Fill main data
+        $("#testname").val(row.name)
+
+        compareLength(row["urls_to_scan"], "#url_to_scan")
+        compareLength(row["urls_exclusions"], "#exclusions")
+
+        for (var indx=0; indx < row["urls_to_scan"].length; indx++) {
+            $($("#url_to_scan .row").find('input[type=text]')[indx]).val(row["urls_to_scan"][indx])
+        }
+        for (var indx=0; indx < row["urls_exclusions"].length; indx++) {
+            $($("#exclusions .row").find('input[type=text]')[indx]).val(row["urls_exclusions"][indx])
+        }
+//        Fill scanners data 'scanners_cards'
+        $.each(row["scanners_cards"], function (key, value) {
+            $("#"+`${key}_checkbox`).prop("checked", true)
+            console.log(row["scanners_cards"])
+            fillCardSettings(key, row["scanners_cards"][key])
+        })
+
+
+
+    },
+    "click .integrations": function (e, value, row, index) {
+        alert('You click INTEGRATIONS action')
+//        TODO: write this method
+    },
+
+    "click .trash": function (e, value, row, index) {
+        $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}` + '?' + $.param({"id[]": row.id}),
+          method: 'DELETE',
+          success: function(data){
+              $("#tests-list").bootstrapTable('refresh');
+          }
+        }
+      );
+    }
+}
+
+
 function submitAppTest(run_test=false) {
       $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
       $("#save").html(`<span class="spinner-border spinner-border-sm"></span>`);
@@ -54,7 +177,7 @@ function submitAppTest(run_test=false) {
       data.append('urls_exclusions', JSON.stringify(urls_params[1]));
       data.append('scanners_cards', JSON.stringify(scanners_cards));
       data.append('reporting', JSON.stringify({}));
-      data.append('save_and_run', run_test)
+      data.append('run_test', run_test)
 
 //      var reporting_cards = reportingCards()
 //      data.append("reporting_cards", JSON.stringify(reporting_cards))

@@ -29,9 +29,9 @@ class SecurityTestsApi(RestResource):
         dict(name="save_and_run", type=str, location='form')
     )
 
-    # _delete_rules = (
-    #     dict(name="id[]", type=int, action="append", location="args"),
-    # )
+    _delete_rules = (
+        dict(name="id[]", type=int, action="append", location="args"),
+    )
 
     def __init__(self):
         super().__init__()
@@ -40,7 +40,7 @@ class SecurityTestsApi(RestResource):
     def __init_req_parsers(self):
         self.get_parser = build_req_parser(rules=self._get_rules)
         self.post_parser = build_req_parser(rules=self._post_rules)
-        # self.delete_parser = build_req_parser(rules=self._delete_rules)
+        self.delete_parser = build_req_parser(rules=self._delete_rules)
 
     def get(self, project_id: int):
         args = self.get_parser.parse_args(strict=False)
@@ -50,21 +50,21 @@ class SecurityTestsApi(RestResource):
             reports.append(each.to_json())
         return {"total": total, "rows": reports}
 
-    # def delete(self, project_id: int):
-    #     args = self.delete_parser.parse_args(strict=False)
-    #     project = self.rpc.project_get_or_404(project_id=project_id)
-    #     query_result = SecurityApiTests.query.filter(
-    #         and_(SecurityApiTests.project_id == project.id, SecurityApiTests.id.in_(args["id[]"]))
-    #     ).all()
-    #     for each in query_result:
-    #         each.delete()
-    #     return {"message": "deleted"}
+    def delete(self, project_id: int):
+        args = self.delete_parser.parse_args(strict=False)
+        project = self.rpc.project_get_or_404(project_id=project_id)
+        query_result = SecurityApiTests.query.filter(
+            and_(SecurityApiTests.project_id == project.id, SecurityApiTests.id.in_(args["id[]"]))
+        ).all()
+        for each in query_result:
+            each.delete()
+        return {"message": "deleted"}
 
     def post(self, project_id: int):
         args = self.post_parser.parse_args(strict=False)
 
-        save_and_run = args.pop("save_and_run")
-        if save_and_run:
+        run_test = args.pop("run_test")
+        if run_test:
             # TODO: write test running
             ...
 

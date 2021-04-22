@@ -30,24 +30,30 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush table-borderless"
-                        id="test-list"
+                        id="tests-list"
                         data-toggle="table"
                         data-side-pagination="server"
-                        data-virtual-scroll="true">
+                        data-url="/api/v1/security/{{config.id}}"
+                        data-page-size=3
+                        data-unique-id="id"
+                        data-pagination="true"
+                    >
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" data-checkbox="true"></th>
-                                <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="test_uid">UUID</th>
-                                <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runner</th>
-                                <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>
+                                <th scope="col" data-sortable="true" data-field="name">Name</th>
+                                <th scope="col" data-sortable="true" data-field="urls_to_scan">Urls</th>
+                                <th scope="col" data-sortable="true" data-visible="false" data-field="test_uid">Uuid</th>
+                                <th scope="col" data-sortable="true" data-field="tools">Tools</th>
+                                <th scope="col" data-field="lg_type" data-formatter="actions_buttons" data-events="status_events">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                     </table>
                 </div>
-                <div class="card-footer py-4 border-0">
-                </div>
+<!--                <div class="card-footer py-4 border-0">-->
+<!--                </div>-->
             </div>
         </div>
         <div class="col-6 pl-1 pr-5">
