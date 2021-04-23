@@ -5,7 +5,7 @@ from json import loads
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, get
 
-from ..models.api_tests import SecurityApiTests
+from ..models.api_tests import SecurityTestsDAST
 
 
 class SecurityTestsApi(RestResource):
@@ -21,9 +21,9 @@ class SecurityTestsApi(RestResource):
 
     _post_rules = (
         dict(name="name", type=str, location='form'),
-        dict(name="urls_to_scan", type=str, location='form'),
-        dict(name="urls_exclusions", type=str, location='form'),
-        dict(name="scanners_cards", type=str, location='form'),
+        # dict(name="urls_to_scan", type=str, location='form'),
+        # dict(name="urls_exclusions", type=str, location='form'),
+        # dict(name="scanners_cards", type=str, location='form'),
         # dict(name="reporting_cards", type=str, location='form'),
         dict(name="reporting", type=str, location='form'),
         dict(name="save_and_run", type=str, location='form')
@@ -45,7 +45,7 @@ class SecurityTestsApi(RestResource):
     def get(self, project_id: int):
         args = self.get_parser.parse_args(strict=False)
         reports = []
-        total, res = get(project_id, args, SecurityApiTests)
+        total, res = get(project_id, args, SecurityTestsDAST)
         for each in res:
             reports.append(each.to_json())
         return {"total": total, "rows": reports}
@@ -53,8 +53,8 @@ class SecurityTestsApi(RestResource):
     def delete(self, project_id: int):
         args = self.delete_parser.parse_args(strict=False)
         project = self.rpc.project_get_or_404(project_id=project_id)
-        query_result = SecurityApiTests.query.filter(
-            and_(SecurityApiTests.project_id == project.id, SecurityApiTests.id.in_(args["id[]"]))
+        query_result = SecurityTestsDAST.query.filter(
+            and_(SecurityTestsDAST.project_id == project.id, SecurityTestsDAST.id.in_(args["id[]"]))
         ).all()
         for each in query_result:
             each.delete()
@@ -70,7 +70,7 @@ class SecurityTestsApi(RestResource):
 
         project = self.rpc.project_get_or_404(project_id=project_id)
 
-        test = SecurityApiTests(
+        test = SecurityTestsDAST(
             project_id=project.id,
             test_uid=str(uuid4()),
             name=args["name"],
