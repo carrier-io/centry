@@ -33,7 +33,7 @@
                         id="tests-list"
                         data-toggle="table"
                         data-side-pagination="server"
-                        data-url="/api/v1/security/{{config.id}}"
+                        data-url="/api/v1/security/{{config.id}}/dast"
                         data-page-size=3
                         data-unique-id="id"
                         data-pagination="true"
@@ -142,10 +142,13 @@
                                 <th scope="col" data-checkbox="true"></th>
                                 <th data-visible="false" data-field="id">index</th>
                                 <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="tests_count">Date</th>
-                                <th scope="col" data-sortable="true" data-field="tests_count">Duration</th>
-                                <th scope="col" data-sortable="true" data-field="lg_type">vUsers</th>
-                                <th scope="col" data-sortable="true" data-field="lg_type">Fail Rate</th>
+                                <th scope="col" data-sortable="true" data-field="start_date">Start</th>
+                                <th scope="col" data-sortable="true" data-field="tests_duration">Duration</th>
+                                <th scope="col" data-sortable="true" data-field="tests_findings">Findings</th>
+                                <th scope="col" data-sortable="true" data-field="tests_fp">False Positive</th>
+                                <th scope="col" data-sortable="true" data-field="tests_excl">Excl</th>
+                                <th scope="col" data-sortable="true" data-field="tests_info">Info</th>
+                                <th scope="col" data-sortable="true" data-field="tests_tag">Tag</th>
                                 <th scope="col" data-field="lg_type">Status</th>
                             </tr>
                         </thead>

@@ -42,7 +42,17 @@ class Module(module.ModuleModel):
         log.info("Initializing module Security")
         init_db()
         from .api.tests import SecurityTestsApi
-        add_resource_to_api(self.context.api, SecurityTestsApi, "/security/<int:project_id>")
+        from .api.test import SecurityTestApi
+        add_resource_to_api(
+            self.context.api,
+            SecurityTestsApi,
+            "/security/<int:project_id>/dast"
+        )
+        add_resource_to_api(
+            self.context.api, SecurityTestApi,
+            "/security/<int:project_id>/dast/<int:test_id>",
+            "/security/<int:project_id>/dast/<string:test_id>"
+        )
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """

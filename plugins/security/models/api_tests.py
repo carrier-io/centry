@@ -35,6 +35,7 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
         # nullable=False
     )
     scanners_cards = Column(JSON)  # {<scanner>: {<scanner_params>}, ...}
+    processing = Column(JSON)  # {<processing_card>: <value>, }
 
     # region = Column(String(128), nullable=False)
     # bucket = Column(String(128), nullable=False)

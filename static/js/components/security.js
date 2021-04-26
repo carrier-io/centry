@@ -35,6 +35,7 @@ function cleanAppTestModal() {
             uncheck_flags[i].checked=false;
         }
     }
+    $("#severity").selectpicker('val', "Info")
 //    $("#qualys_checkbox").prop("checked", false)
 }
 
@@ -91,6 +92,28 @@ function compareLength(array, block_name){
 var status_events = {
     "click .run": function (e, value, row, index) {
         alert('You click RUN action')
+        row["run_test"] = true
+        console.log(row)
+//        var data = new FormData()
+//        data.append('args', 'config')
+//        for(var pair of row.entries()) {
+//           console.log(pair[0]+ '--> '+ pair[1]);
+//        }
+        console.log(`/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`)
+        var type_ = "config"
+        $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`,
+          cache: false,
+          contentType: 'application/json',
+          data: JSON.stringify({'type': type_}),
+          processData: false,
+          method: 'POST',
+          success: function(data){
+              console.log("executed");
+              $("#tests-list").bootstrapTable('refresh');
+          }
+        }
+      );
     },
     "click .settings": function (e, value, row, index) {
         $("#createApplicationTest").modal('show');
@@ -124,7 +147,7 @@ var status_events = {
 
     "click .trash": function (e, value, row, index) {
         $.ajax({
-          url: `/api/v1/security/${getSelectedProjectId()}` + '?' + $.param({"id[]": row.id}),
+          url: `/api/v1/security/${getSelectedProjectId()}/dast` + '?' + $.param({"id[]": row.id}),
           method: 'DELETE',
           success: function(data){
               $("#tests-list").bootstrapTable('refresh');
@@ -145,6 +168,7 @@ function submitAppTest(run_test=false) {
       var urls_params = [[], []]
       var scanners_cards = {qualys: {}}
       var run_test = run_test
+      var processing_cards = {"minimal_security_filter": null}
 
 //      Urls to scan and extensions
       $("#url_to_scan .row").each(function(_, item) {
@@ -170,6 +194,11 @@ function submitAppTest(run_test=false) {
         })
       }
 
+//      --Processing's cards--
+//      Min security filter
+      processing_cards["minimal_security_filter"] = $("#severity").val()
+
+
       var data = new FormData();
 
       data.append('name', $('#testname').val());
@@ -177,18 +206,19 @@ function submitAppTest(run_test=false) {
       data.append('urls_exclusions', JSON.stringify(urls_params[1]));
       data.append('scanners_cards', JSON.stringify(scanners_cards));
       data.append('reporting', JSON.stringify({}));
+      data.append('processing', JSON.stringify(processing_cards));
       data.append('run_test', run_test)
 
 //      var reporting_cards = reportingCards()
 //      data.append("reporting_cards", JSON.stringify(reporting_cards))
 
-//      for(var pair of data.entries()) {
-//           console.log(pair[0]+ '--> '+ pair[1]);
-//        }
+      for(var pair of data.entries()) {
+           console.log(pair[0]+ '--> '+ pair[1]);
+        }
 
 
       $.ajax({
-          url: `/api/v1/security/${getSelectedProjectId()}`,
+          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
           data: data,
           cache: false,
           contentType: false,
