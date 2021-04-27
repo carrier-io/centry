@@ -5,5 +5,8 @@ influxdb==5.2.3
 python-keycloak==0.24.0
 hurry.filesize==0.9
 docker==5.0.0
-git+https://github.com/carrier-io/pylon.git@main
+pylon @ git+https://github.com/carrier-io/pylon.git@main
 
+oic==1.2.1
+jsonpath-rw==1.4.0
+pydantic==1.8.1

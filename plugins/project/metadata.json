@@ -3,6 +3,6 @@
   "version": "0.1",
   "module": "plugins.project",
   "extract": false,
-  "depends_on": ["base"],
+  "depends_on": ["base", "auth_manager"],
   "init_after": []
 }

@@ -19,6 +19,7 @@ from plugins.base.db_manager import db_session
 
 config = Config()
 
+
 class AbstractBaseMixin:
     __table__ = None
     __table_args__ = {"schema": config.DATABASE_SCHEMA} if config.DATABASE_SCHEMA else None
