@@ -12,14 +12,16 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 
-import logging
+
 from typing import Optional
 from flask import abort
 from sqlalchemy import String, Column, Integer, JSON, ARRAY, Text, and_
 
 from plugins.base.models.abstract_base import AbstractBaseMixin
-from plugins.base.db_manager import Base, db_session
+from plugins.base.db_manager import Base
 from plugins.base.connectors.auth import SessionProject, is_user_part_of_the_project, only_users_projects
+from plugins.project.models.keycloak_mixin import KeycloakMixin
+
 
 def user_is_project_admin():
     # this one need to be implemented in user permissions
@@ -52,7 +54,7 @@ def get_active_project():
     return SessionProject.get()
 
 
-class Project(AbstractBaseMixin, Base):
+class Project(AbstractBaseMixin, KeycloakMixin, Base):
     __tablename__ = "project"
 
     API_EXCLUDE_FIELDS = ("secrets_json", "worker_pool_config_json")
@@ -66,6 +68,10 @@ class Project(AbstractBaseMixin, Base):
 
     def insert(self) -> None:
         super().insert()
+
+        # create keycloak group
+        self.keycloak_create_group()
+
         from plugins.base.connectors.minio import MinioClient
         MinioClient(project=self).create_bucket(bucket="reports")
         MinioClient(project=self).create_bucket(bucket="tasks")
@@ -75,7 +81,7 @@ class Project(AbstractBaseMixin, Base):
         selected_id = SessionProject.get()
         return self.id == selected_id
 
-    def to_json(self, exclude_fields: tuple = ()) -> dict:
+    def to_json(self, exclude_fields: tuple = ('_keycloak_group_id', )) -> dict:
         json_data = super().to_json(exclude_fields=exclude_fields)
         # json_data["used_in_session"] = self.used_in_session()
         if 'extended_out' not in exclude_fields:
