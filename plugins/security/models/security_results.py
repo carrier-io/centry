@@ -13,6 +13,7 @@ class SecurityResultsDAST(AbstractBaseMixin, Base):
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, unique=False, nullable=False)
     test_id = Column(Integer, unique=False)
+    test_uid = Column(String(128), unique=False)
     test_name = Column(String(128), unique=False)
     start_date = Column(DateTime, default=dt.utcnow)
     # duration = Column(String(128), unique=False)

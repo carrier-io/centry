@@ -6,6 +6,7 @@ from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, get
 
 from ..models.api_tests import SecurityTestsDAST
+from ..models.security_results import SecurityResultsDAST
 
 
 class SecurityTestsApi(RestResource):
@@ -66,21 +67,15 @@ class SecurityTestsApi(RestResource):
     def post(self, project_id: int):
         args = self.post_parser.parse_args(strict=False)
 
-        print()
-
-        print(args)
-
-        run_test = args.pop("run_test")
-        if run_test:
-            # TODO: write test running
-            ...
+        run_test = loads(args.pop("run_test"))
+        test_uid = str(uuid4())
 
         project = self.rpc.project_get_or_404(project_id=project_id)
 
         test = SecurityTestsDAST(
             project_id=project.id,
             project_name=args["project_name"],
-            test_uid=str(uuid4()),
+            test_uid=test_uid,
             name=args["name"],
             test_environment=args["test_env"],
             urls_to_scan=loads(args["urls_to_scan"]),
@@ -90,5 +85,14 @@ class SecurityTestsApi(RestResource):
             processing=loads(args["processing"])
         )
         test.insert()
+
+        if run_test:
+            security_results = SecurityResultsDAST(
+                project_id=project.id,
+                test_uid=test_uid,
+                test_name=args["name"],
+                execution_json=test.configure_execution_json("cc")
+            )
+            security_results.insert()
 
         return test.to_json(exclude_fields=("id",))

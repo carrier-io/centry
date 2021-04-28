@@ -233,6 +233,7 @@ function submitAppTest(run_test=false) {
               $("#save").addClass("disabled");
               $("#createApplicationTest").modal('hide');
               $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
           }
         }
       );
