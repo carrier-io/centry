@@ -40,6 +40,16 @@ function cleanAppTestModal() {
 //    $("#qualys_checkbox").prop("checked", false)
 }
 
+function test_name_button(value, row, index) {
+    return `<a class="test form-control-label" href="#" role="button">${row.name}</a>`
+}
+
+var click_name = {
+    "click .test": function(e, value, row, index) {
+        alert("Now it's just an alert.. It will be modal window for canceling test soon")
+    }
+}
+
 function actions_buttons(value, row, index) {
     return [
         '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
@@ -105,11 +115,13 @@ var status_events = {
         }
       );
     },
+
     "click .settings": function (e, value, row, index) {
         $("#createApplicationTest").modal('show');
 
 //        Fill main data
         $("#testname").val(row.name)
+        $("#test_env").val(row["test_environment"])
 
         compareLength(row["urls_to_scan"], "#url_to_scan")
         compareLength(row["urls_exclusions"], "#exclusions")
@@ -123,13 +135,12 @@ var status_events = {
 //        Fill scanners data 'scanners_cards'
         $.each(row["scanners_cards"], function (key, value) {
             $("#"+`${key}_checkbox`).prop("checked", true)
-            console.log(row["scanners_cards"])
             fillCardSettings(key, row["scanners_cards"][key])
         })
-
-
-
+//        Fill processing data
+        $("#severity").selectpicker('val', row["processing"]["minimal_security_filter"])
     },
+
     "click .integrations": function (e, value, row, index) {
         alert('You click INTEGRATIONS action')
 //        TODO: write this method
