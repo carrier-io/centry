@@ -18,16 +18,17 @@ from sqlalchemy import Column, Integer, String, ARRAY, JSON
 from plugins.base.db_manager import Base
 from plugins.base.models.abstract_base import AbstractBaseMixin
 from plugins.base.constants import CURRENT_RELEASE
-from plugins.project.connectors.secrets import get_project_hidden_secrets
-from ..models import unsecret
+from plugins.project.connectors.secrets import get_project_hidden_secrets, unsecret
 
 
 class SecurityTestsDAST(AbstractBaseMixin, Base):
     __tablename__ = "security_tests_dast"
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, unique=False, nullable=False)
+    project_name = Column(String(64), nullable=False)
     test_uid = Column(String(128), unique=True, nullable=False)
     name = Column(String(128), nullable=False)
+    test_environment = Column(String(128), nullable=False)
     urls_to_scan = Column(ARRAY(String(128)), nullable=False)
     urls_exclusions = Column(ARRAY(String(128)))
     reporting = Column(
@@ -57,10 +58,8 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
     def configure_execution_json(
             self,
             output='cc',
-            execution=False,  # TODO: find out for what this var
             thresholds={}
     ):
-        from flask import current_app
         from json import loads
 
         if output == "dusty":
@@ -68,9 +67,8 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
             global_dast_settings = dict()
             global_dast_settings["max_concurrent_scanners"] = 1
 
-            # TODO: find out what it is
-            # if "toolreports" in self.dast_settings.get("reporters_checked", list()):
-            #     global_dast_settings["save_intermediates_to"] = "/tmp/intermediates"
+            if "toolreports" in self.reporting:
+                global_dast_settings["save_intermediates_to"] = "/tmp/intermediates"
 
             scanners_config = dict()
             for scanner_name in self.scanners_cards:
@@ -84,13 +82,11 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
             reporters_config = dict()
             reporters_config["galloper"] = {
                 "url": unsecret(
-                    current_app,
                     "{{secret.galloper_url}}",
                     project_id=self.project_id
                 ),
                 "project_id": f"{self.project_id}",
                 "token": unsecret(
-                    current_app,
                     "{{secret.auth_token}}",
                     project_id=self.project_id
                 ),
@@ -176,8 +172,7 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                 "suites": {
                     "dast": {
                         "settings": {
-                            # TODO: get project name and what's a description??
-                            "project_name": self.dast_settings.get("project_name"),
+                            "project_name": self.project_name,
                             "project_description": self.name,
                             "environment_name": "target",
                             "testing_type": "DAST",
@@ -197,26 +192,22 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                             },
                             "false_positive": {
                                 "galloper": unsecret(
-                                    current_app,
                                     "{{secret.galloper_url}}",
                                     project_id=self.project_id
                                 ),
                                 "project_id": f"{self.project_id}",
                                 "token": unsecret(
-                                    current_app,
                                     "{{secret.auth_token}}",
                                     project_id=self.project_id
                                 )
                             },
                             "ignore_finding": {
                                 "galloper": unsecret(
-                                    current_app,
                                     "{{secret.galloper_url}}",
                                     project_id=self.project_id
                                 ),
                                 "project_id": f"{self.project_id}",
                                 "token": unsecret(
-                                    current_app,
                                     "{{secret.auth_token}}",
                                     project_id=self.project_id
                                 )
@@ -234,30 +225,25 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
         parameters = {
             "cmd": f"run -b galloper:{job_type}_{self.test_uid} -s {job_type}",
             "GALLOPER_URL": unsecret(
-                current_app,
                 "{{secret.galloper_url}}",
                 project_id=self.project_id
             ),
             "GALLOPER_PROJECT_ID": f"{self.project_id}",
             "GALLOPER_AUTH_TOKEN": unsecret(
-                current_app,
                 "{{secret.auth_token}}",
                 project_id=self.project_id
             ),
         }
         cc_env_vars = {
             "RABBIT_HOST": unsecret(
-                current_app,
                 "{{secret.rabbit_host}}",
                 project_id=self.project_id
             ),
             "RABBIT_USER": unsecret(
-                current_app,
                 "{{secret.rabbit_user}}",
                 project_id=self.project_id
             ),
             "RABBIT_PASSWORD": unsecret(
-                current_app,
                 "{{secret.rabbit_password}}",
                 project_id=self.project_id
             )
@@ -267,19 +253,19 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
         if output == "docker":
             return f"docker run --rm -i -t " \
                    f"-e project_id={self.project_id} " \
-                   f"-e galloper_url={unsecret(current_app, '{{secret.galloper_url}}', project_id=self.project_id)} " \
-                   f"-e token=\"{unsecret(current_app, '{{secret.auth_token}}', project_id=self.project_id)}\" " \
+                   f"-e galloper_url={unsecret('{{secret.galloper_url}}', project_id=self.project_id)} " \
+                   f"-e token=\"{unsecret('{{secret.auth_token}}', project_id=self.project_id)}\" " \
                    f"getcarrier/control_tower:{CURRENT_RELEASE} " \
                    f"-tid {self.test_uid}"
         if output == "cc":
             execution_json = {
-                "job_name": self.name,  # TODO: is it the name of test??
+                "job_name": self.name,
                 "job_type": job_type,
                 "concurrency": concurrency,
                 "container": container,
                 "execution_params": dumps(parameters),
                 "cc_env_vars": cc_env_vars,
-                "channel": self.region
+                # "channel": self.region
             }
             if "quality" in self.scanners_cards:
                 execution_json["quality_gate"] = "True"

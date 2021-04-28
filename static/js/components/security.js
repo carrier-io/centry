@@ -18,6 +18,7 @@ $('#createApplicationTest').on('hide.bs.modal', function(e) {
 
 function cleanAppTestModal() {
     $("#testname").val($("#testname")[0].defaultValue)
+    $("#test_env").val($("#test_env")[0].defaultValue)
     $('#url_to_scan .row').slice(1,).each(function(_, item) {
         item.remove()
     })
@@ -91,26 +92,15 @@ function compareLength(array, block_name){
 
 var status_events = {
     "click .run": function (e, value, row, index) {
-        alert('You click RUN action')
-        row["run_test"] = true
-        console.log(row)
-//        var data = new FormData()
-//        data.append('args', 'config')
-//        for(var pair of row.entries()) {
-//           console.log(pair[0]+ '--> '+ pair[1]);
-//        }
-        console.log(`/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`)
-        var type_ = "config"
         $.ajax({
           url: `/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`,
           cache: false,
           contentType: 'application/json',
-          data: JSON.stringify({'type': type_}),
+          data: JSON.stringify({'test_name': row.name}),
           processData: false,
           method: 'POST',
           success: function(data){
-              console.log("executed");
-              $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
           }
         }
       );
@@ -198,10 +188,11 @@ function submitAppTest(run_test=false) {
 //      Min security filter
       processing_cards["minimal_security_filter"] = $("#severity").val()
 
-
       var data = new FormData();
 
       data.append('name', $('#testname').val());
+      data.append('project_name', document.getElementById("selected-project").textContent);
+      data.append('test_env', $("#test_env").val());
       data.append('urls_to_scan', JSON.stringify(urls_params[0]));
       data.append('urls_exclusions', JSON.stringify(urls_params[1]));
       data.append('scanners_cards', JSON.stringify(scanners_cards));

@@ -6,7 +6,6 @@ from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, get
 
 from ..models.api_tests import SecurityTestsDAST
-from ..models.security_thresholds import SecurityThresholds
 
 
 class SecurityTestsApi(RestResource):
@@ -22,6 +21,8 @@ class SecurityTestsApi(RestResource):
 
     _post_rules = (
         dict(name="name", type=str, location='form'),
+        dict(name="project_name", type=str, location='form'),
+        dict(name="test_env", type=str, location='form'),
         dict(name="urls_to_scan", type=str, location='form'),
         dict(name="urls_exclusions", type=str, location='form'),
         dict(name="scanners_cards", type=str, location='form'),
@@ -65,6 +66,10 @@ class SecurityTestsApi(RestResource):
     def post(self, project_id: int):
         args = self.post_parser.parse_args(strict=False)
 
+        print()
+
+        print(args)
+
         run_test = args.pop("run_test")
         if run_test:
             # TODO: write test running
@@ -74,31 +79,16 @@ class SecurityTestsApi(RestResource):
 
         test = SecurityTestsDAST(
             project_id=project.id,
+            project_name=args["project_name"],
             test_uid=str(uuid4()),
             name=args["name"],
+            test_environment=args["test_env"],
             urls_to_scan=loads(args["urls_to_scan"]),
             urls_exclusions=loads(args["urls_exclusions"]),
             scanners_cards=loads(args["scanners_cards"]),
             reporting=loads(args["reporting"]),
             processing=loads(args["processing"])
         )
-
         test.insert()
-        thresholds = SecurityThresholds(
-            project_id=project.id,
-            test_name=args["name"],
-            test_uid=test.test_uid,
-            critical=-1,
-            high=-1,
-            medium=-1,
-            low=-1,
-            info=-1,
-            critical_life=-1,
-            high_life=-1,
-            medium_life=-1,
-            low_life=-1,
-            info_life=-1
-        )
-        thresholds.insert()
 
         return test.to_json(exclude_fields=("id",))

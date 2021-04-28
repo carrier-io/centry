@@ -136,12 +136,13 @@
                         id="results-list"
                         data-toggle="table"
                         data-side-pagination="server"
+                        data-url="/api/v1/security/{{config.id}}/dast/results"
                         data-virtual-scroll="true">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" data-checkbox="true"></th>
                                 <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
+                                <th scope="col" data-sortable="true" data-field="name">Name</th>
                                 <th scope="col" data-sortable="true" data-field="start_date">Start</th>
                                 <th scope="col" data-sortable="true" data-field="tests_duration">Duration</th>
                                 <th scope="col" data-sortable="true" data-field="tests_findings">Findings</th>
@@ -149,7 +150,7 @@
                                 <th scope="col" data-sortable="true" data-field="tests_excl">Excl</th>
                                 <th scope="col" data-sortable="true" data-field="tests_info">Info</th>
                                 <th scope="col" data-sortable="true" data-field="tests_tag">Tag</th>
-                                <th scope="col" data-field="lg_type">Status</th>
+                                <th scope="col" data-field="test_status">Status</th>
                             </tr>
                         </thead>
                     </table>
