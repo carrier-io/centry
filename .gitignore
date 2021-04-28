@@ -130,3 +130,5 @@ dmypy.json
 
 # PyCharmIDE
 .idea
+
+tmp
