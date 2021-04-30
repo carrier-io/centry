@@ -10,6 +10,7 @@ from plugins.project.models.statistics import Statistic
 from ..models.api_tests import SecurityTestsDAST
 from ..models.security_results import SecurityResultsDAST
 from ..models.security_thresholds import SecurityThresholds
+from .utils import run_test
 
 
 class SecurityTestsApi(RestResource):
@@ -121,14 +122,9 @@ class SecurityTestsApi(RestResource):
             event = []
             event.append(test.configure_execution_json("cc"))
 
-            response = run_task(project.id, event)
-            response["redirect"] = f"/task/{response['task_id']}/results"
+            response = run_test(project.id, event)
 
             # security_results.set_test_status("Finished")
-
-            statistic = Statistic.query.filter_by(project_id=project_id).first()
-            statistic.dast_scans += 1
-            statistic.commit()
 
             return response
 
