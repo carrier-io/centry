@@ -70,7 +70,7 @@ class Project(AbstractBaseMixin, KeycloakMixin, Base):
         super().insert()
 
         # create keycloak group
-        self.keycloak_create_group()
+        self.keycloak_create_main_group()
 
         from plugins.base.connectors.minio import MinioClient
         MinioClient(project=self).create_bucket(bucket="reports")
