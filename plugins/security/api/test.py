@@ -2,6 +2,9 @@ from sqlalchemy import and_
 
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser
+from plugins.task.api.utils import run_task
+from plugins.project.models.statistics import Statistic
+
 from ..models.api_tests import SecurityTestsDAST
 from ..models.security_results import SecurityResultsDAST
 
@@ -35,13 +38,25 @@ class SecurityTestApi(RestResource):
 
         event = list()
         event.append(test.configure_execution_json("cc"))
-
+        #
         security_results = SecurityResultsDAST(
             project_id=project.id,
-            test_id=test_id,
+            test_id=test.id,
+            test_uid=test.test_uid,
             test_name=args["test_name"],
-            execution_json=event[0]
         )
         security_results.insert()
 
-        return security_results.to_json(exclude_fields="id")
+        if args.get("type") == "config":
+            return event[0]
+
+        response = run_task(project.id, event)
+        response["redirect"] = f"/task/{response['task_id']}/results"
+
+        # security_results.set_test_status("Finished")
+
+        statistic = Statistic.query.filter_by(project_id=project_id).first()
+        statistic.dast_scans += 1
+        statistic.commit()
+
+        return response

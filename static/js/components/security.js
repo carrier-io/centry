@@ -211,12 +211,9 @@ function submitAppTest(run_test=false) {
       data.append('processing', JSON.stringify(processing_cards));
       data.append('run_test', run_test)
 
+//      TODO: write reporting cards parser
 //      var reporting_cards = reportingCards()
 //      data.append("reporting_cards", JSON.stringify(reporting_cards))
-
-      for(var pair of data.entries()) {
-           console.log(pair[0]+ '--> '+ pair[1]);
-        }
 
 
       $.ajax({

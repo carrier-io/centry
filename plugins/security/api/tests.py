@@ -1,12 +1,15 @@
 from sqlalchemy import and_
 from uuid import uuid4
-from werkzeug.datastructures import FileStorage
 from json import loads
+
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, get
+from plugins.task.api.utils import run_task
+from plugins.project.models.statistics import Statistic
 
 from ..models.api_tests import SecurityTestsDAST
 from ..models.security_results import SecurityResultsDAST
+from ..models.security_thresholds import SecurityThresholds
 
 
 class SecurityTestsApi(RestResource):
@@ -65,6 +68,9 @@ class SecurityTestsApi(RestResource):
         return {"message": "deleted"}
 
     def post(self, project_id: int):
+        """
+        Post method for creating and running test
+        """
         args = self.post_parser.parse_args(strict=False)
 
         run_test = loads(args.pop("run_test"))
@@ -86,13 +92,44 @@ class SecurityTestsApi(RestResource):
         )
         test.insert()
 
+        threshold = SecurityThresholds(
+            project_id=project.id,
+            test_name=args["name"],
+            test_uid=test.test_uid,
+            critical=-1,
+            high=-1,
+            medium=-1,
+            low=-1,
+            info=-1,
+            critical_life=-1,
+            high_life=-1,
+            medium_life=-1,
+            low_life=-1,
+            info_life=-1
+        )
+        threshold.insert()
+
         if run_test:
             security_results = SecurityResultsDAST(
                 project_id=project.id,
+                test_id=test.id,
                 test_uid=test_uid,
-                test_name=args["name"],
-                execution_json=test.configure_execution_json("cc")
+                test_name=args["name"]
             )
             security_results.insert()
+
+            event = []
+            event.append(test.configure_execution_json("cc"))
+
+            response = run_task(project.id, event)
+            response["redirect"] = f"/task/{response['task_id']}/results"
+
+            # security_results.set_test_status("Finished")
+
+            statistic = Statistic.query.filter_by(project_id=project_id).first()
+            statistic.dast_scans += 1
+            statistic.commit()
+
+            return response
 
         return test.to_json(exclude_fields=("id",))

@@ -22,12 +22,11 @@ class SecurityResultsDAST(AbstractBaseMixin, Base):
     # excluded = Column(Integer, unique=False)
     # info = Column(Integer, unique=False)
     # tag = Column()
-    test_status = Column(String(128), default="Pending")
-    execution_json = Column(JSON)
+    test_status = Column(String(128), default="Pending...")
 
     # TODO: write this method
-    def set_task_status(self, ts):
-        self.status = ts
+    def set_test_status(self, ts):
+        self.test_status = ts
         self.commit()
 
     @staticmethod

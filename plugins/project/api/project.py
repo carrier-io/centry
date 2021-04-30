@@ -160,8 +160,8 @@ class ProjectAPI(RestResource):
         }
         project.commit()
 
-        self.rpc.set_project_secrets(project.id, project_secrets)
-        self.rpc.set_project_hidden_secrets(project.id, project_hidden_secrets)
+        self.rpc.project_set_secrets(project.id, project_secrets)
+        self.rpc.project_set_hidden_secrets(project.id, project_hidden_secrets)
         create_project_databases(project.id)
         # set_grafana_datasources(project.id)
         return {"message": f"Project was successfully created"}, 200

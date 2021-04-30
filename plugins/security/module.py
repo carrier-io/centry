@@ -44,6 +44,7 @@ class Module(module.ModuleModel):
         from .api.tests import SecurityTestsApi
         from .api.test import SecurityTestApi
         from .api.security_results_api import SecurityResultsApi
+        from .api.security_dispatcher import SecuritySeedDispatcher
         add_resource_to_api(
             self.context.api,
             SecurityTestsApi,
@@ -57,6 +58,10 @@ class Module(module.ModuleModel):
         add_resource_to_api(
             self.context.api, SecurityResultsApi,
             "/security/<int:project_id>/dast/results"
+        )
+        add_resource_to_api(
+            self.context.api, SecuritySeedDispatcher,
+            "/security/<int:project_id>/<string:seed>"
         )
 
     def deinit(self):  # pylint: disable=R0201
