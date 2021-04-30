@@ -4,13 +4,11 @@ from json import loads
 
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser, get
-from plugins.task.api.utils import run_task
-from plugins.project.models.statistics import Statistic
 
 from ..models.api_tests import SecurityTestsDAST
 from ..models.security_results import SecurityResultsDAST
 from ..models.security_thresholds import SecurityThresholds
-from .utils import run_test
+from .utils import exec_test
 
 
 class SecurityTestsApi(RestResource):
@@ -122,7 +120,7 @@ class SecurityTestsApi(RestResource):
             event = []
             event.append(test.configure_execution_json("cc"))
 
-            response = run_test(project.id, event)
+            response = exec_test(project.id, event)
 
             # security_results.set_test_status("Finished")
 

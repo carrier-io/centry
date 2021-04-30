@@ -2,11 +2,10 @@ from sqlalchemy import and_
 
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser
-from plugins.project.models.statistics import Statistic
 
 from ..models.api_tests import SecurityTestsDAST
 from ..models.security_results import SecurityResultsDAST
-from .utils import run_test
+from .utils import exec_test
 
 
 class SecurityTestApi(RestResource):
@@ -50,7 +49,7 @@ class SecurityTestApi(RestResource):
         if args.get("type") == "config":
             return event[0]
 
-        response = run_test(project.id, event)
+        response = exec_test(project.id, event)
 
         # security_results.set_test_status("Finished")
 
