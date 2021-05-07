@@ -62,6 +62,15 @@ class Module(module.ModuleModel):
         self.context.rpc_manager.register_function(get_storage_quota, name='project_get_storage_space_quota')
         self.context.rpc_manager.register_function(check_quota, name='project_check_quota')
 
+        bp = flask.Blueprint(  # pylint: disable=C0103
+            'project', 'plugins.project',
+            root_path=self.root_path,
+            url_prefix=f'{self.context.url_prefix}/'
+        )
+        bp.add_url_rule("/join/<url_id>", "project_join", self.project_join)
+        print('BSBSBSBSBSBSBSB', bp)
+        self.context.app.register_blueprint(bp)
+
 
 
     def deinit(self):  # pylint: disable=R0201
@@ -69,3 +78,47 @@ class Module(module.ModuleModel):
         log.info("De-initializing module")
     #
 
+    def project_join(self, url_id):
+        from flask import session
+        from flask import make_response
+        from redis import Redis
+        from plugins.base.constants import REDIS_PASSWORD
+        from plugins.base.constants import REDIS_USER
+        from plugins.base.constants import REDIS_HOST
+        from plugins.base.constants import REDIS_PORT
+        from plugins.project.models.keycloak_mixin import current_user_id, current_user_email
+        from flask import redirect
+        from flask import url_for
+
+        try:
+            user_id = current_user_id()
+            user_email = current_user_email()
+        except KeyError:
+            session['X-Forwarded-Uri'] = request.url
+            return redirect(url_for('auth_root.login'))
+        # print('url_id url_idurl_idurl_idurl_id', url_id)
+        # print('url_id url_idurl_idurl_idurl_id', self.context.rpc_manager.call.auth_check_auth(request.headers.get("Authorization", "")))
+        # if not self.context.rpc_manager.call.auth_check_auth(request.headers.get("Authorization", "")):
+        #     print('R urLLLLLLLLLLLLLL', request.url)
+
+
+        with Redis(db=7,
+                   password=REDIS_PASSWORD, username=REDIS_USER,
+                   host=REDIS_HOST, port=REDIS_PORT
+                   ) as redis_client:
+            import json
+            group_keycloak_id, invitee_email = json.loads(redis_client.get(f'join_url:{url_id}'))
+            print('GCKID:::::::', group_keycloak_id, 'eml', invitee_email)
+            if not group_keycloak_id:
+                return make_response('Link invalid or expired', 404)
+            if invitee_email.lower() != user_email.lower():
+                return make_response('Invitation link is email-bound. Wrong user email', 403)
+            self.context.rpc_manager.call.auth_manager_add_users_to_groups(
+                realm='carrier',
+                token=self.context.rpc_manager.call.auth_manager_get_token(),
+                users=[user_id],
+                groups=[group_keycloak_id],
+            )
+            # SessionProject.set()
+
+            return redirect(url_for('theme.index'))

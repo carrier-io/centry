@@ -70,7 +70,8 @@ class Project(AbstractBaseMixin, KeycloakMixin, Base):
         super().insert()
 
         # create keycloak group
-        self.keycloak_create_main_group()
+        self.create_main_group()
+        self.create_subgroups()
 
         from plugins.base.connectors.minio import MinioClient
         MinioClient(project=self).create_bucket(bucket="reports")
@@ -81,7 +82,7 @@ class Project(AbstractBaseMixin, KeycloakMixin, Base):
         selected_id = SessionProject.get()
         return self.id == selected_id
 
-    def to_json(self, exclude_fields: tuple = ('_keycloak_group_id', )) -> dict:
+    def to_json(self, exclude_fields: tuple = tuple()) -> dict:
         json_data = super().to_json(exclude_fields=exclude_fields)
         # json_data["used_in_session"] = self.used_in_session()
         if 'extended_out' not in exclude_fields:

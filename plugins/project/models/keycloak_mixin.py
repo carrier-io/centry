@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import Optional
 
 from flask import current_app
+from pydantic import BaseModel
 from pylon.core.tools import log
 from sqlalchemy import Column, JSON
 from sqlalchemy.ext.mutable import MutableDict
@@ -11,16 +12,23 @@ from plugins.auth_manager.models.group_pd import GroupRepresentation
 from plugins.base.models.abstract_base import AbstractBaseMixin
 
 
-def current_user_id():
+def current_user_id() -> str:
     from flask import session
-    return session.get('auth_attributes', {}).get('sub')
+    return session['auth_attributes']['sub']
+
+
+def current_user_email() -> str:
+    from flask import session
+    return session['auth_attributes']['email']
 
 
 class KeycloakMixin:
     _rpc = None
     REALM = 'carrier'
-    MAIN_GROUP_NAME = 'main'
-    REDIS_DB = 7
+
+
+    MAIN_GROUP_NAME = 'owner'
+    SUBGROUP_NAMES = ['maintainer', 'analyst']
 
     @property
     @abstractmethod
@@ -38,14 +46,13 @@ class KeycloakMixin:
             self._rpc = current_app.config["CONTEXT"].rpc_manager
         return self._rpc
 
-    # _keycloak_group_id = Column('keycloak_group_id', String(64), unique=True, nullable=True,)
     keycloak_groups = Column('keycloak_groups', MutableDict.as_mutable(JSON), nullable=False, default={})
 
     @property
     def token(self):
         return self.rpc.call.auth_manager_get_token()
 
-    def keycloak_search_main_group(self) -> Optional[str]:
+    def _search_main_group(self) -> Optional[str]:
         log.debug('Getting id using search method')
         print('Getting id using search method')
         response = self.rpc.call.auth_manager_get_groups(
@@ -59,29 +66,29 @@ class KeycloakMixin:
                 if str(found_group.name) == str(self.id):
                     # self.keycloak_group_id = found_group.id
                     # return self._keycloak_group_id
-                    self.update_from_response(found_group)
-                    return self.keycloak_get_group_id(self.MAIN_GROUP_NAME)
+                    self._refresh_main_group_from_keycloak(found_group)
+                    return self.get_group_id(self.MAIN_GROUP_NAME)
         log.warning(f'Group for project {self.name} is not found in keycloak')
         return None
 
-    def update_from_response(self, group_data: GroupRepresentation) -> None:
+    def _refresh_main_group_from_keycloak(self, group_data: GroupRepresentation) -> None:
         print(group_data, type(group_data))
         self.keycloak_groups[self.MAIN_GROUP_NAME] = group_data.id
         for subgroup in group_data.subGroups:
             self.keycloak_groups[subgroup.name] = subgroup.id
         AbstractBaseMixin.insert(self)
 
-    def keycloak_get_group_id(self, group_name: str, recursion_prevent: bool = False):
+    def get_group_id(self, group_name: str, recursion_prevent: bool = False):
         print('keycloak_get_group_id', group_name)
         print(self.keycloak_groups)
         try:
             return self.keycloak_groups[group_name]
         except KeyError:
             if group_name == self.MAIN_GROUP_NAME:
-                if not self.keycloak_search_main_group():
-                    self.keycloak_create_main_group()
+                if not self._search_main_group():
+                    self.create_main_group()
             else:
-                self.keycloak_update_group_info()
+                self.update_group_info()
                 try:
                     self.keycloak_groups[group_name]
                 except KeyError:
@@ -90,37 +97,41 @@ class KeycloakMixin:
                         return
                     return self.create_subgroup(group_name)
 
-    def create_subgroup(self, name):
+    def create_subgroup(self, name: str) -> Optional[str]:
         response = self.rpc.call.auth_manager_add_subgroup(
             realm=self.REALM,
             token=self.token,
-            parent=self.keycloak_group_representation_offline(),
-            child=self.keycloak_group_representation_offline(name),
+            parent=self.get_group_representation_offline(),
+            child=self.get_group_representation_offline(name),
         )
+        print('RDRDRDR', self.get_group_id(self.MAIN_GROUP_NAME))
         if response.success:
             if response.status == 201:
-                self.set_group(name, response.data.id)
+                print('RDRDRDR', response.data,)
+                print('RDRDRDR', type(response.data))
+                self.map_group_by_id(name, response.data.id)
         else:
+            print(response)
             log.critical(f'Error creating subgroup {response.error}')
             return None
-        return self.keycloak_get_group_id(name, recursion_prevent=True)
+        return self.get_group_id(name, recursion_prevent=True)
 
-    def keycloak_update_group_info(self):
-        print(self.keycloak_group_representation_offline())
+    def update_group_info(self):
+        print(self.get_group_representation_offline())
         response = self.rpc.call.auth_manager_get_groups(
             realm=self.REALM,
             token=self.token,
             with_members=False,
-            group_or_id=self.keycloak_group_representation_offline(),
-            response_debug_processor=lambda r: r.url
+            group_or_id=self.get_group_representation_offline(),
+            # response_debug_processor=lambda r: r.url
         )
         if response.success:
             print(response)
-            self.update_from_response(response.data)
+            self._refresh_main_group_from_keycloak(response.data)
         else:
             log.critical(f'Error updating group info {response.error}')
 
-    def keycloak_group_representation_offline(self, keycloak_group_name: str = None, **kwargs) -> GroupRepresentation:
+    def get_group_representation_offline(self, keycloak_group_name: str = None, **kwargs) -> GroupRepresentation:
         is_main_group = not keycloak_group_name or keycloak_group_name == self.MAIN_GROUP_NAME
         repr_name = id_key = keycloak_group_name
         if is_main_group:
@@ -139,26 +150,26 @@ class KeycloakMixin:
             pass
         return group
 
-    def set_group(self, name: str, group_keycloak_id: str):
+    def map_group_by_id(self, name: str, group_keycloak_id: str):
         print('SETTING group', name, group_keycloak_id)
         self.keycloak_groups[name] = group_keycloak_id
         AbstractBaseMixin.insert(self)
 
-    def keycloak_create_main_group(self) -> ApiResponse:
+    def create_main_group(self) -> ApiResponse:
         print('CREATE CALLEDx')
         response = self.rpc.call.auth_manager_post_group(
             realm=self.REALM,
             token=self.token,
-            group=self.keycloak_group_representation_offline(self.id),
+            group=self.get_group_representation_offline(self.id),
         )
         if response.success:
             log.debug(f'Group {response.data.id} for project {self.name} successfully created')
             print(f'Group {response.data.id} for project {self.name} successfully created')
-            self.set_group(self.MAIN_GROUP_NAME, response.data.id)
-            self.keycloak_add_current_user_to_group(self.keycloak_get_group_id(self.MAIN_GROUP_NAME))
+            self.map_group_by_id(self.MAIN_GROUP_NAME, response.data.id)
+            self.add_current_user_to_group(self.get_group_id(self.MAIN_GROUP_NAME))
         return response
 
-    def keycloak_add_current_user_to_group(self, group_id: str) -> None:
+    def add_current_user_to_group(self, group_id: str) -> None:
         self.rpc.call.auth_manager_add_users_to_groups(
             realm=self.REALM,
             token=self.token,
@@ -166,12 +177,66 @@ class KeycloakMixin:
             groups=[group_id],
         )
 
-    # def join_url(self):
-    #     uid = uuid.uuid4()
-    #     key = f'join_url:{uid}'
-    #     with Redis(db=self.REDIS_DB) as redis_client:
-    #         redis_client.set(key, self.id, 60 * 60)
-    #     return url_for('customers:view', args=[uid])
 
-    def invite_user(self, username: Optional[str] = None, email: Optional[str] = None):
-        raise NotImplementedError
+    def create_subgroups(self):
+        for g in self.SUBGROUP_NAMES:
+            subgroup_id = self.create_subgroup(g)
+            print('SUBGROUP created', subgroup_id)
+
+    def send_invitations(self, invitations):
+        for i in invitations:
+            print(i)
+            Invitation.__tmp_invite(i)
+            # self.get_group_id()
+
+
+
+class InvitationModel(BaseModel):
+    project_id: int
+    group_name: str
+    group_id: str
+    email: str
+
+
+import json
+import uuid
+from redis import Redis
+from flask import url_for
+from plugins.base.constants import REDIS_PASSWORD, REDIS_USER, REDIS_HOST, REDIS_PORT
+
+
+class Invitation:
+    REDIS_DB = 7
+    MODEL = InvitationModel
+    PREFIX = 'join_url'
+    DELIMITER = ':'
+    EXPIRE = 60 * 60
+
+    def redis_encoder(self, data):
+        return json.dumps(data)
+
+    # def __init__(self, project_id):
+    #     super().__init__()
+
+
+
+
+    def __tmp_invite(self, subgroup_id):
+        url = self.make_join_url(subgroup_id)
+        from pathlib import Path
+        folder_path = Path(f'/home/aspect/PycharmProjects/centry/tmp/emails/{self.project_id}')
+        folder_path.mkdir(parents=True, exist_ok=True)
+        with open(f'{folder_path}/{g}.txt', 'w') as out:
+            out.write(f'This is an invitational email for project:\n{self.project_id}\nfor group:\n{g}\n{url}')
+
+    def make_join_url(self, group_id: str, email: str = None):
+        uid = uuid.uuid4()
+        key = f'{self.PREFIX}{self.DELIMITER}{uid}'
+        with Redis(
+                host=REDIS_HOST, port=REDIS_PORT,
+                db=self.REDIS_DB,
+                username=REDIS_USER,
+                password=REDIS_PASSWORD,
+        ) as redis_client:
+            redis_client.set(key, json.dumps([group_id, email]), self.EXPIRE)
+        return url_for('project.project_join', url_id=uid)

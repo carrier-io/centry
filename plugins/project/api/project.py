@@ -43,7 +43,8 @@ class ProjectAPI(RestResource):
         dict(name="plugins", type=list, default=None, location="json"),
         dict(name="vuh_limit", type=int, default=500, location="json"),
         dict(name="storage_space_limit", type=int, default=100, location="json"),
-        dict(name="data_retention_limit", type=int, default=30, location="json")
+        dict(name="data_retention_limit", type=int, default=30, location="json"),
+        dict(name="invitations", type=list, default=[], location="json"),
     )
 
     def __init__(self):
@@ -71,6 +72,7 @@ class ProjectAPI(RestResource):
         plugins = data["plugins"]
         storage_space_limit = data["storage_space_limit"]
         data_retention_limit = data["data_retention_limit"]
+        invitations = data['invitations']
         project = Project(
             name=name_,
             plugins=plugins,
@@ -79,6 +81,11 @@ class ProjectAPI(RestResource):
         project_secrets = {}
         project_hidden_secrets = {}
         project.insert()
+        print('INV'*88)
+        print(invitations)
+        print('INV'*88)
+        project.send_invitations(invitations)
+
         # SessionProject.set(project.id)  # Looks weird, sorry :D
         quota.create(project.id, vuh_limit, storage_space_limit, data_retention_limit)
 
