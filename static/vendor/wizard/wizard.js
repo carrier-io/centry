@@ -124,7 +124,7 @@ const app = Vue.createApp({
 
             },
             validateUniqueness() {
-                return this.invitations.find(inv => inv.email === this.email && inv.group === this.group) === undefined;
+                return this.invitations.find(inv => inv.email.toLowerCase() === this.email.toLowerCase() && inv.group.toLowerCase() === this.group.toLowerCase()) === undefined;
             },
             validateEmail() {
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email);

@@ -12,6 +12,7 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 from json import dumps
+from queue import Empty
 from typing import Optional, Union, Tuple
 from datetime import datetime
 
@@ -81,10 +82,11 @@ class ProjectAPI(RestResource):
         project_secrets = {}
         project_hidden_secrets = {}
         project.insert()
-        print('INV'*88)
-        print(invitations)
-        print('INV'*88)
-        project.send_invitations(invitations)
+
+        try:
+            project.rpc.timeout(5).project_keycloak_group_handler(project).send_invitations(invitations)
+        except Empty:
+            ...
 
         # SessionProject.set(project.id)  # Looks weird, sorry :D
         quota.create(project.id, vuh_limit, storage_space_limit, data_retention_limit)

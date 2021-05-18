@@ -17,6 +17,7 @@
 
 """ Module """
 import logging
+from queue import Empty
 
 import flask  # pylint: disable=E0401
 import jinja2  # pylint: disable=E0401
@@ -85,10 +86,12 @@ class Module(module.ModuleModel):
         return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
-        from random import randint
-        from plugins.project.models.keycloak_mixin import KeycloakMixin
+        try:
+            groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
+        except Empty:
+            groups = []
         return render_template(
             "project_wizard.html",
-            group_options=[KeycloakMixin.MAIN_GROUP_NAME, *KeycloakMixin.SUBGROUP_NAMES],
-            cache_prevent=randint(0, 1000)
+            group_options=groups,
+            cache_prevent=None
         )

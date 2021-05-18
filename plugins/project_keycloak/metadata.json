@@ -1,0 +1,8 @@
+{
+  "name": "Carrier Project Groups Keycloak Plugin",
+  "version": "0.1",
+  "module": "plugins.project_keycloak",
+  "extract": false,
+  "depends_on": ["auth_manager", "project", "theme"],
+  "init_after": []
+}
