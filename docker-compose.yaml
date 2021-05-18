@@ -121,6 +121,27 @@ services:
     labels:
       - 'traefik.enable=false'
     container_name: carrier-influx
+  interceptor:
+    image: getcarrier/interceptor:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    container_name: carrier-interceptor
+    environment:
+      - RAM_QUOTA=$RAM_QUOTA
+      - CPU_QUOTA=$CPU_QUOTA
+      - CPU_CORES=$INTERPECTOR_TASKS
+      - RABBIT_HOST=carrier-rabbit
+      - RABBIT_PASSWORD=$RABBIT_PASSWORD
+      - RABBIT_USER=$RABBIT_USER
+      - LOKI_HOST=$APP_HOST
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 
   keycloak:

@@ -50,7 +50,7 @@
                 <div class="col-xs text-right">
                     <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="qualys">
+                      <input type="checkbox" id="qualys_checkbox">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>
@@ -58,28 +58,28 @@
             <div class="collapse ml-3 mr-3" id="qualysSettings">
 
                 <div class="form-group mb-0 mt-0 pr-4">
-                    <label class="form-control-label" for="profile_id">Option Profile ID</label>
-                    <input type="text" id="profile_id" class="form-control form-control-alternative"
+                    <label class="form-control-label" for="qualys_profile_id">Option Profile ID</label>
+                    <input type="text" id="qualys_profile_id" class="form-control form-control-alternative"
                            placeholder="Profile ID">
                 </div>
 
                 <div class="form-group mb-0 mt-0 pr-4">
-                    <label class="form-control-label" for="template_id">Report template ID</label>
-                    <input type="text" id="template_id" class="form-control form-control-alternative"
+                    <label class="form-control-label" for="qualys_template_id">Report template ID</label>
+                    <input type="text" id="qualys_template_id" class="form-control form-control-alternative"
                            placeholder="Template ID">
                 </div>
 
-                <div class="form-group mb-0 mt-0 pr-4">
+                <div class="form-group mb-0 mt-0 pr-4" id="qualys_scanner_type">
                     <label class="form-control-label">Scanner type</label><br>
 
-                        <input type="radio" id="scannerType1"
+                        <input type="radio" id="QualysScannerType1"
                             name="scanner_type" value="external" style="vertical-align: middle">
-                        <label for="scannerType1"><b>External</b></label><br>
+                        <label for="QualysScannerType1"><b>External</b></label><br>
 
 
-                        <input type="radio" id="scannerType2"
+                        <input type="radio" id="QualysScannerType2"
                             name="scanner_type" value="internal" style="vertical-align: middle">
-                        <label for="scannerType2"><b>Internal</b></label>
+                        <label for="QualysScannerType2"><b>Internal</b></label>
 
                 </div>
 
