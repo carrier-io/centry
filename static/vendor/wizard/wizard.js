@@ -84,8 +84,6 @@
 
 })(jQuery);
 
-// console.log('here we go again https://testdriven.io/blog/combine-flask-vue/');
-
 const app = Vue.createApp({
         delimiters: ['[[', ']]'],
         data() {
