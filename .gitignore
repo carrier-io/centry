@@ -132,3 +132,7 @@ dmypy.json
 .idea
 
 tmp
+
+.env
+docker-compose.yaml
+app.py

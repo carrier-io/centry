@@ -17,11 +17,11 @@
 
 """ Module """
 import logging
+from queue import Empty
+
 import flask  # pylint: disable=E0401
 import jinja2  # pylint: disable=E0401
-
 from flask import request, render_template, redirect, url_for
-
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 
@@ -34,7 +34,7 @@ from .components.commons.page import (
 )
 from .components.security.application import applications_scanners_config
 from .components.security.common import findings_processing
-from plugins.base.connectors.auth import SessionProject
+from ..base.connectors.auth import SessionProject
 
 
 class Module(module.ModuleModel):
@@ -86,4 +86,12 @@ class Module(module.ModuleModel):
         return render_template("base.html", active_chapter=chapter, config=project_config)
 
     def project_wizard(self):
-        return render_template("project_wizard.html")
+        try:
+            groups = self.context.rpc_manager.timeout(5).project_keycloak_group_list()
+        except Empty:
+            groups = []
+        return render_template(
+            "project_wizard.html",
+            group_options=groups,
+            cache_prevent=None
+        )

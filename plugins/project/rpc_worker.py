@@ -1,3 +1,5 @@
+from typing import Union
+
 from plugins.project.models.project import Project, SessionProject, get_user_projects
 from plugins.project.models.quota import ProjectQuota
 from plugins.project.models.statistics import Statistic
@@ -38,3 +40,7 @@ def get_project_config(project_id=None):
         return Project.query.filter_by(project_id=project_id).first().to_json()
     except:
         return {}
+
+
+def set_active_project(project_id: Union[str, int]):
+    SessionProject.set(int(project_id))

@@ -12,6 +12,7 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 from json import dumps
+from queue import Empty
 from typing import Optional, Union, Tuple
 from datetime import datetime
 
@@ -43,7 +44,8 @@ class ProjectAPI(RestResource):
         dict(name="plugins", type=list, default=None, location="json"),
         dict(name="vuh_limit", type=int, default=500, location="json"),
         dict(name="storage_space_limit", type=int, default=100, location="json"),
-        dict(name="data_retention_limit", type=int, default=30, location="json")
+        dict(name="data_retention_limit", type=int, default=30, location="json"),
+        dict(name="invitations", type=list, default=[], location="json"),
     )
 
     def __init__(self):
@@ -71,6 +73,7 @@ class ProjectAPI(RestResource):
         plugins = data["plugins"]
         storage_space_limit = data["storage_space_limit"]
         data_retention_limit = data["data_retention_limit"]
+        invitations = data['invitations']
         project = Project(
             name=name_,
             plugins=plugins,
@@ -79,6 +82,12 @@ class ProjectAPI(RestResource):
         project_secrets = {}
         project_hidden_secrets = {}
         project.insert()
+
+        try:
+            project.rpc.timeout(5).project_keycloak_group_handler(project).send_invitations(invitations)
+        except Empty:
+            ...
+
         # SessionProject.set(project.id)  # Looks weird, sorry :D
         quota.create(project.id, vuh_limit, storage_space_limit, data_retention_limit)
 

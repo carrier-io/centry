@@ -1,0 +1,52 @@
+{% include 'common/head.html' %}
+<!-- Too add page specific imports -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" href="{{ url_for('static', filename='vendor/wizard/wizard.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="main">
+    <div class="container">
+        <div class="row back">
+            <div class="col side-holder bg-blue-linear"></div>
+            <div class="col">
+                <div-content class="header-image">
+                    <div class="row">
+                        <div class="col tab-content">
+                            <div class="w-100" id="timer">
+                                <h1 class="pb-0">You have successfully joined a project!</h1>
+                                <span>you will be redirected to <a href="{{ redirect_url }}" ref="redirectLink">project main page</a> in [[ time ]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div-content>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% include 'common/foot.html' %}
+<!-- Too add page specific scripts -->
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+const app = Vue.createApp({
+    delimiters: ['[[', ']]'],
+    data() {
+        return {
+            time: 10,
+        }
+    },
+    mounted() {
+        const intrvl = setInterval(() => {
+            this.time--;
+            if (this.time === 0) {
+                clearInterval(intrvl);
+                this.$refs.redirectLink.click()
+            }
+        }, 1000);
+    },
+})
+const vm = app.mount('#timer');
+</script>
+</body>
+</html>
