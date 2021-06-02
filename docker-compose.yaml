@@ -105,6 +105,7 @@ services:
     networks:
       - pylon
     container_name: carrier-minio
+
   influx:
     image: influxdb:1.7
     restart: unless-stopped
@@ -120,9 +121,68 @@ services:
     labels:
       - 'traefik.enable=false'
     container_name: carrier-influx
+  interceptor:
+    image: getcarrier/interceptor:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    container_name: carrier-interceptor
+    environment:
+      - RAM_QUOTA=$RAM_QUOTA
+      - CPU_QUOTA=$CPU_QUOTA
+      - CPU_CORES=$INTERPECTOR_TASKS
+      - RABBIT_HOST=carrier-rabbit
+      - RABBIT_PASSWORD=$RABBIT_PASSWORD
+      - RABBIT_USER=$RABBIT_USER
+      - LOKI_HOST=$APP_HOST
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+  keycloak:
+    image: jboss/keycloak:9.0.0
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    container_name: carrier-keycloak
+    depends_on:
+      - postgres
+      - traefik
+    volumes:
+      - ./config/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/disablessl.sh:/tmp/disablessl.sh
+      - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
+    environment:
+      - DB_ADDR=postgres
+      - DB_VENDOR=$DATABASE_VENDOR
+      - KEYCLOAK_USER=$KEYCLOAK_USER
+      - KEYCLOAK_PASSWORD=$KEYCLOAK_PASSWORD
+      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
+      - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
+      - DB_DATABASE=$POSTGRES_DB
+      - DB_USER=$POSTGRES_USER
+      - DB_PASSWORD=$POSTGRES_PASSWORD
+      - PROXY_ADDRESS_FORWARDING=$PROXY_ADDRESS_FORWARDING
+    networks:
+      - pylon
+    ports:
+      - 8081:8080
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.keycloak.rule=PathPrefix(`/auth`)'
+      - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
+
 
 volumes:
-  postgre-data:
+#  postgre-data:
   redis-data:
   minio-data:
   influx-data:

@@ -12,20 +12,20 @@
                     <label class="form-control-label mb-0 mt-1">Minimal Severity Filter</label>
                     <br><small>Function description</small>
                 </div>
-                <div class="col-xs text-right pt-2">
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="severity_filter">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
+<!--                <div class="col-xs text-right pt-2">-->
+<!--                    <label class="custom-toggle mr-3 mb-0 align-middle">-->
+<!--                      <input type="checkbox" id="severity_filter">-->
+<!--                      <span class="custom-toggle-slider rounded-circle"></span>-->
+<!--                    </label>-->
+<!--                </div>-->
             </div>
-            <div class="row ml-3 mr-3 mt-2" id="severity_filters" style="display:none">
+            <div class="row ml-3 mr-3 mt-2" id="severity_filters">
                 <select class="selectpicker show-tick form-control" id="severity">
-                    <option>Critical</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                    <option>Info</option>
+                    <option value="Info">Info</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
                 </select>
             </div>
         </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-xs text-right pt-2">
                     <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="ado">
+                      <input type="checkbox" id="another">
                       <span class="custom-toggle-slider rounded-circle"></span>
                     </label>
                 </div>

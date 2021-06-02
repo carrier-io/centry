@@ -130,3 +130,9 @@ dmypy.json
 
 # PyCharmIDE
 .idea
+
+tmp
+
+.env
+docker-compose.yaml
+app.py

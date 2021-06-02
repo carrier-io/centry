@@ -11,15 +11,17 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
-
-import logging
+from queue import Empty
 from typing import Optional
 from flask import abort
 from sqlalchemy import String, Column, Integer, JSON, ARRAY, Text, and_
+from sqlalchemy.ext.mutable import MutableDict
 
 from plugins.base.models.abstract_base import AbstractBaseMixin
-from plugins.base.db_manager import Base, db_session
+from plugins.base.db_manager import Base
 from plugins.base.connectors.auth import SessionProject, is_user_part_of_the_project, only_users_projects
+from plugins.project.utils import RpcMixin
+
 
 def user_is_project_admin():
     # this one need to be implemented in user permissions
@@ -52,7 +54,7 @@ def get_active_project():
     return SessionProject.get()
 
 
-class Project(AbstractBaseMixin, Base):
+class Project(AbstractBaseMixin, RpcMixin, Base):
     __tablename__ = "project"
 
     API_EXCLUDE_FIELDS = ("secrets_json", "worker_pool_config_json")
@@ -63,9 +65,22 @@ class Project(AbstractBaseMixin, Base):
     secrets_json = Column(JSON, unique=False, default={})
     worker_pool_config_json = Column(JSON, unique=False, default={})
     plugins = Column(ARRAY(Text), unique=False, default={})
+    keycloak_groups = Column(
+        'keycloak_groups', MutableDict.as_mutable(JSON),
+        nullable=False, default={},
+    )
 
     def insert(self) -> None:
         super().insert()
+
+        # create keycloak group
+        try:
+            group_handler = self.rpc.timeout(5).project_keycloak_group_handler(self)
+            group_handler.create_main_group()
+            group_handler.create_subgroups()
+        except Empty:
+            ...
+
         from plugins.base.connectors.minio import MinioClient
         MinioClient(project=self).create_bucket(bucket="reports")
         MinioClient(project=self).create_bucket(bucket="tasks")
@@ -75,7 +90,7 @@ class Project(AbstractBaseMixin, Base):
         selected_id = SessionProject.get()
         return self.id == selected_id
 
-    def to_json(self, exclude_fields: tuple = ()) -> dict:
+    def to_json(self, exclude_fields: tuple = tuple()) -> dict:
         json_data = super().to_json(exclude_fields=exclude_fields)
         # json_data["used_in_session"] = self.used_in_session()
         if 'extended_out' not in exclude_fields:

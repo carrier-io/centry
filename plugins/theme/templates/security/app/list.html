@@ -30,18 +30,24 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush table-borderless"
-                        id="test-list"
+                        id="tests-list"
                         data-toggle="table"
                         data-side-pagination="server"
-                        data-virtual-scroll="true">
+                        data-url="/api/v1/security/{{config.id}}/dast"
+                        data-page-size=3
+                        data-unique-id="id"
+                        data-pagination="true"
+                    >
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" data-checkbox="true"></th>
-                                <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="test_uid">UUID</th>
-                                <th scope="col" data-sortable="true" data-formatter=lgFormatter>Runner</th>
-                                <th scope="col" data-field="lg_type" data-formatter=actionFormatter>Actions</th>
+                                <th scope="col" data-sortable="true" data-field="name">Name</th>
+                                <th scope="col" data-sortable="true" data-field="urls_to_scan">Urls</th>
+                                <th scope="col" data-sortable="true" data-visible="false" data-field="test_uid">Uuid</th>
+                                <th scope="col" data-sortable="true" data-field="tools">Tools</th>
+                                <th scope="col" data-field="lg_type" data-formatter="actions_buttons" data-events="status_events">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                     </table>
@@ -130,17 +136,21 @@
                         id="results-list"
                         data-toggle="table"
                         data-side-pagination="server"
+                        data-url="/api/v1/security/{{config.id}}/dast/results"
                         data-virtual-scroll="true">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" data-checkbox="true"></th>
                                 <th data-visible="false" data-field="id">index</th>
-                                <th scope="col" data-sortable="true" data-field="name" data-formatter=createLinkToTest>Name</th>
-                                <th scope="col" data-sortable="true" data-field="tests_count">Date</th>
-                                <th scope="col" data-sortable="true" data-field="tests_count">Duration</th>
-                                <th scope="col" data-sortable="true" data-field="lg_type">vUsers</th>
-                                <th scope="col" data-sortable="true" data-field="lg_type">Fail Rate</th>
-                                <th scope="col" data-field="lg_type">Status</th>
+                                <th scope="col" data-sortable="true" data-field="name" data-formatter="test_name_button" data-events="click_name">Name</th>
+                                <th scope="col" data-sortable="true" data-field="start_date">Start</th>
+                                <th scope="col" data-sortable="true" data-field="tests_duration">Duration</th>
+                                <th scope="col" data-sortable="true" data-field="tests_findings">Findings</th>
+                                <th scope="col" data-sortable="true" data-field="tests_fp">False Positive</th>
+                                <th scope="col" data-sortable="true" data-field="tests_excl">Excl</th>
+                                <th scope="col" data-sortable="true" data-field="tests_info">Info</th>
+                                <th scope="col" data-sortable="true" data-field="tests_tag">Tag</th>
+                                <th scope="col" data-field="test_status">Status</th>
                             </tr>
                         </thead>
                     </table>
@@ -154,3 +164,4 @@
 {{ template_slot("create_test", payload=config)|safe }}
 
 <script src="{{ url_for('static', filename='js/components/security.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/components/reporting.js') }}" type="text/javascript"></script>
