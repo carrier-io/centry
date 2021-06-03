@@ -1,0 +1,97 @@
+<div class="row" id="all_findings" style="display: none">
+    <div class="col-12 pr-5 pl-5">
+        <div class="card card-12 shadow-sm">
+            <div class="card-header bg-transparent border-0">
+                <div class="row align-items-center">
+                    <div class="col">
+                            <ul class="nav nav-pills" data-align="center">
+                                <li>
+                                    <h3 id="findings">Findings</h3>
+                                </li>
+                            </ul>
+                    </div>
+                    <div class="col">
+                        <ul id="findings-control" class="topmenu nav nav-pills justify-content-end">
+                            <li class="nav-item mr-2 mr-md-0 pt-1">
+                                <button id="filter-suites" onclick="filters()" class="btn btn-secondary p-2">
+                                    <span class="btn-inner--icon"><i class="fa fa-filter"></i></span>
+                                </button>
+                            </li>
+                            <li class="nav-item mr-2 mr-md-0">
+                                <button id="all" onclick="refreshTable({{config.id}})" class="btn btn-secondary p-2">
+                                    <span class="btn-inner--icon">ALL</span>
+                                </button>
+                            </li>
+                            <li class="nav-item mr-2 mr-md-0">
+                                <button id="valid-button" class="btn btn-link p-2" onclick="specialFilter('Valid', {{config.id}})">
+                                    Valid
+                                </button>
+                            </li>
+                            <li class="nav-item mr-2 mr-md-0">
+                                <button id="fp-button" class="btn btn-link p-2" onclick="specialFilter('False_positive', {{config.id}})">
+                                    False positive
+                                </button>
+                            </li>
+                            <li class="nav-item mr-2 mr-md-0">
+                                <button id="ignored-button" class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                    Ignored
+                                </button>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #5712b0; font-weight: 600">Bulk Actions</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item submenu" href="javascript:void(0)" data-toggle="dropdown" aria-expanded="false">Change status</a>
+                                        <div class="dropdown-menu" id="change_status">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('status', 'False_positive')">False_positive</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('status', 'Ignored')">Ignored</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('status', 'Valid')">Valid</a>
+                                        </div>
+                                    <a class="dropdown-item submenu" href="javascript:void(0)" data-toggle="dropdown" aria-expanded="false">Change severity</a>
+                                        <div class="dropdown-menu" id="change_severity">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('severity', 'Critical')">Critical</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('severity', 'High')">High</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('severity', 'Medium')">Medium</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('severity', 'Low')">Low</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bulkModify('severity', 'Info')">Info</a>
+                                        </div>
+                                </div>
+                            </li>
+                            <li class="nav-item mr-2 mr-md-0 pt-1">
+                                <button id="refresh" onclick="refreshTable({{config.id}})" class="btn btn-secondary p-2">
+                                    <span class="btn-inner--icon"><i class="fa fa-sync"></i></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless"
+                       id="test-findings-list"
+                       data-toggle="table"
+                       data-side-pagination="server"
+                       data-url=""
+                       data-page-size=10
+                       data-virtual-scroll="true"
+                       data-detail-view="true"
+                       data-detail-view-icon="false"
+                       data-detail-formatter="detailFormatter"
+                >
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" data-checkbox="true"></th>
+                            <th scope="col" data-field="icon" class="detail" data-formatter="detailIconFormatter" data-events="detailIconEvents"></th>
+                            <th data-visible="false" data-field="id">index</th>
+                            <th scope="col" data-sortable="true" data-field="tool_name">scanner</th>
+                            <th scope="col" data-sortable="true" data-field="description">description</th>
+                            <th scope="col" data-sortable="true" data-field="severity" data-formatter="set_finding_severity">severity</th>
+                            <th scope="col" data-sortable="true" data-field="status" data-formatter="set_finding_status">status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="card-footer py-4 border-0">
+            </div>
+        </div>
+    </div>
+</div>

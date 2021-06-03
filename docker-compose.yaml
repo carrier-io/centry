@@ -121,6 +121,7 @@ services:
     labels:
       - 'traefik.enable=false'
     container_name: carrier-influx
+
   interceptor:
     image: getcarrier/interceptor:latest
     logging:
@@ -182,7 +183,7 @@ services:
 
 
 volumes:
-#  postgre-data:
+  postgre-data:
   redis-data:
   minio-data:
   influx-data:

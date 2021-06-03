@@ -1,0 +1,176 @@
+<div class="container" id="test_results">
+    <div class="row">
+        <div class="col-12 pr-5 pl-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <ul class="nav nav-pills" data-align="center">
+                                <li>
+                                    <a id="back-button" href="?chapter=Security&module=App&page=list" class="btn btn-nooutline-secondary mr-2">
+                                        <i class="fas fa-arrow-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <h3 id="test_title" style="text-transform: none; margin-top: 5"> {{ config["test_name"] }} </h3>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <ul id="tests-control" class="nav nav-pills justify-content-end mr-3">
+                                <li class="nav-item mr-2 mr-md-0">
+                                    <button type="button" id="rerun-test" class="btn btn-secondary btn-sm" onclick="rerunTest()" style="display: none">
+                                        Rerun test
+                                    </button>
+                                </li>
+                                <li class="nav-item md-0 pr-0">
+                                    <button type="button" id="config-test" class="btn btn-secondary btn-sm" onclick="showConfig()" style="display: none">
+                                        Show config
+                                    </button>
+                                </li>
+                                <li class="nav-item mr-2 md-0">
+                                    <button type="button" id="stop-test" class="btn btn-secondary btn-sm" onclick="stopTest()" style="color: #db0f0f; ">
+                                        Stop test
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0 pb-0" id="progressbar-body" style="flex: 0; display: none">
+                    <div class="space-progress p-4 ml-3 mr-3" align="center">
+                        <div>
+                            <div class="row">
+                                <div class="col" align="right">
+                                </div>
+                                <div class="col">
+                                    <span data-align="left"> <b id="test_status">{{config['test_status']}}</b></span>
+                                    <div class="progress" style="width: 80%">
+                                      <div class="progress-bar" role="progressbar" id="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span data-align="left" id="test_status_description">Process details description</span>
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0" id="findings-small-cards" style="flex: 0; display: none">
+                    <div class="card-group" style="">
+                        <div class="card" style="background-color: #d4f7ff; color: #3951a8">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 id="new_findings" style="color: #3951a8"> - </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>NEW</b><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="severity_critical card">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 class="severity_critical" id="critical_findings"> {{config["critical"]}} </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>CRITICAL</b><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="severity_high card">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 class="severity_high" id="high_findings"> {{config["high"]}} </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>HIGH</b><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="severity_medium card">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 class="severity_medium" id="medium_findings"> {{config["medium"]}} </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>MEDIUM</b><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="severity_low card">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 class="severity_low" id="low_findings"> {{config["low"]}} </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>LOW</b><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="severity_info card">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <h2 class="severity_info" id="info_findings"> {{config["info"]}} </h2>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom: 2px solid">
+                                    <b>INFO</b><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer border-0">
+                    <div class="row-6 ml-3" id="processing-table" style="display: none">
+                        <table >
+                            <tr style="border: 0">
+                                <th class="text-gray pr-2">STARTED</th><td width="30%"> <b id="first_started_date"> {{ config["start_date"] }} </b> </td>
+                                <th class="text-gray pr-2">SCAN TYPE</th><td width="15%"> <b>DAST</b> </td>
+                                <th class="text-gray pr-2">ENVIRONMENT</th><td width="15%"> <b>Demo</b> </td>
+                                <th class="text-gray pr-2">SCANNERS</th><td width="20%"> <b>-</b> </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="row-6 ml-3" id="full-info-table" style="display: none">
+                        <table >
+                            <tr style="border: 0">
+                                <th class="text-gray pr-2">STARTED</th><td width="30%"> <b id="started_date"> {{ config["start_date"] }} </b> </td>
+                                <th class="text-gray pr-2">SCAN TYPE</th><td width="15%"> <b>DAST</b> </td>
+                                <th class="text-gray pr-2">VALID</th><td width="10%"> <b id="valid_values">{{config["valid"]}}</b> </td>
+                                <th class="text-gray pr-2">SCANNERS</th><td width="20%"> <b id="test_scanners">-</b> </td>
+                            </tr>
+                            <tr style="border: 0">
+                                <th class="text-gray pr-2">ENDED</th><td width="30%"> <b id="ended_date"> {{config["ended_date"]}} </b> </td>
+                                <th class="text-gray pr-2">ENVIRONMENT</th><td width="15%"> <b id="test_env">Demo</b> </td>
+                                <th class="text-gray pr-2">FALSE POSITIVE</th><td width="10%"> <b id="fp_values"> {{config["false_positive"]}} </b> </td>
+                                <th class="text-gray pr-2">URL</th><td width="20%"> <b id="test_urls">-</b> </td>
+                            </tr>
+                            <tr style="border: 0">
+                                <th class="text-gray pr-2">DURATION</th><td width="10%"> <b id="test_duration"> {{config["duration"]}} S </b> </td>
+                                <th class="text-gray pr-2">FINDINGS</th><td width="10%"> <b id="test_findings">{{ config["findings"] }}</b> </td>
+                                <th class="text-gray pr-2">IGNORED</th><td width="10%"> <b id="ignored_values">{{config["ignored"]}}</b> </td>
+                                <th class="text-gray pr-2">TAGS</th><td width="20%"> <b id="test_tags">{{config["tags"]}}</b> </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ template_slot("security_logs_list", payload=config)|safe }}
+    {{ template_slot("security_findings_table", payload=config)|safe }}
+    {{ template_slot("security_artifacts_table", payload=config)|safe }}
+</div>

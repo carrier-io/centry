@@ -41,14 +41,45 @@ function cleanAppTestModal() {
 }
 
 function test_name_button(value, row, index) {
-    return `<a class="test form-control-label" href="#" role="button">${row.name}</a>`
+    return `<a class="test form-control-label" href="?chapter=Security&module=Result&page=list&project_id=${getSelectedProjectId()}&test_id=${row.id}" role="button">${row.name}</a>`
 }
 
-var click_name = {
-    "click .test": function(e, value, row, index) {
-        alert("Now it's just an alert.. It will be modal window for canceling test soon")
-    }
-}
+//var click_name = {
+//    "click .test": function(e, value, row, index) {
+//        alert("Now it's just an alert.. It will be modal window for canceling test soon")
+//        $(document).ready(function() {
+//            $.ajax({
+//              url: `/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`,
+//              cache: false,
+//              processData: false,
+//              method: 'GET',
+//              success: function(data){
+//                    console.log(data)
+//                    if (data["test_status"] === "Finished"){
+//                        $('#finished_test_results').show();
+//                        fillFirstRow(data);
+//                    } else  {
+//                        $('#test_results').show();
+//                    }
+//                }
+//              }
+//            );
+//        });
+////        $.ajax(
+////            {
+////          url: `/api/v1/security/${getSelectedProjectId()}/dast/${row.id}`,
+////          cache: false,
+//////          data: {'test_name': row.name},
+////          processData: false,
+////          method: 'GET',
+////          success: function(data){
+////                console.log("redirected")
+//////              $("#results-list").bootstrapTable('refresh');
+////          }
+////        }
+////        );
+//    }
+//}
 
 function actions_buttons(value, row, index) {
     return [

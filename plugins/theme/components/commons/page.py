@@ -43,3 +43,12 @@ def render_run_test(context, slot, payload):  # pylint: disable=R0201,W0613
 
 def reporting_config(context, slot, payload):
     return render_template(f"common/reporting-config.html", config=payload)
+
+
+def render_tests_result_page(context, slot, payload):
+    chapter = request.args.get('chapter', '')
+    module = request.args.get('module', '')
+    try:
+        return render_template(f"{chapter.lower()}/{module.lower()}/test_running_result.html", active_chapter=chapter, config=payload)
+    except:
+        return render_template(f"common/empty.html", active_chapter=chapter, config=payload)
