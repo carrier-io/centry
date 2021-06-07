@@ -1,8 +1,0 @@
-{
-  "name": "Carrier Security RestAPI Plugin",
-  "version": "0.1",
-  "module": "plugins.security",
-  "extract": false,
-  "depends_on": ["base", "project"],
-  "init_after": ["project"]
-}

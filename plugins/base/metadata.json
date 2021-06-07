@@ -1,8 +1,0 @@
-{
-  "name": "Carrier shared library",
-  "version": "0.1",
-  "module": "plugins.base",
-  "extract": false,
-  "depends_on": [],
-  "init_after": []
-}

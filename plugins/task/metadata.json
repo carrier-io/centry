@@ -1,8 +1,0 @@
-{
-  "name": "Carrier Tasks RestAPI Plugin",
-  "version": "0.1",
-  "module": "plugins.task",
-  "extract": false,
-  "depends_on": ["base"],
-  "init_after": []
-}

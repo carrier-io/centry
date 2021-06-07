@@ -1,7 +1,10 @@
 from os import environ
-environ["CORE_CONFIG_SEED"] = "file:config/pylon.yml"
+environ["APP_HOST"] = "http://127.0.0.1"
+
+
 environ["CORE_DEVELOPMENT_MODE"] = 'true'
-environ["APP_HOST"] = "http://192.168.1.215"
+environ["CORE_DEBUG_LOGGING"] = 'true'
+environ["CORE_CONFIG_SEED"] = 'file:config/pylon.yml'
 
 from pylon import main
 

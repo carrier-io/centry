@@ -1,8 +1,0 @@
-{
-  "name": "Theme of carrier ui",
-  "version": "0.1",
-  "module": "plugins.theme",
-  "extract": true,
-  "depends_on": [],
-  "init_after": []
-}
