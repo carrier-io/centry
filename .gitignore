@@ -136,3 +136,4 @@ tmp
 .env
 docker-compose.yaml
 app.py
+/config/keycloak/themes/
