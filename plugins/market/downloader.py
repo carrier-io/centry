@@ -49,7 +49,7 @@ class WebMixin:
                     zip_file.extractall(plugin.directory)
                     try:
                         Path(plugin.directory, zip_file.namelist()[0]).rename(plugin.path)
-                    except FileExistsError:
+                    except (FileExistsError, OSError):
                         shutil.rmtree(plugin.path)
                         Path(plugin.directory, zip_file.namelist()[0]).rename(plugin.path)
 

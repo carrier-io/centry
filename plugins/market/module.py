@@ -117,6 +117,7 @@ class Module(module.ModuleModel):
         })
         pending_requirements = defaultdict(list)
         for plugin in map(Plugin, self.plugin_list):
+            log.info('Checking requirements for %s', plugin)
             update_pending_requirements(plugin, pending_requirements, req_status)
         resolve_version_conflicts(pending_requirements, req_status)
 
