@@ -47,19 +47,6 @@ class Module(module.ModuleModel):
         log.info('Initializing module Market')
         Plugin.directory = Path(self.context.settings["development"]["modules"])
 
-
-        bp = flask.Blueprint(  # pylint: disable=C0103
-            'market', 'plugins.market',
-            root_path=self.root_path,
-            url_prefix=f'{self.context.url_prefix}/market/'
-        )
-        bp.add_url_rule('/', 'index', self.index)
-
-        # Register in app
-        self.context.app.register_blueprint(bp)
-
-        # rpc_manager
-
         self.check_updates()
 
         self.download_plugins()
@@ -80,14 +67,11 @@ class Module(module.ModuleModel):
             for plugin, requirement in map(lambda y: (y['plugin'], y['requirement']), i):
                 plugin.installer(package=requirement)
 
-        self.__copy_settings_deprecated()
+        self.copy_configs()
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """
-        log.info('De-initializing module auth_root')
-
-    def index(self):
-        return 'Market here'
+        log.info('De-initializing module Market')
 
     @property
     def plugin_list(self):
@@ -123,16 +107,16 @@ class Module(module.ModuleModel):
 
         return req_status
 
-    def __copy_settings_deprecated(self):
+    def copy_configs(self):
         '''
         Need to teach pylon to read settings from inside plugin, now just copy it in config folder under plugin name
         '''
         import shutil
         for p in self.plugin_list:
-            try:
-                shutil.copy(
-                    Path(self.context.settings['development']['modules'], p, 'config.yml'),
-                    Path(self.context.settings['development']['config'], f'{p}.yml')
-                )
-            except FileNotFoundError:
-                ...
+            src = Path(self.context.settings['development']['modules'], p, 'config.yml')
+            dst = Path(self.context.settings['development']['config'], f'{p}.yml')
+            if not dst.exists():
+                try:
+                    shutil.copy(src, dst)
+                except FileNotFoundError:
+                    ...

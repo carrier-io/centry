@@ -47,11 +47,12 @@ class WebMixin:
                     tmp_bytes = BytesIO(await response.read())
                     zip_file = ZipFile(tmp_bytes)
                     zip_file.extractall(plugin.directory)
+                    src = Path(plugin.directory, zip_file.namelist()[0])
                     try:
-                        Path(plugin.directory, zip_file.namelist()[0]).rename(plugin.path)
+                        src.rename(plugin.path)
                     except (FileExistsError, OSError):
-                        shutil.rmtree(plugin.path)
-                        Path(plugin.directory, zip_file.namelist()[0]).rename(plugin.path)
+                        shutil.copytree(src, plugin.path, dirs_exist_ok=True)
+                        shutil.rmtree(src)
 
 
 class PluginDownloader(WebMixin):
