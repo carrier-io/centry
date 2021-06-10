@@ -1,0 +1,512 @@
+@charset "UTF-8";
+/* @extend display-flex; */
+display-flex, .form-row, .step-current .step-current-content, .fieldset-flex, .form-flex, .actions ul, .actions ul li a {
+  display: flex;
+  display: -webkit-flex; }
+
+/* @extend list-type-ulli; */
+list-type-ulli, .actions ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+a:focus,
+a:active {
+  text-decoration: none;
+  outline: none;
+  transition: all 300ms ease 0s;
+  -moz-transition: all 300ms ease 0s;
+  -webkit-transition: all 300ms ease 0s;
+  -o-transition: all 300ms ease 0s;
+  -ms-transition: all 300ms ease 0s; }
+
+
+.side-holder {
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 650px;
+    max-height: 650px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.side-bar {
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 650px;
+    max-height: 650px;
+    display: table;
+}
+
+.table-responsive {
+    margin-bottom: 40px;
+}
+
+.clear {
+  clear: both;
+}
+
+h1, .h1 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+h2, .h2 {
+    font-size: 24px;
+    color: var(--button-blue);
+}
+
+h4, .h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+span {
+    font-size: 18px;
+    font-weight: 400;
+    line-width: 24px;
+}
+
+
+p {
+    font-size: 14px;
+    font-weight: 400;
+    line-width: 20px;
+}
+
+/* Essentials */
+.side-content { display: table-row; height: 100%; }
+.content-body { display: table-cell; }
+.header, .footer {
+    padding: 10px 20px;
+    background: none !important
+    }
+.footer img {
+  display: block;
+  margin-left: 55px;
+  margin-right: auto;
+  margin-bottom: 30px;
+}
+.content-body { padding: 20px;}
+
+.tab-content {
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.tab-content svg {
+  fill: var(--primary);
+}
+
+.crate-project-page {
+    margin-right: 140px;
+    margin-left: 140px;
+    width: 600px;
+}
+
+.form-control-label-sm {
+    font-size: 14px;
+}
+
+.header-image {
+    background-image: url("/static/brand/main_component@2x.png");
+    background-repeat: no-repeat;
+    background-size: 500px;
+    background-position-y: -45px;
+    z-index: 100;
+}
+
+.flight-image {
+    background-image: url("/static/brand/advan-time@2x.png");
+    background-repeat: no-repeat;
+    background-size: 200px;
+    background-position-y: 40px;
+    background-position-x: 80px;
+    z-index: 100;
+}
+
+.plain-size {
+    margin-bottom: 150px;
+}
+.back {
+  margin: 0px;
+  min-height: 650px;
+  max-height: 650px;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #222;
+  font-weight: 500;
+  margin: 0px;
+  background: #f8f8f8; }
+
+.main {
+  padding: calc(100vh/10) 0;
+ }
+
+.card-container {
+    max-height: 435px;
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+  min-width: 1148px;
+  max-width: 1148px;
+  min-height: 650px;
+  max-height: 650px;
+  position: relative;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0px 5px 9.5px 0.5px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px 5px 9.5px 0.5px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px 5px 9.5px 0.5px rgba(0, 0, 0, 0.08);
+  -o-box-shadow: 0px 5px 9.5px 0.5px rgba(0, 0, 0, 0.08);
+  -ms-box-shadow: 0px 5px 9.5px 0.5px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  -ms-border-radius: 10px; }
+
+.create-project {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 1148px;
+  max-width: 1148px;
+  min-height: 650px;
+  max-height: 650px;
+  z-index: 10;
+}
+
+div-fieldset {
+  display: block;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.form-label {
+  font-size: 22px;
+  color: #222;
+  font-weight: bold;
+  margin: 0px;
+  padding-bottom: 15px;
+  display: block;
+  width: 100%; }
+
+input {
+  height: 50px; }
+
+textarea,
+input {
+  width: 100%;
+  display: block;
+  border: 1px solid #ebebeb;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  font-size: 14px;
+  color: #222;
+  font-weight: bold;
+  padding: 10px 20px;
+  box-sizing: border-box; }
+  textarea::-webkit-input-placeholder,
+  input::-webkit-input-placeholder {
+    color: #999;
+    font-weight: 500; }
+  textarea::-moz-placeholder,
+  input::-moz-placeholder {
+    color: #999;
+    font-weight: 500; }
+  textarea:-ms-input-placeholder,
+  input:-ms-input-placeholder {
+    color: #999;
+    font-weight: 500; }
+  textarea:-moz-placeholder,
+  input:-moz-placeholder {
+    color: #999;
+    font-weight: 500; }
+  textarea:focus,
+  input:focus {
+    border: 1px solid var(--button-blue-hover); }
+
+textarea {
+  height: 178px; }
+
+.form-row {
+  margin: 0 -10px; }
+  .form-row .form-group {
+    width: 50%;
+    padding: 0 10px; }
+
+.form-group {
+  margin-bottom: 20px; }
+
+fieldset.current {
+  padding-top: 0;
+}
+
+.form-rating {
+  float: left;
+}
+
+.step-current {
+    color: #94E4FC;
+}
+
+.step-current span {
+    font-size: 14px!important;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+.form-rating:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+  clip: rect(0, 0, 0, 0); }
+
+.form-rating:not(:checked) > label {
+  float: right;
+  width: 1em;
+  padding: 0 .1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 20px;
+  color: #ebebeb; }
+
+.form-rating:not(:checked) > label:before {
+  content: '\f27d';
+  font-family: 'Material-Design-Iconic-Font'; }
+
+.form-rating > input:checked ~ label {
+  color: #fbd91b; }
+
+.form-rating:not(:checked) > label:hover,
+.form-rating:not(:checked) > label:hover ~ label {
+  color: #fbd91b; }
+
+.form-rating > input:checked + label:hover,
+.form-rating > input:checked + label:hover ~ label,
+.form-rating > input:checked ~ label:hover,
+.form-rating > input:checked ~ label:hover ~ label,
+.form-rating > label:hover ~ input:checked ~ label {
+  color: #fbd91b;
+}
+
+.form-rating > label:active {
+  position: relative;
+  top: 2px;
+  left: 2px;
+}
+
+.steps {
+  display: none;
+}
+
+.fieldset-flex {
+  align-items: center;
+  -moz-align-items: center;
+  -webkit-align-items: center;
+  -o-align-items: center;
+  -ms-align-items: center;
+  justify-content: space-between;
+  -moz-justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -o-justify-content: space-between;
+  -ms-justify-content: space-between;
+}
+
+.form-flex {
+  align-items: center;
+  -moz-align-items: center;
+  -webkit-align-items: center;
+  -o-align-items: center;
+  -ms-align-items: center;
+  justify-content: space-between;
+  -moz-justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -o-justify-content: space-between;
+  -ms-justify-content: space-between;
+}
+
+div-content {
+  margin-top: -15px;
+  display: block;
+}
+
+div-content .row {
+  margin: 0px;
+}
+
+.actions {
+  margin-top: 20px;
+  padding-bottom: 0px;
+  width: 100%;
+}
+
+.actions ul {
+    width: 100%;
+    justify-content: flex-end;
+    -moz-justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+    -o-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+}
+
+.actions ul .disabled {
+    display: none; }
+
+.actions ul li {
+    margin-left: 10px;
+}
+
+.actions ul li a {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  min-width: 150px;
+  background-color: var(--button-blue);
+  border-color: var(--button-blue);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.625rem 1.25rem;
+  line-height: 1.2;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.actions ul li a.btn-secondary {
+    color: var(--button-blue);
+    background-color: var(--white);
+    border-color: var(--secondary);
+}
+
+.margin-right-auto {
+    margin-right: auto;
+    margin-left: 0px!important;
+}
+
+.actions ul li a:hover {
+  color: #fff;
+  background-color: var(--button-blue-hover);
+  border-color: var(--button-blue-hover);
+  text-decoration: none;
+}
+
+.actions ul li a.btn-secondary:hover {
+    color: var(--button-blue);
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.actions ul li a:focus,
+.actions ul li a.focus {
+  outline: 0;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(118, 135, 232, 0.5);
+}
+
+label {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.input-group-append.form-control {
+    border-radius: 0px;
+}
+
+.input-group-append .form-control {
+    min-width: 120px;
+    border-radius: 0px;
+    background: url('/static/fonts/fontawesome_free/svgs/solid/chevron-down.svg') no-repeat 90% 50% #fff;
+    background-size: 16px  10px;
+}
+
+.input-group-append .form-control:focus {
+    border: 1px solid #cad1d7;
+}
+
+.bordered {
+    border: 0.0625rem solid #dee2e6;
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+.table-fixed {
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 13px!important;
+}
+
+.table-fixed tbody{
+    height:240px;
+    overflow-y:auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th{
+    display:block;
+}
+
+.table-fixed tbody td{
+      float:left;
+      padding: 0.5rem;
+}
+.table-fixed thead tr th {
+    float:left;
+    padding: 0.5rem;
+    font-weight: 400;
+}
+
+.slider-holder {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.noUi-marker.noUi-marker-horizontal.noUi-marker-normal {
+    background: var(--white)!important;
+    display: none;
+}
+
+.noUi-marker.noUi-marker-horizontal.noUi-marker-large {
+    top: -9px;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    box-shadow: none;
+    cursor: pointer;
+    background-color: var(--background);
+}
+
+.noUi-value.noUi-value-horizontal.noUi-value-large {
+    top: -5!important;
+}
+
+
+.scrollable-list-group {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+}

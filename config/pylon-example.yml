@@ -1,0 +1,57 @@
+
+# General server config
+server:
+#  path: /
+#  proxy: true
+  host: "0.0.0.0"
+  port: 8080
+
+# Local paths to modules and config
+development:
+  modules: plugins
+  config: config
+
+# Session storage
+sessions:
+  redis:
+    host: {{ IP_HERE }}
+    password: password
+  prefix: pylon_session_
+
+# Traefik config
+traefik:
+  redis:
+    host: {{ IP_HERE }}
+    password: password
+  rootkey: traefik
+  entrypoint: http
+  rule: PathPrefix(`/`)
+  node_name: core
+  node_hostname: pylon
+  # node_url: http://pylon:8080
+
+# Events queue
+events:
+  rabbitmq:
+    host: {{ IP_HERE }}
+    port: 5672
+    user: user
+    password: password
+    vhost: carrier
+    queue: events
+    hmac_key: key
+    hmac_digest: sha512
+
+# Module/config storage
+storage:
+  endpoint: {{ IP_HERE }}:9000
+  access_key: admin
+  secret_key: password
+  secure: false
+  buckets:
+    module: module
+    config: config
+
+# Settings for Flask application
+# application:
+#   EXPLAIN_TEMPLATE_LOADING: true

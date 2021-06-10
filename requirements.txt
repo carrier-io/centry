@@ -1,0 +1,4 @@
+pylon @ git+https://github.com/Aspect13/pylon.git@feature/market_support
+cchardet==2.1.7
+aiodns==3.0.0
+aiohttp==3.7.4.post0
