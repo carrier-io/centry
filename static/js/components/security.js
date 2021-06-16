@@ -198,7 +198,7 @@ function submitAppTest(run_test=false) {
 
 //      Main variables
       var urls_params = [[], []]
-      var scanners_cards = {qualys: {}}
+      var scanners_cards = {}
       var run_test = run_test
       var processing_cards = {"minimal_security_filter": null}
 
@@ -215,6 +215,7 @@ function submitAppTest(run_test=false) {
 //      --Scanner's cards--
 //      Qualys
       if ($("#qualys_checkbox").prop("checked")){
+        scanners_cards.qualys = {};
         scanners_cards.qualys["qualys_profile_id"] = $("#qualys_profile_id").val()
         scanners_cards.qualys["qualys_template_id"] = $("#qualys_template_id").val()
         scanners_cards.qualys["scanner_type"] = $("input[name=scanner_type]:checked", "#qualys_scanner_type").val()
@@ -225,6 +226,11 @@ function submitAppTest(run_test=false) {
             scanners_cards.qualys["scanner_pool"].push(scanner_pool.val())
         })
       }
+      if ($("#owaspzap").prop("checked")){
+        scanners_cards.zap = {};
+      }
+
+      console.log(scanners_cards)
 
 //      --Processing's cards--
 //      Min security filter

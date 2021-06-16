@@ -61,8 +61,11 @@ class SecurityTestApi(RestResource):
         test = SecurityTestsDAST.query.filter(_filter).first()
 
         event = list()
-        event.append(test.configure_execution_json("cc"))
-        #
+        event.append(test.configure_execution_json("dusty"))
+
+        from pprint import pprint
+        pprint(event)
+
         security_results = SecurityResultsDAST(
             project_id=project.id,
             test_id=test.id,
@@ -75,7 +78,4 @@ class SecurityTestApi(RestResource):
             return event[0]
 
         response = exec_test(project.id, event)
-
-        # security_results.set_test_status("Finished")
-
         return response

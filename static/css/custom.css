@@ -948,3 +948,8 @@ select.custom-selector-picker {
     width: 0%;
     background-color: #68f2c0;
 }
+
+.project_status_good {
+    background-color: #45DE9D;
+    color: #ffffff;
+}
