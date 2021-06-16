@@ -230,8 +230,6 @@ function submitAppTest(run_test=false) {
         scanners_cards.zap = {};
       }
 
-      console.log(scanners_cards)
-
 //      --Processing's cards--
 //      Min security filter
       processing_cards["minimal_security_filter"] = $("#severity").val()

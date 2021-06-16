@@ -63,9 +63,6 @@ class SecurityTestApi(RestResource):
         event = list()
         event.append(test.configure_execution_json("dusty"))
 
-        from pprint import pprint
-        pprint(event)
-
         security_results = SecurityResultsDAST(
             project_id=project.id,
             test_id=test.id,

@@ -133,7 +133,6 @@ function updateRowAbove(test_id) {
 }
 
 function refreshTable(test_id) {
-    console.log(`/api/v1/security/${getSelectedProjectId()}/findings/${test_id}`)
     $("#test-findings-list").bootstrapTable("refresh", {
         url: `/api/v1/security/${getSelectedProjectId()}/findings/${test_id}`
     });
@@ -218,8 +217,6 @@ function setSeverityOrStatus(entry_type, row_id, report_id, item) {
         issues_id: [row_id]
     }
 
-    console.log(data)
-
     $.ajax({
         url: `/api/v1/security/${getSelectedProjectId()}/findings/${report_id}`,
         type: "PUT",
@@ -237,7 +234,6 @@ function bulkModify(type, value) {
     $("#test-findings-list").bootstrapTable('getSelections').forEach(item => {
         issues_list.push(item['id'])
     })
-    console.log("issues_list == ", issues_list)
 
     applyModify(issues_list, value, type)
 }
@@ -250,7 +246,6 @@ function applyModify(issues, value, type){
         "issues_id": issues,
         [type]: value
     }
-    console.log(report_id)
 
     $.ajax({
         url: `/api/v1/security/${getSelectedProjectId()}/findings/${report_id}`,
