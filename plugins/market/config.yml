@@ -2,3 +2,6 @@ plugin_repo: 'https://raw.githubusercontent.com/Aspect13/actions_test/master/sou
 requirements:
   raise_on_attention: false
 auto_update_plugins: false
+preordered_plugins:
+  - 'auth_root'
+  - 'project'

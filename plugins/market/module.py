@@ -17,9 +17,12 @@
 
 """ Module """
 import asyncio
+import shutil
 from collections import defaultdict
+from os import getenv
 from pathlib import Path
 from types import MappingProxyType
+from pkg_resources import VersionConflict
 
 import flask  # pylint: disable=E0401
 import jinja2  # pylint: disable=E0401
@@ -27,6 +30,8 @@ import jinja2  # pylint: disable=E0401
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module  # pylint: disable=E0611,E0401
 from pylon.core.tools import storage
+from pylon.core.tools.storage import get_development_config
+from pylon.main import CORE_DEVELOPMENT_MODE
 
 from .downloader import run_downloader, run_updater
 from .requirement_resolver import update_pending_requirements, add_entries, resolve_version_conflicts
@@ -35,24 +40,47 @@ from .utils.plugin import Plugin
 
 class Module(module.ModuleModel):
     """ Pylon module """
+    name = 'market'
 
     def __init__(self, settings, root_path, context):
         self.settings = settings
         self.root_path = root_path
         self.context = context
-        self.rpc_prefix = 'market_'
+        self.rpc_prefix = f'{self.name}_'
+
+        if CORE_DEVELOPMENT_MODE and not settings:
+            src = Path(self.context.settings['development']['modules'], self.name, 'config.yml')
+            dst = Path(self.context.settings['development']['config'], f'{self.name}.yml')
+            if not dst.exists():
+                try:
+                    shutil.copy(src, dst)
+                except FileNotFoundError:
+                    ...
+            self.settings = get_development_config(self.context.settings, self.name)
+
 
     def init(self):
         """ Init module """
         log.info('Initializing module Market')
-        Plugin.directory = Path(self.context.settings["development"]["modules"])
+
+        Plugin.directory = Path(self.context.settings['development']['modules'])
 
         self.check_updates()
 
-        self.download_plugins()
+        plugins_to_download = self.plugin_list
+        try:
+            plugins_to_download.extend(self.settings['preordered_plugins'])
+        except KeyError:
+            ...
+        try:
+            plugins_to_download.extend(getenv('PREORDERED_PLUGINS').split(','))
+        except AttributeError:
+            ...
+
+        self.download_plugins(set(plugins_to_download))
 
         req_status = self.check_requirements()
-        from pkg_resources import VersionConflict
+
         if req_status['attention']:
             if self.settings['requirements']['raise_on_attention']:
                 raise VersionConflict(req_status['attention'])
@@ -77,14 +105,24 @@ class Module(module.ModuleModel):
     def plugin_list(self):
         return storage.list_development_modules(self.context.settings)
 
-    def download_plugins(self):
+    def download_plugins(self, plugin_list):
         loop = asyncio.get_event_loop()
-        downloader = loop.run_until_complete(run_downloader(plugins_list=self.plugin_list, plugin_repo=self.settings['plugin_repo']))
+        downloader = loop.run_until_complete(
+            run_downloader(
+                plugins_list=plugin_list,
+                plugin_repo=self.settings['plugin_repo']
+            )
+        )
         loop.run_until_complete(downloader.gather_tasks())
 
     def check_updates(self):
         loop = asyncio.get_event_loop()
-        updater = loop.run_until_complete(run_updater(plugins_list=self.plugin_list, plugin_repo=self.settings['plugin_repo']))
+        updater = loop.run_until_complete(
+            run_updater(
+                plugins_list=self.plugin_list,
+                plugin_repo=self.settings['plugin_repo']
+            )
+        )
         if updater.plugins_to_update:
             if self.settings['auto_update_plugins']:
                 log.info(f'Plugin updates found: {updater.plugins_to_update}, downloading...')
@@ -111,7 +149,6 @@ class Module(module.ModuleModel):
         '''
         Need to teach pylon to read settings from inside plugin, now just copy it in config folder under plugin name
         '''
-        import shutil
         for p in self.plugin_list:
             src = Path(self.context.settings['development']['modules'], p, 'config.yml')
             dst = Path(self.context.settings['development']['config'], f'{p}.yml')
