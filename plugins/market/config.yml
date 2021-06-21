@@ -4,4 +4,4 @@ requirements:
 auto_update_plugins: false
 preordered_plugins:
   - 'auth_root'
-  - 'project'
+  - 'projects'

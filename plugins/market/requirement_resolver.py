@@ -6,7 +6,7 @@ from plugins.market.utils.plugin import Plugin
 
 def add_entries(plugin_list):
 	for plugin in map(Plugin, plugin_list):
-		plugin.add_entry()
+		plugin.register()
 
 
 def update_pending_requirements(plugin: Plugin, pending_requirements, req_status) -> None:

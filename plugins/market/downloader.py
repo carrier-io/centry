@@ -109,7 +109,9 @@ class PluginUpdater(WebMixin):
 
     async def check_for_updates(self, plugins_list):
         for p in plugins_list:
-            plugin = Plugin(p)
+            plugin = p
+            if isinstance(p, str):
+                plugin = Plugin(p)
             try:
                 meta = await self.fetch_txt(self.market_data[plugin.name]['metadata'])
                 repo_plugin_meta = json.loads(meta)
@@ -126,13 +128,15 @@ class PluginUpdater(WebMixin):
         await self.downloader.gather_tasks()
 
 
-async def run_downloader(plugins_list, plugin_repo):
+async def run_downloader(plugins_list, plugin_repo) -> PluginDownloader:
     repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
 
     downloader = PluginDownloader(market_data=repo_data)
 
     for p in plugins_list:
-        plugin = Plugin(p)
+        plugin = p
+        if isinstance(p, str):
+            plugin = Plugin(p)
         if not plugin.status_downloaded:
             await downloader.download_plugin(plugin)
         async for task in downloader.resolve_dependencies(plugin):
@@ -140,7 +144,7 @@ async def run_downloader(plugins_list, plugin_repo):
     return downloader
 
 
-async def run_updater(plugins_list, plugin_repo):
+async def run_updater(plugins_list, plugin_repo) -> PluginUpdater:
     repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
     updater = PluginUpdater(market_data=repo_data)
     await updater.check_for_updates(plugins_list)
