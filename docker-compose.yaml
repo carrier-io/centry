@@ -157,8 +157,8 @@ services:
       - postgres
       - traefik
     volumes:
-      - ./config/carrier.json:$KEYCLOAK_IMPORT
-      - ./config/disablessl.sh:/tmp/disablessl.sh
+      - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
       - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
     environment:
       - DB_ADDR=postgres
@@ -182,7 +182,7 @@ services:
 
 
 volumes:
-#  postgre-data:
+  postgre-data:
   redis-data:
   minio-data:
   influx-data:
