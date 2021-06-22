@@ -58,7 +58,6 @@ class Module(module.ModuleModel):
                     ...
             self.settings = get_development_config(self.context.settings, self.name)
 
-
     def init(self):
         """ Init module """
         log.info('Initializing module Market')

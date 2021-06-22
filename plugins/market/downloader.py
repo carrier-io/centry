@@ -9,7 +9,7 @@ from zipfile import ZipFile
 
 import asyncio
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientResponse
 from pylon.core.tools import log
 
 from .utils.plugin import Plugin
@@ -32,12 +32,21 @@ if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 
+class FetchError(Exception):
+    def __init__(self, response: ClientResponse):
+        msg = f'Fetch error {response.status} on url {response.url}'
+        log.exception(msg)
+        super().__init__(msg)
+
+
 class WebMixin:
     @staticmethod
     async def fetch_txt(url: str) -> str:
         async with ClientSession() as client:
             async with client.get(url) as response:
-                return await response.text()
+                if response.ok:
+                    return await response.text()
+                raise FetchError(response)
 
     @staticmethod
     async def download_plugin_zip(url: str, plugin: Plugin) -> None:
@@ -66,7 +75,7 @@ class PluginDownloader(WebMixin):
         try:
             meta = await self.fetch_txt(self.market_data[plugin.name]['metadata'])
             plugin.metadata = json.loads(meta)
-        except KeyError:
+        except (KeyError, FetchError):
             log.error('PLUGIN {} NOT FOUND'.format(plugin.name))
             return 404
         # plugin.path.mkdir()
@@ -119,7 +128,7 @@ class PluginUpdater(WebMixin):
                     plugin.metadata = repo_plugin_meta
                     plugin.status_downloaded = False
                     self.plugins_to_update.add(plugin)
-            except KeyError:
+            except (KeyError, FetchError):
                 pass
 
     async def run_update(self):
