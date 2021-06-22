@@ -1,0 +1,67 @@
+{
+  "auth_root": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/auth_root/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/auth_root/main/requirements.txt",
+    "data": "https://github.com/carrier-io/auth_root/archive/refs/heads/main.zip"
+  },
+  "auth_manager": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/auth_manager/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/auth_manager/main/requirements.txt",
+    "data": "https://github.com/carrier-io/auth_manager/archive/refs/heads/main.zip"
+  },
+  "auth_project": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/auth_project/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/auth_project/main/requirements.txt",
+    "data": "https://github.com/carrier-io/auth_project/archive/refs/heads/main.zip"
+  },
+  "auth_mappers": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/auth_mappers/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/auth_mappers/main/requirements.txt",
+    "data": "https://github.com/carrier-io/auth_mappers/archive/refs/heads/main.zip"
+  },
+  "auth_oidc": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/auth_oidc/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/auth_oidc/main/requirements.txt",
+    "data": "https://github.com/carrier-io/auth_oidc/archive/refs/heads/main.zip"
+  },
+  "projects": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/projects/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/projects/main/requirements.txt",
+    "data": "https://github.com/carrier-io/projects/archive/refs/heads/main.zip"
+  },
+  "shared": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/shared/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/shared/main/requirements.txt",
+    "data": "https://github.com/carrier-io/shared/archive/refs/heads/main.zip"
+  },
+  "tasks": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/tasks/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/tasks/main/requirements.txt",
+    "data": "https://github.com/carrier-io/tasks/archive/refs/heads/main.zip"
+  },
+  "security": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/security/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/security/main/requirements.txt",
+    "data": "https://github.com/carrier-io/security/archive/refs/heads/main.zip"
+  },
+  "secrets": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/secrets/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/secrets/main/requirements.txt",
+    "data": "https://github.com/carrier-io/secrets/archive/refs/heads/main.zip"
+  },
+  "backend_performance": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/backend_performance/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/backend_performance/main/requirements.txt",
+    "data": "https://github.com/carrier-io/backend_performance/archive/refs/heads/main.zip"
+  },
+  "artifacts": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/artifacts/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/artifacts/main/requirements.txt",
+    "data": "https://github.com/carrier-io/artifacts/archive/refs/heads/main.zip"
+  },
+  "theme": {
+    "metadata": "https://raw.githubusercontent.com/carrier-io/theme/main/metadata.json",
+    "requirements": "https://raw.githubusercontent.com/carrier-io/theme/main/requirements.txt",
+    "data": "https://github.com/carrier-io/theme/archive/refs/heads/main.zip"
+  }
+}
