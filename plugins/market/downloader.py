@@ -9,7 +9,7 @@ from zipfile import ZipFile
 
 import asyncio
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientResponse
 from pylon.core.tools import log
 
 from .utils.plugin import Plugin
@@ -32,12 +32,21 @@ if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 
+class FetchError(Exception):
+    def __init__(self, response: ClientResponse):
+        msg = f'Fetch error {response.status} on url {response.url}'
+        log.exception(msg)
+        super().__init__(msg)
+
+
 class WebMixin:
     @staticmethod
     async def fetch_txt(url: str) -> str:
         async with ClientSession() as client:
             async with client.get(url) as response:
-                return await response.text()
+                if response.ok:
+                    return await response.text()
+                raise FetchError(response)
 
     @staticmethod
     async def download_plugin_zip(url: str, plugin: Plugin) -> None:
@@ -66,7 +75,7 @@ class PluginDownloader(WebMixin):
         try:
             meta = await self.fetch_txt(self.market_data[plugin.name]['metadata'])
             plugin.metadata = json.loads(meta)
-        except KeyError:
+        except (KeyError, FetchError):
             log.error('PLUGIN {} NOT FOUND'.format(plugin.name))
             return 404
         # plugin.path.mkdir()
@@ -109,7 +118,9 @@ class PluginUpdater(WebMixin):
 
     async def check_for_updates(self, plugins_list):
         for p in plugins_list:
-            plugin = Plugin(p)
+            plugin = p
+            if isinstance(p, str):
+                plugin = Plugin(p)
             try:
                 meta = await self.fetch_txt(self.market_data[plugin.name]['metadata'])
                 repo_plugin_meta = json.loads(meta)
@@ -117,7 +128,7 @@ class PluginUpdater(WebMixin):
                     plugin.metadata = repo_plugin_meta
                     plugin.status_downloaded = False
                     self.plugins_to_update.add(plugin)
-            except KeyError:
+            except (KeyError, FetchError):
                 pass
 
     async def run_update(self):
@@ -126,13 +137,15 @@ class PluginUpdater(WebMixin):
         await self.downloader.gather_tasks()
 
 
-async def run_downloader(plugins_list, plugin_repo):
+async def run_downloader(plugins_list, plugin_repo) -> PluginDownloader:
     repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
 
     downloader = PluginDownloader(market_data=repo_data)
 
     for p in plugins_list:
-        plugin = Plugin(p)
+        plugin = p
+        if isinstance(p, str):
+            plugin = Plugin(p)
         if not plugin.status_downloaded:
             await downloader.download_plugin(plugin)
         async for task in downloader.resolve_dependencies(plugin):
@@ -140,7 +153,7 @@ async def run_downloader(plugins_list, plugin_repo):
     return downloader
 
 
-async def run_updater(plugins_list, plugin_repo):
+async def run_updater(plugins_list, plugin_repo) -> PluginUpdater:
     repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
     updater = PluginUpdater(market_data=repo_data)
     await updater.check_for_updates(plugins_list)

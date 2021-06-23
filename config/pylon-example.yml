@@ -52,6 +52,17 @@ storage:
     module: module
     config: config
 
+# Loki logging settings
+loki:
+  buffering: true
+  buffer_capacity: 20
+  include_node_name: true
+  include_level_name: true
+  include_logger_name: true
+  verify: true
+  url: {{ IP_HERE }}:3100
+
+
 # Settings for Flask application
 # application:
 #   EXPLAIN_TEMPLATE_LOADING: true

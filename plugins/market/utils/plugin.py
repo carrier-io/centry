@@ -1,4 +1,6 @@
 import json
+import site
+from distutils.sysconfig import get_python_lib
 from functools import partial, cached_property
 from pathlib import Path
 
@@ -13,22 +15,26 @@ class Plugin:
     requirements_file = 'requirements.txt'
     metadata_file = 'metadata.json'
     directory = Path('plugins')
+    global_site_packages = get_python_lib()
 
-    def __init__(self, name, depends_on: list = None):
+    def __init__(self, name):
         self.name = name
         self.status_downloaded = self.path.exists()
-        self._metadata = {
+        try:
+            self.metadata = json.load(self.path.joinpath(self.metadata_file).open('r'))
+        except FileNotFoundError:
+            self.metadata = self._metadata_default
+
+    @property
+    def _metadata_default(self):
+        return {
             "name": self.name,
             "version": "0.1",
             "module": '.'.join([self.directory.stem, self.name]),
             "extract": False,
-            "depends_on": depends_on or [],
+            "depends_on": [],
             "init_after": []
         }
-        try:
-            self.metadata = json.load(self.path.joinpath(self.metadata_file).open('r'))
-        except FileNotFoundError:
-            self.metadata = self._metadata
 
     @property
     def path(self):
@@ -36,7 +42,7 @@ class Plugin:
 
     def create(self, rewrite=False):
         if rewrite:
-            self.metadata = self._metadata
+            self.metadata = self._metadata_default
         if not self.path.exists() or rewrite:
             self._create()
 
@@ -58,8 +64,18 @@ class Plugin:
     def requirements(self):
         return self.path.joinpath(self.requirements_file)
 
-    def add_entry(self):
+    def register(self):
+        market = self.__class__('market')
+        with open(market.sp.joinpath(f'{self.name}.pth'), 'w') as out:
+            out.write(str(self.sp.absolute()))
         pkg_resources.working_set.add_entry(self.sp)
+        site.addsitedir(self.sp.absolute())
+
+    def _register_in_global(self):
+        with open(Path(self.global_site_packages, f'{self.name}.pth'), 'w') as out:
+            out.write(f"import site; site.addsitedir(r'{self.sp.absolute()}')")
+        pkg_resources.working_set.add_entry(self.sp)
+        site.addsitedir(self.sp.absolute())
 
     @cached_property
     def environment(self):
@@ -77,4 +93,3 @@ class Plugin:
 
     def __eq__(self, other):
         return self.__hash__() == other.__hash__()
-

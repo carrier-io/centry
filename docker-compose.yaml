@@ -77,7 +77,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     environment:
-      - 'VAULT_LOCAL_CONFIG={"disable_mlock":true,"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable": 1}},"storage":{"postgresql":{"connection_url":"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"}},"ui":false}'
+      - 'VAULT_LOCAL_CONFIG={"disable_mlock":true,"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable": 1}},"storage":{"postgresql":{"connection_url":"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"}},"ui":false}'
     command: vault server -config=/vault/config/local.json
     ports:
     - 8200:8200
@@ -157,8 +157,8 @@ services:
       - postgres
       - traefik
     volumes:
-      - ./config/carrier.json:$KEYCLOAK_IMPORT
-      - ./config/disablessl.sh:/tmp/disablessl.sh
+      - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
       - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
     environment:
       - DB_ADDR=postgres
@@ -182,7 +182,7 @@ services:
 
 
 volumes:
-#  postgre-data:
+  postgre-data:
   redis-data:
   minio-data:
   influx-data:
