@@ -122,8 +122,6 @@ class SecurityTestsApi(RestResource):
 
             response = exec_test(project.id, event)
 
-            # security_results.set_test_status("Finished")
-
             return response
 
         return test.to_json(exclude_fields=("id",))
