@@ -61,7 +61,7 @@ class SecurityTestApi(RestResource):
         test = SecurityTestsDAST.query.filter(_filter).first()
 
         event = list()
-        event.append(test.configure_execution_json("dusty"))
+        event.append(test.configure_execution_json("cc"))
 
         security_results = SecurityResultsDAST(
             project_id=project.id,

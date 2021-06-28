@@ -141,6 +141,8 @@ services:
       - RABBIT_PASSWORD=$RABBIT_PASSWORD
       - RABBIT_USER=$RABBIT_USER
       - LOKI_HOST=$APP_HOST
+    networks:
+      - pylon
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -189,6 +191,8 @@ services:
         max-file: "5"
         max-size: "10m"
     restart: unless-stopped
+    networks:
+      - pylon
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml -table-manager.retention-period=$RETENTION_PERIOD -table-manager.retention-deletes-enabled=$RETENTION_DELETES_ENABLE
