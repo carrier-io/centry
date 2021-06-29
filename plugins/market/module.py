@@ -33,7 +33,7 @@ from pylon.core.tools import storage
 from pylon.core.tools.storage import get_development_config
 from pylon.main import CORE_DEVELOPMENT_MODE
 
-from .downloader import run_downloader, run_updater
+from .downloader import run_downloader, run_updater, run_cloner
 from .requirement_resolver import update_pending_requirements, add_entries, resolve_version_conflicts
 from .utils.plugin import Plugin
 
@@ -79,7 +79,8 @@ class Module(module.ModuleModel):
         except AttributeError:
             ...
 
-        self.download_plugins(set(plugins_to_download))
+        # self.download_plugins(set(plugins_to_download))
+        self.clone_plugins(set(plugins_to_download))
 
         req_status = self.check_requirements()
 
@@ -117,6 +118,13 @@ class Module(module.ModuleModel):
         )
         loop.run_until_complete(downloader.gather_tasks())
 
+    def clone_plugins(self, plugin_list):
+        loop = asyncio.get_event_loop()
+        downloader = loop.run_until_complete(
+            run_cloner(plugins_list=plugin_list)
+        )
+        loop.run_until_complete(downloader.gather_tasks())
+
     def check_updates(self):
         loop = asyncio.get_event_loop()
         updater = loop.run_until_complete(
@@ -131,6 +139,7 @@ class Module(module.ModuleModel):
                 loop.run_until_complete(updater.run_update())
             else:
                 log.warning(f'Plugin updates found: {updater.plugins_to_update}')
+        return updater.plugins_to_update
 
     def check_requirements(self):
         add_entries(self.plugin_list)

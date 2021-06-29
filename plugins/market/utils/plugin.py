@@ -19,17 +19,24 @@ class Plugin:
 
     def __init__(self, name):
         self.name = name
-        self.status_downloaded = self.path.exists()
+        # self.status_downloaded = self.path.exists()
         try:
-            self.metadata = json.load(self.path.joinpath(self.metadata_file).open('r'))
+            self.reload_metadata()
         except FileNotFoundError:
             self.metadata = self._metadata_default
+
+    @property
+    def status_downloaded(self):
+        return self.path.exists()
+
+    def reload_metadata(self):
+        self.metadata = json.load(self.path.joinpath(self.metadata_file).open('r'))
 
     @property
     def _metadata_default(self):
         return {
             "name": self.name,
-            "version": "0.1",
+            "version": "0.0",
             "module": '.'.join([self.directory.stem, self.name]),
             "extract": False,
             "depends_on": [],

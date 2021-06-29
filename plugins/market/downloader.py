@@ -5,6 +5,7 @@ from asyncio.proactor_events import _ProactorBasePipeTransport
 from functools import wraps
 from io import BytesIO
 from pathlib import Path
+from typing import Optional, AsyncIterable
 from zipfile import ZipFile
 
 import asyncio
@@ -39,6 +40,38 @@ class FetchError(Exception):
         super().__init__(msg)
 
 
+class CloneError(Exception):
+    def __init__(self, stderr: str):
+        msg = f'Fetch error {stderr}'
+        log.exception(msg)
+        super().__init__(msg)
+
+
+class GitMixin:
+    async def clone_callback(self, plugin: Plugin):
+        raise NotImplementedError
+
+    async def clone_github_repo(
+            self,
+            plugin: Plugin,
+            git_user: str = 'carrier-io',
+            url_template: str = 'https://github.com/{git_user}/{plugin.name}.git',
+            clone_args: Optional[list] = None
+    ):
+        if not clone_args:
+            clone_args = ['-q']
+        clone_url = url_template.format(git_user=git_user, plugin=plugin)
+        proc = await asyncio.create_subprocess_exec(
+            'git', 'clone', clone_url, plugin.path, *clone_args,
+            stderr=asyncio.subprocess.PIPE
+        )
+        err = await proc.stderr.read()
+        await proc.wait()
+        if err:
+            raise CloneError(err.decode('utf-8'))
+        await self.clone_callback(plugin)
+
+
 class WebMixin:
     @staticmethod
     async def fetch_txt(url: str) -> str:
@@ -64,11 +97,28 @@ class WebMixin:
                         shutil.rmtree(src)
 
 
-class PluginDownloader(WebMixin):
+class PluginDownloader(WebMixin, GitMixin):
     def __init__(self, market_data: dict):
         self.market_data = market_data
         self.plugins_to_download = set()
         self.tasks = list()
+
+    async def clone_plugin(self, plugin: Plugin):
+        log.info('Plugin clone called %s', plugin)
+        self.tasks.append(asyncio.create_task(
+            self.clone_github_repo(plugin, git_user='Aspect13'),
+            name=f'Task_clone_repo_{plugin.name}'
+        ))
+        self.plugins_to_download.add(plugin)
+
+    async def clone_callback(self, plugin: Plugin):
+        plugin.reload_metadata()
+        async for dependency in self.resolve_dependencies(plugin):
+            self.tasks.append(asyncio.create_task(
+                self.clone_plugin(dependency),
+                name=f'Task_clone_plugin_{dependency.name}'
+            ))
+
 
     async def download_plugin(self, plugin: Plugin) -> int:
         log.info('Plugin download called %s', plugin)
@@ -85,18 +135,26 @@ class PluginDownloader(WebMixin):
         ))
 
         self.plugins_to_download.add(plugin)
-        async for task in self.resolve_dependencies(plugin):
-            self.tasks.append(task)
+        async for dependency in self.resolve_dependencies(plugin):
+            self.tasks.append(asyncio.create_task(
+                self.download_plugin(dependency),
+                name=f'Task_download_plugin_{dependency.name}'
+            ))
         return 200
 
-    async def resolve_dependencies(self, plugin: Plugin):
+
+
+    async def resolve_dependencies(self, plugin: Plugin) -> AsyncIterable[Plugin]:
         for parent_plugin in plugin.metadata['depends_on']:
             parent_plugin = Plugin(parent_plugin)
             if not parent_plugin.status_downloaded:
-                yield asyncio.create_task(
-                    self.download_plugin(parent_plugin),
-                    name=f'Task_download_plugin_{plugin.name}'
-                )
+                if parent_plugin in self.plugins_to_download:
+                    print('!AAAAAAAAAAAA!!!', 'ALREADY ASKED FOR DWNLD', parent_plugin)
+                yield parent_plugin
+                # yield asyncio.create_task(
+                #     self.download_plugin(parent_plugin),
+                #     name=f'Task_download_plugin_{plugin.name}'
+                # )
 
     async def gather_tasks(self):
         while pending := [task for task in self.tasks if not task.done()]:
@@ -148,8 +206,8 @@ async def run_downloader(plugins_list, plugin_repo) -> PluginDownloader:
             plugin = Plugin(p)
         if not plugin.status_downloaded:
             await downloader.download_plugin(plugin)
-        async for task in downloader.resolve_dependencies(plugin):
-            downloader.tasks.append(task)
+        # async for task in downloader.resolve_dependencies(plugin):
+        #     downloader.tasks.append(task)
     return downloader
 
 
@@ -159,3 +217,18 @@ async def run_updater(plugins_list, plugin_repo) -> PluginUpdater:
     await updater.check_for_updates(plugins_list)
     return updater
 
+
+async def run_cloner(plugins_list) -> PluginDownloader:
+    # repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
+
+    downloader = PluginDownloader(market_data=dict())
+
+    for p in plugins_list:
+        plugin = p
+        if isinstance(p, str):
+            plugin = Plugin(p)
+        if not plugin.status_downloaded:
+            await downloader.clone_plugin(plugin)
+    # async for task in downloader.resolve_dependencies(plugin):
+    #     downloader.tasks.append(task)
+    return downloader
