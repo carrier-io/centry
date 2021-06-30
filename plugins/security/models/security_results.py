@@ -18,8 +18,22 @@ class SecurityResultsDAST(AbstractBaseMixin, Base):
     test_name = Column(String(128), unique=False)
     start_date = Column(DateTime, default=dt.utcnow)
     duration = Column(String(128), unique=False)
+    #
+    scan_time = Column(String(128), unique=False)
+    scan_duration = Column(String(128), unique=False)
+    project_name = Column(String(128), unique=False)
+    app_name = Column(String(128), unique=False)
+    dast_target = Column(String(128), unique=False)
+    sast_code = Column(String(128), unique=False)
+    scan_type = Column(String(4), unique=False)
+    findings = Column(Integer, unique=False)
+    false_positives = Column(Integer, unique=False)
+    excluded = Column(Integer, unique=False)
+    info_findings = Column(Integer, unique=False)
+    environment = Column(String(32), unique=False)
+    #
     # findings counts
-    findings = Column(Integer, unique=False, default=0)
+    # findings = Column(Integer, unique=False, default=0)
     valid = Column(Integer, unique=False, default=0)
     false_positive = Column(Integer, unique=False, default=0)
     ignored = Column(Integer, unique=False, default=0)
@@ -29,7 +43,7 @@ class SecurityResultsDAST(AbstractBaseMixin, Base):
     low = Column(Integer, unique=False, default=0)
     info = Column(Integer, unique=False, default=0)
     # other
-    excluded = Column(Integer, unique=False)
+    # excluded = Column(Integer, unique=False)
     tags = Column(ARRAY(String))
     test_status = Column(
         JSON,

@@ -1,0 +1,16 @@
+<div class="card ml-0 mr-0" id="scanner_owaspzapCard">
+    <div class="row">
+        <div class="col">
+            <label class="form-control-label mb-0 mt-1">Owasp Zap</label>
+        </div>
+        <div class="col-xs text-right">
+            <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('owaspzapCard')"><i class="fas fa-cog"></i></button>
+            <label class="custom-toggle mr-3 mb-0 align-middle">
+              <input type="checkbox" id="scanner_owaspzap">
+              <span class="custom-toggle-slider rounded-circle"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('zap.static', filename='js/components/zap_parser.js') }}" type="text/javascript"></script>

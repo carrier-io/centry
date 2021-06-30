@@ -38,7 +38,7 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
     scanners_cards = Column(JSON)  # {<scanner>: {<scanner_params>}, ...}
     processing = Column(JSON)  # {<processing_card>: <value>, }
 
-    # region = Column(String(128), nullable=False)
+    region = Column(String(128), nullable=False, default="default")
     # bucket = Column(String(128), nullable=False)
     # last_run = Column(Integer)
     # job_type = Column(String(20))
@@ -63,21 +63,28 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
         from json import loads
 
         if output == "dusty":
-
+            from flask import current_app
             global_dast_settings = dict()
             global_dast_settings["max_concurrent_scanners"] = 1
 
             if "toolreports" in self.reporting:
                 global_dast_settings["save_intermediates_to"] = "/tmp/intermediates"
 
-            scanners_config = dict()
+            scanners_config = {}
+
+            # scanners_data
             for scanner_name in self.scanners_cards:
-                scanners_config[scanner_name] = {
-                    "scan_types": "all",
-                    "target": self.urls_to_scan
-                }
-                if scanner_name == "qualys":
-                    scanners_config[scanner_name]["exclude"] = self.urls_exclusions
+                scanners_config[scanner_name] = {}
+                scanners_data = (
+                        current_app.config["CONTEXT"].rpc_manager.node.call(scanner_name)
+                        or
+                        {"target": "urls_to_scan"}
+                )
+                for setting in scanners_data:
+                    scanners_config[scanner_name][setting] = self.__dict__.get(
+                        scanners_data[setting],
+                        scanners_data[setting]
+                    )
 
             reporters_config = dict()
             reporters_config["galloper"] = {
@@ -217,7 +224,9 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                     }
                 }
             }
-
+            from pprint import pprint
+            print("DUSTY CONFIG")
+            pprint(dusty_config)
             return dusty_config
 
         job_type = "dast"
@@ -265,7 +274,7 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                 "container": container,
                 "execution_params": dumps(parameters),
                 "cc_env_vars": cc_env_vars,
-                # "channel": self.region
+                "channel": self.region
             }
             if "quality" in self.scanners_cards:
                 execution_json["quality_gate"] = "True"

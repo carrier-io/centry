@@ -138,8 +138,8 @@ services:
       - CPU_QUOTA=$CPU_QUOTA
       - CPU_CORES=$INTERPECTOR_TASKS
       - RABBIT_HOST=carrier-rabbit
-      - RABBIT_PASSWORD=$RABBIT_PASSWORD
-      - RABBIT_USER=$RABBIT_USER
+      - RABBIT_PASSWORD=$RABBITMQ_PASSWORD
+      - RABBIT_USER=$RABBITMQ_USER
       - LOKI_HOST=$APP_HOST
     networks:
       - pylon

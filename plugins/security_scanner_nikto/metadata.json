@@ -1,0 +1,8 @@
+{
+  "name": "Carrier Security Nikto Plugin",
+  "version": "0.1",
+  "module": "plugins.security_scanner_nikto",
+  "extract": true,
+  "depends_on": ["base", "project", "theme"],
+  "init_after": ["theme"]
+}

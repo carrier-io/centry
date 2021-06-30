@@ -1,3 +1,4 @@
+from json import loads
 from sqlalchemy import and_
 
 from plugins.base.utils.restApi import RestResource
@@ -14,12 +15,24 @@ class SecurityTestApi(RestResource):
         dict(name="test_name", type=str, required=False, location='json'),
     )
 
+    _put_rules = (
+        dict(name="name", type=str, location='form'),
+        dict(name="test_env", type=str, location='form'),
+        dict(name="urls_to_scan", type=str, location='form'),
+        dict(name="urls_exclusions", type=str, location='form'),
+        dict(name="scanners_cards", type=str, location='form'),
+        # dict(name="reporting_cards", type=str, location='form'),
+        dict(name="reporting", type=str, location='form'),
+        dict(name="processing", type=str, location='form')
+    )
+
     def __init__(self):
         super(SecurityTestApi, self).__init__()
         self.__init_req_parsers()
 
     def __init_req_parsers(self):
         self.post_parser = build_req_parser(rules=self._post_rules)
+        self.put_parser = build_req_parser(rules=self._put_rules)
 
     def get(self, project_id, test_id):
         project = self.rpc.project_get_or_404(project_id=project_id)
@@ -44,6 +57,36 @@ class SecurityTestApi(RestResource):
         if scanners:
             test["scanners"] = ", ".join([scan[0] for scan in scanners])
         return test
+
+    def put(self, project_id, test_id):
+        """ Update test data """
+        args = self.put_parser.parse_args(strict=False)
+        project = self.rpc.project_get_or_404(project_id=project_id)
+
+        if isinstance(test_id, int):
+            _filter = and_(
+                SecurityTestsDAST.project_id == project.id, SecurityTestsDAST.id == test_id
+            )
+        else:
+            _filter = and_(
+                SecurityTestsDAST.project_id == project.id, SecurityTestsDAST.test_uid == test_id
+            )
+        task = SecurityTestsDAST.query.filter(_filter).first()
+
+        update_values = {
+            "name": args["name"],
+            "test_environment": args["test_env"],
+            "urls_to_scan": loads(args["urls_to_scan"]),
+            "urls_exclusions": loads(args["urls_exclusions"]),
+            "scanners_cards": loads(args["scanners_cards"]),
+            "reporting": loads(args["reporting"]),
+            "processing": loads(args["processing"])
+        }
+
+        task.update(update_values)
+        task.commit()
+
+        return task.to_json()
 
     def post(self, project_id, test_id):
         """ Run test """

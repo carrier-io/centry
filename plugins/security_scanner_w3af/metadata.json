@@ -1,0 +1,8 @@
+{
+  "name": "Carrier Security W3AF Plugin",
+  "version": "0.1",
+  "module": "plugins.security_scanner_w3af",
+  "extract": true,
+  "depends_on": ["base", "project", "theme"],
+  "init_after": ["theme"]
+}
