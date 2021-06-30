@@ -1,0 +1,32 @@
+<div class="row" id="all_artifacts" style="display: none">
+    <div class="col-12 pr-5 pl-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-transparent border-0">
+                <div class="row">
+                    <div class="col">
+                            <h3 id="logs_title">Artifacts</h3>
+                        </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-borderless"
+                    id="test-artifacts-list"
+                    data-toggle="table"
+                    data-side-pagination="server"
+                    data-virtual-scroll="true">
+                    <thead class="thead-light">
+                        <tr>
+                            <th data-visible="false" data-field="id">index</th>
+                            <th scope="col" data-sortable="true" data-field="name">Name</th>
+                            <th scope="col" data-sortable="true" data-field="size">Size</th>
+                            <th scope="col" data-sortable="true" data-field="date">Date</th>
+                            <th scope="col" data-sortable="true" data-field="actions">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="card-footer py-4 border-0">
+            </div>
+        </div>
+    </div>
+</div>

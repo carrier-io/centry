@@ -1,0 +1,217 @@
+<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 pr-5 pl-5">
+            <div class="card card-14 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="promo_block">Promo block</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 pr-2 pl-5">
+            <div class="card card-14 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="results">Project status</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col p-0">
+                            <div class="project_status_good card mt-0" style="height: 100%">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col text-right">
+                                            <h2 class="project_status_good">
+                                                <span class="iconify" data-icon="mdi-shield-check" data-width="26" data-inline="false">
+                                                </span>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer project_status_good border-0">
+                                    <div class="row" style="border-bottom: 2px solid">
+                                        <b>PROJECT HEALTH</b><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <table >
+                                <tr style="border: 0">
+                                    <th class="text-gray pr-2">CRITICAL</th><td width="30%"> <b id="project_critical_statuses"> - </b> </td>
+                                </tr>
+                                <tr style="border: 0">
+                                    <th class="text-gray pr-2">HIGH</th><td width="15%"> <b id="project_high_statuses">-</b> </td>
+                                </tr>
+                                <tr style="border: 0">
+                                    <th class="text-gray pr-2">MEDIUM</th><td width="15%"> <b id="project_medium_statuses">-</b> </td>
+                                </tr>
+                                <tr style="border: 0">
+                                    <th class="text-gray pr-2">LOW</th><td width="20%"> <b id="project_low_statuses">-</b> </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer py-4 border-0">
+                </div>
+            </div>
+        </div>
+        <div class="col-4 pr-2 pl-2">
+            <div class="card card-14 shadow-sm">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="project_errors">Errors stats</h3>
+                        </div>
+                        <div class="col">
+                            <ul class="nav nav-pills justify-content-end">
+                                <li class="nav-item mr-2 mr-md-0">
+                                    Last month
+                                    <button id="calendar" class="btn btn-link btn-sm">
+                                        <span class="btn-inner--icon"><i class="fa fa-calendar fa-lg"></i></span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <button id="all-tests-button" class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                All tests
+                            </button>
+<!--                            <a class="btn btn-secondary btn-sm" type="button" href="#">All tests</a>-->
+                        </div>
+                        <div class="col">
+                            <button id="app-button" class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Application
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="code-button" class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Code
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="infrastructure-button" class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Infrastructure
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-borderless"
+                               id="project-error-stats"
+                               data-toggle="table"
+                               data-side-pagination="server"
+                               data-url=""
+                               data-page-size=5
+                               data-virtual-scroll="true"
+                        >
+                            <thead class="thead-light">
+                                <tr>
+                                    <th data-visible="false" data-field="id">index</th>
+                                    <th scope="col" data-sortable="true" data-field="name">name</th>
+                                    <th scope="col" data-sortable="true" data-field="errors">errors</th>
+                                    <th scope="col" data-sortable="true" data-field="date">date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer py-4 border-0">
+                </div>
+            </div>
+        </div>
+        <div class="col-4 pr-5 pl-2">
+            <div class="card card-14 shadow-sm">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="project_scan_runs">Scan runs</h3>
+                        </div>
+                        <div class="col">
+                            <ul class="nav nav-pills justify-content-end">
+                                <li class="nav-item mr-2 mr-md-0">
+                                    Last month
+                                    <button class="btn btn-link btn-sm">
+                                        <span class="btn-inner--icon"><i class="fa fa-calendar fa-lg"></i></span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <button class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                All tests
+                            </button>
+<!--                            <a class="btn btn-secondary btn-sm" type="button" href="#">All tests</a>-->
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Application
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Code
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-link p-2" onclick="specialFilter('Ignored', {{config.id}})">
+                                Infrastructure
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-borderless"
+                               id="project-scan-runs"
+                               data-toggle="table"
+                               data-side-pagination="server"
+                               data-url=""
+                               data-page-size=5
+                               data-virtual-scroll="true"
+                        >
+                            <thead class="thead-light">
+                                <tr>
+                                    <th data-visible="false" data-field="id">index</th>
+                                    <th scope="col" data-sortable="true" data-field="name">name</th>
+                                    <th scope="col" data-sortable="true" data-field="date">date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer py-4 border-0">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col pr-5 pl-5">
+            <div class="card card-14 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="text-gray" id="promo_block_">Promo block</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
