@@ -71,7 +71,7 @@ class SecurityTestApi(RestResource):
             _filter = and_(
                 SecurityTestsDAST.project_id == project.id, SecurityTestsDAST.test_uid == test_id
             )
-        task = SecurityTestsDAST.query.filter(_filter).first()
+        task = SecurityTestsDAST.query.filter(_filter)
 
         update_values = {
             "name": args["name"],
@@ -84,9 +84,9 @@ class SecurityTestApi(RestResource):
         }
 
         task.update(update_values)
-        task.commit()
+        SecurityTestsDAST.commit()
 
-        return task.to_json()
+        return {"message": "Parameters for test were updated"}
 
     def post(self, project_id, test_id):
         """ Run test """

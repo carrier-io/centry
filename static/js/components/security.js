@@ -181,6 +181,24 @@ function getScannersData(){
 function saveTest(data) {
     if (edit_test) {
         $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'PUT',
+          success: function(data){
+              $("#submit").html(`<i class="fas fa-play"></i>`);
+              $("#save").html(`<i class="fas fa-save"></i>`);
+              $("#submit").removeClass("disabled");
+              $("#save").addClass("disabled");
+              $("#createApplicationTest").modal('hide');
+              $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
+          }
+        });
+    } else {
+        $.ajax({
           url: `/api/v1/security/${getSelectedProjectId()}/dast`,
           data: data,
           cache: false,
@@ -198,26 +216,8 @@ function saveTest(data) {
           }
         }
       );
-    } else {
-        $.ajax({
-          url: `/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`,
-          data: data,
-          cache: false,
-          contentType: false,
-          processData: false,
-          method: 'PUT',
-          success: function(data){
-              $("#submit").html(`<i class="fas fa-play"></i>`);
-              $("#save").html(`<i class="fas fa-save"></i>`);
-              $("#submit").removeClass("disabled");
-              $("#save").addClass("disabled");
-              $("#createApplicationTest").modal('hide');
-              $("#tests-list").bootstrapTable('refresh');
-              $("#results-list").bootstrapTable('refresh');
-              edit_test = false;
-          }
-        });
     }
+    edit_test = false;
 }
 
 function submitAppTest(run_test=false) {
