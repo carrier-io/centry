@@ -1,7 +1,10 @@
 plugin_repo: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
 requirements:
   raise_on_attention: false
+
 auto_update_plugins: false
+ignore_updates:
+
 preordered_plugins:
   - 'auth_root'
   - 'projects'
