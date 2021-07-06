@@ -257,7 +257,6 @@ class PluginUpdater(WebMixin):
                 repo_plugin_meta = json.loads(meta)
                 if float(plugin.version) < float(repo_plugin_meta['version']):
                     plugin.metadata = repo_plugin_meta
-                    plugin.status_downloaded = False
                     self.plugins_to_update.add(plugin)
             except (KeyError, FetchError):
                 pass

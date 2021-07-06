@@ -67,7 +67,7 @@ class Module(module.ModuleModel):
         me = Plugin(self.name)
         me._register_in_global()
 
-        # self.check_updates()
+        self.check_updates()
 
         plugins_to_download = self.plugin_list
         try:
