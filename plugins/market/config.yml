@@ -1,4 +1,11 @@
-plugin_repo: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
+plugin_repo:
+  type: file
+#  path: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
+  path: './config/plugins_local.json'
+  auth:
+    username:
+    password:
+
 requirements:
   raise_on_attention: false
 
@@ -6,5 +13,14 @@ auto_update_plugins: false
 ignore_updates:
 
 preordered_plugins:
-  - 'auth_root'
-  - 'projects'
+
+git_config:
+  default:
+    username:
+    password:
+    key:
+    key_data:
+  projects:
+    username: 123
+    password: 456
+

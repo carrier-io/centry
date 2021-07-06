@@ -148,10 +148,14 @@ class Module(module.ModuleModel):
         loop.run_until_complete(downloader.gather_tasks())
 
     def check_updates(self):
+        try:
+            plugins_to_check = set(self.plugin_list).difference(set(self.settings['ignore_updates'] or []))
+        except KeyError:
+            plugins_to_check = self.plugin_list
         loop = asyncio.get_event_loop()
         updater = loop.run_until_complete(
             run_updater(
-                plugins_list=self.plugin_list,
+                plugins_list=plugins_to_check,
                 plugin_repo=self.settings['plugin_repo']
             )
         )
