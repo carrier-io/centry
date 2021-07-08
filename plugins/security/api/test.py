@@ -104,7 +104,6 @@ class SecurityTestApi(RestResource):
         test = SecurityTestsDAST.query.filter(_filter).first()
 
         event = list()
-        event.append(test.configure_execution_json("cc"))
 
         security_results = SecurityResultsDAST(
             project_id=project.id,
@@ -113,6 +112,11 @@ class SecurityTestApi(RestResource):
             test_name=args["test_name"],
         )
         security_results.insert()
+
+        test.results_test_id = security_results.id
+        test.commit()
+
+        event.append(test.configure_execution_json("cc"))
 
         if args.get("type") == "config":
             return event[0]

@@ -39,6 +39,8 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
     processing = Column(JSON)  # {<processing_card>: <value>, }
 
     region = Column(String(128), nullable=False, default="default")
+    # TODO: add relationship with DASTtestsResults table
+    results_test_id = Column(Integer)
     # bucket = Column(String(128), nullable=False)
     # last_run = Column(Integer)
     # job_type = Column(String(20))
@@ -65,6 +67,7 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
         if output == "dusty":
             from flask import current_app
             global_dast_settings = dict()
+            loki_settings = current_app.config["CONTEXT"].settings["loki"]
             global_dast_settings["max_concurrent_scanners"] = 1
 
             if "toolreports" in self.reporting:
@@ -87,6 +90,13 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                     )
 
             reporters_config = dict()
+            reporters_config["loki"] = {
+                "project_id": self.project_id,
+                "test_id": self.id,
+                "result_id": self.results_test_id,
+                "url": loki_settings["url"]
+            }
+
             reporters_config["galloper"] = {
                 "url": unsecret(
                     "{{secret.galloper_url}}",
@@ -224,9 +234,6 @@ class SecurityTestsDAST(AbstractBaseMixin, Base):
                     }
                 }
             }
-            from pprint import pprint
-            print("DUSTY CONFIG")
-            pprint(dusty_config)
             return dusty_config
 
         job_type = "dast"

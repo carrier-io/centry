@@ -50,7 +50,7 @@ function cleanAppTestModal() {
 }
 
 function test_name_button(value, row, index) {
-    return `<a class="test form-control-label" href="?chapter=Security&module=Result&page=list&project_id=${getSelectedProjectId()}&test_id=${row.id}" role="button">${row.name}</a>`
+    return `<a class="test form-control-label" href="?chapter=Security&module=Result&page=list&project_id=${getSelectedProjectId()}&result_test_id=${row.id}&test_id=${row.test_id}" role="button">${row.name}</a>`
 }
 
 var click_name = {
