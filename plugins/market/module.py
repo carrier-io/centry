@@ -33,7 +33,7 @@ from pylon.core.tools import storage
 from pylon.core.tools.storage import get_development_config
 from pylon.main import CORE_DEVELOPMENT_MODE
 
-from .downloader import run_downloader, run_updater
+from .downloader import run_updater, run_cloner, run_downloader, GitManagerMixin
 from .requirement_resolver import update_pending_requirements, add_entries, resolve_version_conflicts
 from .utils.plugin import Plugin
 
@@ -72,14 +72,17 @@ class Module(module.ModuleModel):
         plugins_to_download = self.plugin_list
         try:
             plugins_to_download.extend(self.settings['preordered_plugins'])
-        except KeyError:
+        except (KeyError, TypeError):
             ...
         try:
             plugins_to_download.extend(getenv('PREORDERED_PLUGINS').split(','))
         except AttributeError:
             ...
 
-        self.download_plugins(set(plugins_to_download))
+        # self.download_plugins(set(plugins_to_download))
+        GitManagerMixin.git_manager = self.context.git_manager
+        GitManagerMixin.git_config = self.settings['git_config']
+        self.clone_plugins(set(plugins_to_download))
 
         req_status = self.check_requirements()
 
@@ -117,20 +120,54 @@ class Module(module.ModuleModel):
         )
         loop.run_until_complete(downloader.gather_tasks())
 
+    # def download_plugins_zip(self, plugin_list):
+    #     loop = asyncio.get_event_loop()
+    #     downloader = loop.run_until_complete(
+    #         run_zip_downloader(
+    #             plugins_list=plugin_list,
+    #             plugin_repo=self.settings['plugin_repo']
+    #         )
+    #     )
+    #     loop.run_until_complete(downloader.gather_tasks())
+
+    def clone_plugins_subprocess(self, plugin_list):
+        loop = asyncio.get_event_loop()
+        downloader = loop.run_until_complete(
+            run_cloner(plugins_list=plugin_list)
+        )
+        loop.run_until_complete(downloader.gather_tasks())
+
+    def clone_plugins(self, plugin_list):
+        loop = asyncio.get_event_loop()
+        downloader = loop.run_until_complete(
+            run_downloader(
+                plugins_list=plugin_list,
+                plugin_repo=self.settings['plugin_repo']
+            )
+        )
+        loop.run_until_complete(downloader.gather_tasks())
+
     def check_updates(self):
+        try:
+            plugins_to_check = set(self.plugin_list).difference(set(self.settings['ignore_updates'] or []))
+        except KeyError:
+            plugins_to_check = self.plugin_list
         loop = asyncio.get_event_loop()
         updater = loop.run_until_complete(
             run_updater(
-                plugins_list=self.plugin_list,
+                plugins_list=plugins_to_check,
                 plugin_repo=self.settings['plugin_repo']
             )
         )
         if updater.plugins_to_update:
             if self.settings['auto_update_plugins']:
-                log.info(f'Plugin updates found: {updater.plugins_to_update}, downloading...')
-                loop.run_until_complete(updater.run_update())
+                # log.info(f'Plugin updates found: {updater.plugins_to_update}, downloading...')
+                # loop.run_until_complete(updater.run_update())
+                log.warning('Plugin update temporary unavailable')
+                log.warning(f'Plugin updates found: {updater.plugins_to_update}')
             else:
                 log.warning(f'Plugin updates found: {updater.plugins_to_update}')
+        return updater.plugins_to_update
 
     def check_requirements(self):
         add_entries(self.plugin_list)
