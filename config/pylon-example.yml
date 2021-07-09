@@ -66,3 +66,11 @@ loki:
 # Settings for Flask application
 # application:
 #   EXPLAIN_TEMPLATE_LOADING: true
+
+# dulwich git manager
+git_manager:
+  default:
+    username:
+    password:
+    key:
+    key_data:

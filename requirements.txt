@@ -1,4 +1,3 @@
-pylon @ git+https://github.com/Aspect13/pylon.git@feature/dulwich
-cchardet==2.1.7
+pylon @ git+https://github.com/carrier-io/pylon.git
 aiodns==3.0.0
 aiohttp==3.7.4.post0
