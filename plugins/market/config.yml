@@ -1,6 +1,6 @@
 plugin_repo:
+  #  path: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
   type: file
-#  path: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
   path: './config/plugins_local.json'
   auth:
     username:
@@ -20,7 +20,3 @@ git_config:
     password:
     key:
     key_data:
-  projects:
-    username: 123
-    password: 456
-
