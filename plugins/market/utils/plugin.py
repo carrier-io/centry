@@ -75,13 +75,13 @@ class Plugin:
         market = self.__class__('market')
         with open(market.sp.joinpath(f'{self.name}.pth'), 'w') as out:
             out.write(str(self.sp.absolute()))
-        pkg_resources.working_set.add_entry(self.sp)
+        pkg_resources.working_set.add_entry(str(self.sp))
         site.addsitedir(self.sp.absolute())
 
     def _register_in_global(self):
         with open(Path(self.global_site_packages, f'{self.name}.pth'), 'w') as out:
             out.write(f"import site; site.addsitedir(r'{self.sp.absolute()}')")
-        pkg_resources.working_set.add_entry(self.sp)
+        pkg_resources.working_set.add_entry(str(self.sp))
         site.addsitedir(self.sp.absolute())
 
     @cached_property
