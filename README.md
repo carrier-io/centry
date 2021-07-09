@@ -26,8 +26,12 @@ New Generation of Carrier UI
       "init_after": []
     }
     ```
-* Create config file for you plugin `config.yml`
+* Create config file for you plugin named `config.yml` right inside the plugin directory
 * Create `module.py` with class Module, inherited from pylon `ModuleModel`
+  ```python
+  class Module(module.ModuleModel):
+    """ Pylon module """
+  ```
 * define `init` and `deinit` methods
 * `__init__` method should look like:
     ```python
@@ -36,39 +40,93 @@ New Generation of Carrier UI
         self.root_path = root_path
         self.context = context
     ```
-  * `settings`  - _contains config data from your `config.yml`_
-  * `context`   - _contains data from pylon. Global pylon settings are accessible via `context.settings`_
-  * `root_path` - _prefix for plugin blueprints_
+    * `settings`  - _contains config data from your `config.yml`_
+    * `context`   - _contains data from pylon. Global pylon settings are accessible via `context.settings`_
+    * `root_path` - _prefix for plugin blueprints_
+* `def deinit(self): ...` is just a destructor, so place there whatever is needed for your plugin
 * Optionally create `requirements.txt` with special modules required by your plugin
     * upon launch requirements will be installed automatically into `./site-packages` folder in plugin directory
 
 ## Market plugin info:
 * Downloads plugins from defined source
-* Updates plugins automatically or just notifies
+  * supported sources are `git` and `http` containing zipped plugin 
+* Updates plugins automatically _(if set)_ or just notifies
 * Installs dependencies for every plugin
 
 All settings located in .yml
-* plugin_repo: 'path/to/plugins.json' - _.json file http url with entries of plugins available_
-* requirements:
-    raise_on_attention: false - _throws error on non-conflicting requirements that need manual attention_
-* auto_update_plugins: true - _updates plugins automatically whenever update detected_
-* preordered_plugins:
-  - 'auth_root'
-  - 'projects' - _used to set plugins that you require regardless of dependencies_
-    _can also be set in PREORDERED_PLUGINS env variable in `auth_root,projects` format_
+*  ```yaml
+    plugin_repo:
+      type: file
+      path: './config/plugins_local.json'
+    ```
+    ```yaml
+    plugin_repo:
+      type: http
+      path: 'https://raw.githubusercontent.com/carrier-io/centry/main/config/plugins.json'
+    ```
+   _.json file with entries of plugins available. Supported types: `file`, `http`_
+
+* ```yaml
+  requirements:
+    raise_on_attention: false
+  ```
+  _throws error on non-conflicting requirements that need manual attention_
+  
+* ```yaml
+  auto_update_plugins: false
+  ```
+  _updates plugins automatically whenever update detected_
+  
+* ```yaml
+  ignore_updates:
+    - plugin_1
+    - plugin_3
+  ```  
+  _ignores checks for updates for indicated plugins_
+
+* ```yaml
+  preordered_plugins:
+    - plugin_1
+    - plugin_3
+  ```
+   _used to set plugins that you require regardless of dependencies.
+   This option can also be set in PREORDERED_PLUGINS env variable in `plugin_1,plugin_3` format_
+  
+* ```yaml
+  git_config:
+    default:
+      username:
+      password:
+      key:
+      key_data:
+    plugin_1:
+      username: us3r
+      password: passw0rd
+  ```
+  _sets git configuration for market's git manager. 
+  `default` is used globally, but special settings can be set for each plugin individually with named section like `plugin_1`_
+
 
 #### plugins.json format:
 ```json
-{
-  "projects": {
-    "metadata": "https://raw.githubusercontent.com/carrier-io/projects/main/metadata.json",
-    "requirements": "https://raw.githubusercontent.com/carrier-io/projects/main/requirements.txt",
-    "data": "https://github.com/carrier-io/projects/archive/refs/heads/main.zip"
+ {
+  "plugin_1": {
+    "source": {
+      "type": "git",
+      "url": "https://my/git/url/plugin_1.git"
+    },
+    "objects": {
+      "metadata": "https://url/to/plugin/metadata/metadata.json"
+    }
   },
-  "shared": {
-    "metadata": "https://raw.githubusercontent.com/carrier-io/shared/main/metadata.json",
-    "requirements": "https://raw.githubusercontent.com/carrier-io/shared/main/requirements.txt",
-    "data": "https://github.com/carrier-io/shared/archive/refs/heads/main.zip"
+  "plugin_3": {
+    "source": {
+      "type": "http",
+      "url": "https://my/zip/url/plugin_3.zip"
+    },
+    "objects": {
+      "metadata": "https://url/to/plugin/metadata/metadata.json"
+    }
   }
 }
 ```
