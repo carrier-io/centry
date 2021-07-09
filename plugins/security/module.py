@@ -45,9 +45,10 @@ class Module(module.ModuleModel):
         from .api.test import SecurityTestApi
         from .api.security_results_api import SecurityResultsApi
         from .api.security_dispatcher import SecuritySeedDispatcher
-        from .api.security_report_api import FindingsAPI
+        from .api.security_findings_api import FindingsAPI
         from .api.update_test_status import TestStatusUpdater
         from .api.get_loki_url import GetLokiUrl
+        from .api.security_report_api import SecurityReportAPI
         add_resource_to_api(
             self.context.api, GetLokiUrl,
             "/security/<int:project_id>/get_url",
@@ -79,6 +80,10 @@ class Module(module.ModuleModel):
             self.context.api, TestStatusUpdater,
             "/security/<int:project_id>/update_status/<int:test_id>",
             "/security/<int:project_id>/update_status/<string:test_id>"
+        )
+        add_resource_to_api(
+            self.context.api, SecurityReportAPI,
+            "/security/<int:project_id>"
         )
 
     def deinit(self):  # pylint: disable=R0201

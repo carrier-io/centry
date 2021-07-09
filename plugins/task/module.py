@@ -44,9 +44,11 @@ class Module(module.ModuleModel):
         from .api.tasks import TasksApi
         from .api.task_upgrade_api import TaskUpgradeApi
         from .api.task import TaskApi
+        from .api.task_actions import TaskActionApi
         add_resource_to_api(self.context.api, TaskApi, "/task/<int:project_id>/<string:task_id>")
         add_resource_to_api(self.context.api, TasksApi, "/task/<int:project_id>")
         add_resource_to_api(self.context.api, TaskUpgradeApi, "/upgrade/<int:project_id>/task")
+        add_resource_to_api(self.context.api, TaskActionApi, "/task/<string:task_id>/<string:action>")
 
         from .rpc_worker import tasks_count, create, list_tasks
         self.context.rpc_manager.register_function(create, name='task_create')

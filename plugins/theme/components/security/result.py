@@ -1,9 +1,5 @@
 from flask import request, render_template
 
-from pylon.core.tools import log
-from pylon.core.tools.minio import MinIOHelper
-from plugins.project.connectors.secrets import get_project_hidden_secrets
-
 
 def result_findings(context, slot, payload):
     return render_template(

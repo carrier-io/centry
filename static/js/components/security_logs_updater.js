@@ -11,7 +11,6 @@ var app = new Vue({
     },
     mounted() {
         websocket_connect();
-//        state_refresh();
     },
     updated() {
         var item = $("#logs-body");
@@ -23,16 +22,16 @@ var app = new Vue({
 function websocket_connect() {
     test_id = page_params.get('test_id')
     project_id = page_params.get('project_id')
+    result_test_id = page_params.get('result_test_id')
     $.ajax({
-        url: `/api/v1/security/${project_id}/get_url?task_id=${test_id}`,
+        url: `/api/v1/security/${project_id}/get_url?task_id=${test_id}&result_test_id=${result_test_id}`,
         cache: false,
         contentType: false,
         processData: false,
         method: 'GET',
         success: function(data){
-            var full_ws_url = data['websocket_url']
-            console.log(full_ws_url)
-            socket = new WebSocket(full_ws_url);
+            full_ws_url = data['websocket_url']
+            socket = new WebSocket(`${full_ws_url}`);
             socket.onmessage = on_websocket_message;
             socket.onopen = on_websocket_open;
             socket.onclose = on_websocket_close;

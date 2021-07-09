@@ -118,10 +118,12 @@ class SecurityTestsApi(RestResource):
             security_results.insert()
 
             event = []
+            test.results_test_id = security_results.id
+            test.commit()
             event.append(test.configure_execution_json("cc"))
 
             response = exec_test(project.id, event)
 
             return response
 
-        return test.to_json(exclude_fields=("id",))
+        return test.to_json()

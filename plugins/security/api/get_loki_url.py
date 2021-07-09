@@ -2,13 +2,11 @@ import json
 import gzip
 
 import flask
-from sqlalchemy import and_
 
 from pylon.core.tools import log
 from pylon.core.seeds.minio import MinIOHelper
 from plugins.base.utils.restApi import RestResource
 from plugins.base.utils.api_utils import build_req_parser
-from ..models.security_results import SecurityResultsDAST
 
 
 class GetLokiUrl(RestResource):
@@ -20,31 +18,33 @@ class GetLokiUrl(RestResource):
         super().__init__()
         self.__init_req_parsers()
         from flask import current_app
-        self.settings = settings
-        # self.app_setting = current_app.config["SETTINGS"]
+        self.settings = current_app.config["CONTEXT"]
 
     def __init_req_parsers(self):
         self.get_parser = build_req_parser(rules=self._get_rules)
 
     def get(self, project_id: int):
 
-        # state = self._get_task_state()
         key = flask.request.args.get("task_id", None)
-        # if key is None or key not in state:
-        #     return {"message": ""}, 404
+        result_key = flask.request.args.get("result_test_id", None)
+        if not key or not result_key:  # or key not in state:
+            return {"message": ""}, 404
 
-        # websocket_base_url = self.settings["logs"]["url"]
-        websocket_base_url = "https://127.0.0.1:3100/api/v1/push"
-        websocket_base_url = websocket_base_url.replace("https://", "wss://")
+        websocket_base_url = self.settings.settings['loki']['url']
+        websocket_base_url = websocket_base_url.replace("http://", "ws://")
         websocket_base_url = websocket_base_url.replace("api/v1/push", "api/v1/tail")
-        #
-        logs_query = "{" + f'task_key="{key}"' + "}"
+
+        # TODO: probably need to rename params
+        # logs_query = "{" + f'task_key="{key}"' + "}"
+        logs_query = "{" + f'task_key="{key}"&result_test_id="{result_key}"&project_id="{project_id}"' + "}"
+
+        # TODO: Uncomment or re-write when all settings will be ready
+        # state = self._get_task_state()
         # logs_start = state[key].get("ts_start", 0)
+        logs_start = 0
         logs_limit = 10000000000
 
-        # return {"websocket_url": f"{websocket_base_url}?query={logs_query}&start={logs_start}&limit={logs_limit}" }
-
-        return {"websocket_url": f"{websocket_base_url}?query={logs_query}&start=0&limit=1000000" }
+        return {"websocket_url": f"{websocket_base_url}?query={logs_query}&start={logs_start}&limit={logs_limit}"}
 
     def _get_minio(self):  # pylint: disable=R0201
         return MinIOHelper.get_client(self.app_setting["storage"])

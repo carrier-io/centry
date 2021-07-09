@@ -29,6 +29,15 @@ class ProjectQuota(AbstractBaseMixin, Base):
     storage_space = Column(Integer, unique=False)
     data_retention_limit = Column(Integer, unique=False)
     last_update_time = Column(DateTime, server_default=utcnow())
+    ##
+    name = Column(String, unique=False)
+    performance_test_runs = Column(Integer, unique=False, default=0)  # per month
+    ui_performance_test_runs = Column(Integer, unique=False, default=0)  # per month
+    sast_scans = Column(Integer, unique=False, default=0)  # total active
+    dast_scans = Column(Integer, unique=False, default=0)  # per month
+    public_pool_workers = Column(Integer, unique=False, default=0)
+    tasks_count = Column(Integer, unique=False, default=0)
+    tasks_executions = Column(Integer, unique=False, default=0)
 
     def update(self, vuh_limit, storage_space, data_retention_limit):
         self.vuh_limit = vuh_limit

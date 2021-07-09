@@ -1,3 +1,8 @@
+{%if config.scanners %}
+{%set left_scanners=config.left_scanners %}
+{%set right_scanners=config.right_scanners %}
+{%endif%}
+
 <div class="row p-0 pl-4">
     <div class="col">
         <h4 class="mb-0 mt-0">Scanners</h4>
@@ -40,161 +45,11 @@
         </ul>
     </div>
 </div>
-<div class="row pl-4 pr-4 mb-3">
+<div class="row pl-4 pr-4 mb-3" id="scannersCardsContainer">
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="qualysCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">Qualys</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" data-toggle="collapse" data-target="#qualysSettings" aria-expanded="false"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="qualys_checkbox">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="collapse ml-3 mr-3" id="qualysSettings">
-
-                <div class="form-group mb-0 mt-0 pr-4">
-                    <label class="form-control-label" for="qualys_profile_id">Option Profile ID</label>
-                    <input type="text" id="qualys_profile_id" class="form-control form-control-alternative"
-                           placeholder="Profile ID">
-                </div>
-
-                <div class="form-group mb-0 mt-0 pr-4">
-                    <label class="form-control-label" for="qualys_template_id">Report template ID</label>
-                    <input type="text" id="qualys_template_id" class="form-control form-control-alternative"
-                           placeholder="Template ID">
-                </div>
-
-                <div class="form-group mb-0 mt-0 pr-4" id="qualys_scanner_type">
-                    <label class="form-control-label">Scanner type</label><br>
-
-                        <input type="radio" id="QualysScannerType1"
-                            name="scanner_type" value="external" style="vertical-align: middle">
-                        <label for="QualysScannerType1"><b>External</b></label><br>
-
-
-                        <input type="radio" id="QualysScannerType2"
-                            name="scanner_type" value="internal" style="vertical-align: middle">
-                        <label for="QualysScannerType2"><b>Internal</b></label>
-                </div>
-
-                <div class="form-group" id="scanner_pool">
-                    <div class="row">
-                        <div class="col ml-0 pl-0">
-                            <label class="form-control-label" for="scanner_pool">Qualys scanner pool</label>
-                        </div>
-                        <div class="col-xs text-right pt-3">
-                            <div class="col-xs text-right">
-                                    <button type="button" class="btn btn-nooutline-secondary pt-1 mr-2" onclick="addNewURL('scanner_pool', 'Key')"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="owaspzapCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">OWASP ZAP</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('owaspzapCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="owaspzap">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="niktoCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">Nikto</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="nikto">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="nmapCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">NMap</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('nmapCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="nmap">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
+        {{ template_slot(left_scanners, payload=config)|safe }}
     </div>
     <div class="col-6">
-        <div class="card ml-0 mr-0" id="masscanCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">Masscan</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('masscanCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="masscan">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="SSLyzeCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">SSLyze</label>
-                </div>
-                <div class="col-xs text-right">
-                    <span style="color: #FFD700; vertical-align:middle">&#9888;</span><small> Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('SSLyzeCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="SSLyze">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="AEMhackerCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">AEM Hacker</label>
-                </div>
-                <div class="col-xs text-right">
-                    <span style="color: #FFD700; vertical-align:middle">&#9888;</span><small> Scanner doesn't support exceptions</small><button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('AEMhackerCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="AEMhacker">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card ml-0 mr-0" id="w3afCard">
-            <div class="row">
-                <div class="col">
-                    <label class="form-control-label mb-0 mt-1">W3af</label>
-                </div>
-                <div class="col-xs text-right">
-                    <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('w3afCard')"><i class="fas fa-cog"></i></button>
-                    <label class="custom-toggle mr-3 mb-0 align-middle">
-                      <input type="checkbox" id="w3af">
-                      <span class="custom-toggle-slider rounded-circle"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
+        {{ template_slot(right_scanners, payload=config)|safe }}
     </div>
 </div>

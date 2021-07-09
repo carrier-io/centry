@@ -1,0 +1,16 @@
+<div class="card ml-0 mr-0" id="niktoCard">
+    <div class="row">
+        <div class="col">
+            <label class="form-control-label mb-0 mt-1">Nikto</label>
+        </div>
+        <div class="col-xs text-right">
+            <button type="button" class="btn btn-nooutline-secondary p-0 pr-3 pl-3 mr-0" onclick="toggleCardsRows('niktoCard')"><i class="fas fa-cog"></i></button>
+            <label class="custom-toggle mr-3 mb-0 align-middle">
+              <input type="checkbox" id="nikto_checkbox">
+              <span class="custom-toggle-slider rounded-circle"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('nikto.static', filename='js/components/nikto_parser.js') }}" type="text/javascript"></script>

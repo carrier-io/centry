@@ -1,13 +1,13 @@
 var page_params = new URLSearchParams(window.location.search);
 
 $(document).ready(function() {
-    updateRowAbove(page_params.get('test_id'));
+    updateRowAbove(page_params.get('result_test_id'));
 })
 
 var statuses_before = []
 
 function getTestsMainInfo() {
-    test_id = page_params.get('test_id')
+    test_id = page_params.get('result_test_id')
     $.ajax({
         url: `/api/v1/security/${getSelectedProjectId()}/dast/${test_id}`,
         cache: false,
