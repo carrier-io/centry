@@ -852,3 +852,104 @@ button.d-trunc span {
     width: 16px;
     height: 16px;
 }
+
+select.custom-selector-picker {
+  display: inline-block;
+  width: 40%;
+  height: calc(1.5em + 1.25rem + 2px);
+  padding: 0.625rem 1.75rem 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #8898aa;
+  vertical-align: middle;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%2332325d' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
+  background-color: #fff;
+  border: 0;
+  border-radius: 0.25rem;
+  appearance: none;
+}
+
+.btn-link {
+    color: var(--primary);
+}
+
+.detail-view {
+    background-color: #d8e6f0;
+}
+
+.dropdown-menu .dropdown-menu {
+    top: auto;
+    left: -100%;
+    transform: translateY(-2rem);
+}
+
+.dropdown-item + .dropdown-menu {
+    display: none;
+}
+
+.dropdown-item.submenu::after {
+    content: '▸';
+    margin-left: 0.5rem;
+}
+
+.dropdown-item:hover + .dropdown-menu,
+.dropdown-menu:hover {
+    display: block;
+}
+
+.status_false_positive {
+    background-color: #e0f2fe;
+    color: #2f7df1;
+}
+
+.status_valid {
+    background-color: #fff0f0;
+    color: #f32626;
+}
+
+.status_ignored {
+    background-color: #e0e8f3;
+    color: var(--primary);
+}
+
+.severity_critical {
+    background-color: #fff0f0;
+    color: #f32626;
+}
+
+.severity_high {
+    background-color: #ffeddd;
+    color: #da7313;
+}
+
+.severity_medium {
+    background-color: #fffbe7;
+    color: #d0bf29;
+}
+
+.severity_low {
+    background-color: #e7ffe7;
+    color: #12ad18;
+}
+
+.severity_info {
+    background-color: #e0f2fe;
+    color: #458efc;
+}
+
+.space-progress {
+    height: 100%;
+    border-radius: 0.3rem;
+    background-color: #c9ffeb;
+}
+
+#progressbar {
+    width: 0%;
+    background-color: #68f2c0;
+}
+
+.project_status_good {
+    background-color: #45DE9D;
+    color: #ffffff;
+}

@@ -115,5 +115,77 @@
     "objects": {
       "metadata": "https://raw.githubusercontent.com/carrier-io/theme/main/metadata.json"
     }
+  },
+    "security_scanner_zap": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_zap.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_zap/main/metadata.json"
+    }
+  },
+  "security_scanner_qualys": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_qualys.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_qualys/main/metadata.json"
+    }
+  },
+  "security_scanner_aem": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_aem.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_aem/main/metadata.json"
+    }
+  },
+  "security_scanner_masscan": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_masscan.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_masscan/main/metadata.json"
+    }
+  },
+  "security_scanner_w3af": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_w3af.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_w3af/main/metadata.json"
+    }
+  },
+  "security_scanner_nikto": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_nikto.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_nikto/main/metadata.json"
+    }
+  },
+    "security_scanner_sslyze": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_sslyze.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_sslyze/main/metadata.json"
+    }
+  },
+    "security_scanner_nmap": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/security_scanner_nmap.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_nmap/main/metadata.json"
+    }
   }
 }
