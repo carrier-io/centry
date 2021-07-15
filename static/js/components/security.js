@@ -1,3 +1,7 @@
+var scanners_cards = {};
+var edit_test = false;
+
+
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
         sanitizeFn: function(content) {return content}
@@ -13,6 +17,11 @@ $('#severity_filter').click(function() {
 })
 
 $('#createApplicationTest').on('hide.bs.modal', function(e) {
+    edit_test = false;
+    $("#submit").html(`<i class="fas fa-play"></i>`);
+    $("#save").html(`<i class="fas fa-save"></i>`);
+    $("#submit").removeClass("disabled");
+    $("#save").removeClass("disabled");
     cleanAppTestModal()
 });
 
@@ -41,7 +50,7 @@ function cleanAppTestModal() {
 }
 
 function test_name_button(value, row, index) {
-    return `<a class="test form-control-label" href="#" role="button">${row.name}</a>`
+    return `<a class="test form-control-label" href="?chapter=Security&module=Result&page=list&project_id=${getSelectedProjectId()}&result_test_id=${row.id}&test_id=${row.test_id}" role="button">${row.name}</a>`
 }
 
 var click_name = {
@@ -117,6 +126,7 @@ var status_events = {
     },
 
     "click .settings": function (e, value, row, index) {
+        edit_test = row['test_uid'];
         $("#createApplicationTest").modal('show');
 
 //        Fill main data
@@ -158,6 +168,57 @@ var status_events = {
     }
 }
 
+function getScannersData(){
+    scannersContainer = document.getElementById("scannersCardsContainer");
+    cards = scannersContainer.getElementsByClassName("card");
+
+    for (i = 0; i < cards.length; i++) {
+        scanner_id = cards[i].id
+        window[scanner_id]();
+    }
+}
+
+function saveTest(data) {
+    if (edit_test) {
+        $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'PUT',
+          success: function(data){
+              $("#submit").html(`<i class="fas fa-play"></i>`);
+              $("#save").html(`<i class="fas fa-save"></i>`);
+              $("#submit").removeClass("disabled");
+              $("#save").addClass("disabled");
+              $("#createApplicationTest").modal('hide');
+              $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
+          }
+        });
+    } else {
+        $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          success: function(data){
+              $("#submit").html(`<i class="fas fa-play"></i>`);
+              $("#save").html(`<i class="fas fa-save"></i>`);
+              $("#submit").removeClass("disabled");
+              $("#save").addClass("disabled");
+              $("#createApplicationTest").modal('hide');
+              $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
+          }
+        }
+      );
+    }
+    edit_test = false;
+}
 
 function submitAppTest(run_test=false) {
       $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
@@ -167,7 +228,6 @@ function submitAppTest(run_test=false) {
 
 //      Main variables
       var urls_params = [[], []]
-      var scanners_cards = {qualys: {}}
       var run_test = run_test
       var processing_cards = {"minimal_security_filter": null}
 
@@ -182,18 +242,7 @@ function submitAppTest(run_test=false) {
       })
 
 //      --Scanner's cards--
-//      Qualys
-      if ($("#qualys_checkbox").prop("checked")){
-        scanners_cards.qualys["qualys_profile_id"] = $("#qualys_profile_id").val()
-        scanners_cards.qualys["qualys_template_id"] = $("#qualys_template_id").val()
-        scanners_cards.qualys["scanner_type"] = $("input[name=scanner_type]:checked", "#qualys_scanner_type").val()
-        scanners_cards.qualys["scanner_pool"] = []
-
-        $("#scanner_pool .row").slice(1,).each(function(_, item) {
-            var scanner_pool = $(item).find('input[type=text]')
-            scanners_cards.qualys["scanner_pool"].push(scanner_pool.val())
-        })
-      }
+      getScannersData();
 
 //      --Processing's cards--
 //      Min security filter
@@ -215,23 +264,24 @@ function submitAppTest(run_test=false) {
 //      var reporting_cards = reportingCards()
 //      data.append("reporting_cards", JSON.stringify(reporting_cards))
 
+       saveTest(data)
 
-      $.ajax({
-          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
-          data: data,
-          cache: false,
-          contentType: false,
-          processData: false,
-          method: 'POST',
-          success: function(data){
-              $("#submit").html(`<i class="fas fa-play"></i>`);
-              $("#save").html(`<i class="fas fa-save"></i>`);
-              $("#submit").removeClass("disabled");
-              $("#save").addClass("disabled");
-              $("#createApplicationTest").modal('hide');
-              $("#tests-list").bootstrapTable('refresh');
-              $("#results-list").bootstrapTable('refresh');
-          }
-        }
-      );
+//      $.ajax({
+//          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
+//          data: data,
+//          cache: false,
+//          contentType: false,
+//          processData: false,
+//          method: 'POST',
+//          success: function(data){
+//              $("#submit").html(`<i class="fas fa-play"></i>`);
+//              $("#save").html(`<i class="fas fa-save"></i>`);
+//              $("#submit").removeClass("disabled");
+//              $("#save").addClass("disabled");
+//              $("#createApplicationTest").modal('hide');
+//              $("#tests-list").bootstrapTable('refresh');
+//              $("#results-list").bootstrapTable('refresh');
+//          }
+//        }
+//      );
     }
