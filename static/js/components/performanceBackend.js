@@ -186,5 +186,45 @@ function nameStyle(value, row, index) {
 function runTestModal(test_id) {
     var test_data = $('#tests-list').bootstrapTable('getRowByUniqueId', test_id);
     console.log(test_data);
+    $('#run_test').removeAttr('onclick');
+    $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
     $("#runTestModal").modal('show');
 }
+
+function runTest(test_id) {
+        console.log(`going to run test ${test_id}`)
+        var params = {}
+        $("#nav-test-params .test_param").each(function() {
+           if ($(this).children()[0].innerText !== "" && $(this).children()[1].value !== "") {
+                params[$(this).children()[0].innerText] = $(this).children()[1].value;
+           }
+        });
+        var env_vars = {}
+        $("#nav-runner-env-vars .env_vars").each(function() {
+           if ($(this).children()[0].innerText !== "" && $(this).children()[1].value !== "") {
+                env_vars[$(this).children()[0].innerText] = $(this).children()[1].value;
+           }
+        });
+        var cc_env_vars = {}
+        $("#nav-cc-env-vars .cc_env_vars").each(function() {
+           if ($(this).children()[0].innerText !== "" && $(this).children()[1].value !== "") {
+                cc_env_vars[$(this).children()[0].innerText] = $(this).children()[1].value;
+           }
+        });
+        var data = {
+            'params': JSON.stringify(params),
+            'env_vars': JSON.stringify(env_vars),
+            'cc_env_vars': JSON.stringify(cc_env_vars),
+            'parallel': $('#runTest_parallel').val(),
+            'region': $('#runTest_region').val()
+        }
+        $.ajax({
+            url: `/api/v1/tests/${getSelectedProjectId()}/backend/${test_id}`,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (result) {
+                console.log("Test started")
+            }
+        });
+    }

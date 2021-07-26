@@ -17,6 +17,7 @@ preordered_plugins:
   - theme
   - secrets
   - artifacts
+  - backend_performance
 
 git_config:
   default:
