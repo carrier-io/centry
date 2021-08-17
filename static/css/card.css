@@ -1,0 +1,215 @@
+.card {
+  background-color: var(--white);
+  border: 0px;
+  border-radius: 4px;
+  box-shadow: var(--bloc-shadow);
+}
+
+.card .row .col {
+  padding-left: 15px;
+  padding-right: 0px;
+}
+
+.card .row .col:last-child {
+  padding-right: 15px;
+}
+
+.card .card-header {
+  background-color: var(--white);
+  border: 0px;
+  margin-top: 10px;
+}
+
+.card .card-body {
+  padding-top: 0;
+}
+
+.card-12 {
+  margin: 20px 40px 0px 40px;
+}
+
+.card-x {
+  width: 100%;
+}
+
+.d-flex .card-x:first-child {
+  margin: 20px 10px 0px 40px;
+}
+
+.d-flex .card-x:nth-child(n + 2) {
+  margin: 20px 10px 0px 10px;
+}
+
+.d-flex .card-x:last-child {
+  margin: 20px 40px 0px 10px;
+}
+
+.card-sm {
+  border-radius: 4px !important;
+  box-shadow: none;
+  min-width: 170px;
+}
+
+.card-sm .card-header {
+  font-weight: 700;
+  font-size: 24px;
+  text-align: end;
+  background-color: transparent;
+  padding: 10px 20px 0px 20px;
+  margin: 0;
+}
+
+.card-sm .card-body {
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-bottom: 1px solid;
+  padding: 0;
+  margin: 0px 20px 10px 20px;
+}
+.card-stripped {
+  background-color: var(--white);
+  color: var(--basic);
+  border: 1px dashed var(--borders);
+  box-shadow: none;
+}
+
+.card-stripped .card-body {
+  border-bottom: none;
+}
+
+.card-green {
+  background-color: var(--card-green);
+  color: var(--green);
+  border: 1px solid var(--border-green20);
+}
+.card-green .card-body {
+  border-bottom-color: var(--green60);
+}
+.card-blue {
+  background-color: var(--card-blue);
+  color: var(--blue);
+  border: 1px solid var(--border-blue20);
+}
+.card-blue .card-body {
+  border-bottom-color: var(--blue60);
+}
+.card-red {
+  background-color: var(--card-red);
+  color: var(--error);
+  border: 1px solid var(--border-red20);
+}
+.card-red .card-body {
+  border-bottom-color: var(--error60);
+}
+.card-azure {
+  background-color: var(--card-lightblue);
+  color: var(--info);
+  border: 1px solid var(--border-azure20);
+}
+.card-azure .card-body {
+  border-bottom-color: var(--info60);
+}
+.card-magento {
+  background-color: var(--card-magento);
+  color: var(--basic);
+  border: 1px solid var(--border-magento20);
+}
+.card-magento .card-body {
+  border-bottom-color: var(--basic60);
+}
+.card-gray {
+  background-color: var(--background);
+  color: var(--main-text);
+  border: 1px solid var(--border-gray20);
+}
+.card-gray .card-body {
+  border-bottom-color: var(--border-gray);
+}
+
+.card-yellow {
+  background-color: var(--bg-yellow);
+  color: var(--text-yellow);
+  border: 1px solid var(--boder-yellow20);
+}
+.card-yellow .card-body {
+  border-bottom-color: var(--boder-yellow);
+}
+
+.card-orange {
+  background-color: var(--bg-orange);
+  color: var(--text-orange);
+  border: 1px solid var(--boder-orange20);
+}
+.card-orange .card-body {
+  border-bottom-color: var(--boder-orange);
+}
+
+.card-sm-table,
+.card-sm-tag-table {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.card-sm-table .card-body,
+.card-sm-tag-table .card-body {
+  padding: 0;
+  margin-top: 20px;
+}
+
+.card-sm-table table,
+.response-codes,
+.card-sm-tag-table table {
+  width: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--text-decoration);
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.response-codes {
+  width: fit-content !important;
+}
+
+.card-sm-table table td:nth-child(odd),
+.response-codes td:nth-child(odd),
+.card-sm-tag-table table tr:nth-child(odd) {
+  font-weight: 300;
+}
+
+.card-sm-table table td:nth-child(odd),
+.card-sm-tag-table table tr:nth-child(odd) {
+  padding-right: 10px;
+  text-transform: uppercase;
+}
+
+.response-codes td:nth-child(odd) {
+  text-transform: capitalize;
+  padding-right: 5px;
+}
+
+.card-sm-table table td:nth-child(even),
+.response-codes td:nth-child(even),
+.card-sm-tag-table table tr:nth-child(even) {
+  padding-right: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100vw - 200px);
+}
+
+.response-codes td:nth-child(even) {
+  font-weight: 700;
+  padding-right: 10px;
+}
+
+.card-sm-table table td:nth-child(even),
+.card-sm-tag-table table tr:nth-child(even) {
+  padding-right: 20px;
+}
+
+.card-table {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+}

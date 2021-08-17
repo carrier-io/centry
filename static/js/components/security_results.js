@@ -7,9 +7,10 @@ $(document).ready(function() {
 var statuses_before = []
 
 function getTestsMainInfo() {
-    test_id = page_params.get('result_test_id')
+    test_id = page_params.get('result_test_id');
+    project_id = page_params.get('project_id');
     $.ajax({
-        url: `/api/v1/security/${getSelectedProjectId()}/dast/${test_id}`,
+        url: `/api/v1/security/${project_id}/dast/${test_id}`,
         cache: false,
         contentType: false,
         processData: false,
@@ -40,7 +41,7 @@ function getTestsMainInfo() {
                 $("#rerun-test").show();
                 $("#config-test").show();
                 $("#all_findings").show();
-                test_id = page_params.get('test_id')
+                // test_id = page_params.get('test_id')
                 updateRowAbove(test_id);
                 refreshTable(test_id);
                 $("#all_artifacts").show();

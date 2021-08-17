@@ -100,18 +100,6 @@ class WebMixin:
                     log.error('Response failed with status %s', response.status)
 
 
-# class GitSettings:
-#     def __init__(self, market_data, plugin_git_settings):
-#         self.market_data = market_data if market_data else {}
-#         self.plugin_git_settings = plugin_git_settings if plugin_git_settings else {}
-#
-#     def __getattr__(self, item):
-#         try:
-#             return self.plugin_git_settings[item]
-#         except KeyError:
-#             return self.market_data[item]
-
-
 class GitManagerMixin:
     git_manager = None
     git_config = None
@@ -158,7 +146,6 @@ class PluginDownloader(WebMixin, GitSubprocessMixin, GitManagerMixin):
         plugin.reload_metadata()
         self.plugins_to_download.add(plugin)
 
-
     async def clone_plugin(self, plugin: Plugin):
 
         try:
@@ -193,41 +180,11 @@ class PluginDownloader(WebMixin, GitSubprocessMixin, GitManagerMixin):
             ))
 
 
-    # async def download_plugin(self, plugin: Plugin) -> int:
-    #     log.info('Plugin download called %s', plugin)
-    #     try:
-    #         meta = await self.fetch_txt(self.market_data[plugin.name]['metadata'])
-    #         plugin.metadata = json.loads(meta)
-    #     except (KeyError, FetchError):
-    #         log.error('PLUGIN {} NOT FOUND'.format(plugin.name))
-    #         return 404
-    #     # plugin.path.mkdir()
-    #     self.tasks.append(asyncio.create_task(
-    #         self.download_plugin_zip(self.market_data[plugin.name]['data'], plugin),
-    #         name=f'Task_download_plugin_data_{plugin.name}'
-    #     ))
-    #
-    #     self.plugins_to_download.add(plugin)
-    #     async for dependency in self.resolve_dependencies(plugin):
-    #         self.tasks.append(asyncio.create_task(
-    #             self.download_plugin(dependency),
-    #             name=f'Task_download_plugin_{dependency.name}'
-    #         ))
-    #     return 200
-
-
-
     async def resolve_dependencies(self, plugin: Plugin) -> AsyncIterable[Plugin]:
         for parent_plugin in plugin.metadata['depends_on']:
             parent_plugin = Plugin(parent_plugin)
             if not parent_plugin.status_downloaded:
-                if parent_plugin in self.plugins_to_download:
-                    print('!AAAAAAAAAAAA!!!', 'ALREADY ASKED FOR DWNLD', parent_plugin)
                 yield parent_plugin
-                # yield asyncio.create_task(
-                #     self.download_plugin(parent_plugin),
-                #     name=f'Task_download_plugin_{plugin.name}'
-                # )
 
     async def gather_tasks(self):
         while pending := [task for task in self.tasks if not task.done()]:
@@ -289,23 +246,6 @@ async def run_downloader(plugins_list, plugin_repo: dict) -> PluginDownloader:
         if not plugin.status_downloaded:
             await downloader.clone_plugin(plugin)
     return downloader
-
-
-
-# async def run_zip_downloader(plugins_list, plugin_repo) -> PluginDownloader:
-#     repo_data = json.loads(await WebMixin.fetch_txt(plugin_repo))
-#
-#     downloader = PluginDownloader(market_data=repo_data)
-#
-#     for p in plugins_list:
-#         plugin = p
-#         if isinstance(p, str):
-#             plugin = Plugin(p)
-#         if not plugin.status_downloaded:
-#             await downloader.download_plugin(plugin)
-#         # async for task in downloader.resolve_dependencies(plugin):
-#         #     downloader.tasks.append(task)
-#     return downloader
 
 
 async def run_updater(plugins_list, plugin_repo) -> PluginUpdater:

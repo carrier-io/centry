@@ -1,66 +1,178 @@
 /* common */
+/* latin */
 @font-face {
-  font-display: swap;
-  font-family: 'Source Sans Pro';
+  font-family: "Source Sans Pro";
   font-style: normal;
-  font-weight: 400;
-  src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'),
-  url('../fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2'),
-  url('../fonts/source-sans-pro-v12-latin-regular.woff') format('woff');
-}
-
-@font-face {
+  font-weight: 300;
   font-display: swap;
-  font-family: 'Source Sans Pro';
+  src: url(https://fonts.gstatic.com/s/sourcesanspro/v14/6xKydSBYKcSV-LCoeQqfX1RYOo3ik4zwlxdu3cOWxw.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sourcesanspro/v14/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7lujVj9w.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 700;
-  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),
-  url('../fonts/source-sans-pro-v12-latin-700.woff2') format('woff2'),
-  url('../fonts/source-sans-pro-v12-latin-700.woff') format('woff');
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sourcesanspro/v14/6xKydSBYKcSV-LCoeQqfX1RYOo3ig4vwlxdu3cOWxw.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 700;
+}
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 18px;
+}
+h4 {
+  font-size: 16px;
+}
+h5 {
+  font-size: 14px;
+}
+h6,
+h7,
+h8 {
+  text-transform: uppercase;
+}
+h6 {
+  font-weight: 300;
+  font-size: 14px;
+}
+h7 {
+  font-weight: 400;
+  font-size: 12px;
+}
+h8 {
+  font-weight: 700;
+  font-size: 12px;
+}
+h9,
+h10 {
+  font-weight: 400;
+}
+h9 {
+  font-size: 14px;
+}
+h10 {
+  font-size: 12px;
+}
+h11,
+h12,
+h13 {
+  font-weight: 300;
+}
+h11 {
+  font-size: 18px;
+}
+h12 {
+  font-size: 14px;
+}
+h13 {
+  font-size: 12px;
 }
 
 :root {
-  --primary: rgb(87, 18, 176);
-  --primary-light: rgba(250, 247, 252, 1.0);
-  --highlight: rgba(255, 255, 255, 0.8);
-  --white: #fff;
-  --dark: #525f7f;
-  --bg: rgb(249, 250, 255);
-  --background: #E5E5E5;
-  --gray: #8898aa;
-  --blue-linear: linear-gradient(165.62deg, #531DED 5%, #3A22CD 32.74%, #291893 69.1%, #2D2589 98.3%);
-  --button-blue: #3B12B0;
-  --button-blue-hover: #432FBB;
-  --secondary: #f4f5f7;
-  --btn-light: #F2F2FF;
+  --basic: #5933c6;
+  --basic60: rgba(89, 51, 198, 0.35);
+  --basic-hover: #6947cb;
+  --basic25: #d5ccf1;
+  --pressed: #4627a0;
+  --pressed60: #907dc6;
+  --background: #f9faff;
+  --borders: #dbe2e8;
+  --tabs-btns-icns: #f2f2ff;
+  --main-text: #32325d;
+  --text-decoration: #525f7f;
+  --somegray: #757f99;
+  --border-gray: #9fa7bb;
+  --border-gray20: #eaeaf4;
+  --tip: #abb3b9;
+  --lines: #cad1d7;
+  --lines40: #eaedef;
+  --inactive: #f3f5f8;
+  --disabled: #c1c2d1;
+  --gray100: #f6f9fc;
+  --gray200: #eef3f6;
+  --white: #ffffff;
+  --black: #000;
+  --lightgray: #e0dee3;
+  --text-yellow: #dbc714;
+  --border-yellow20: rgba(239, 228, 130, 0.2);
+  --boder-yellow: #efe482;
+  --bg-yellow: #fffbe7;
+  --yellow: #fac933;
+  --purple: #432fbb;
+  --blue: rgb(94, 114, 228);
+  --blue60: rgba(94, 114, 228, 0.35);
+  --magenta: #e127ff;
+  --warn: #f89033;
+  --text-orange: #e97912;
+  --border-orange20: rgba(241, 194, 150, 0.2);
+  --boder-orange: #f1c296;
+  --bg-orange: #ffeddd;
+  --warn40: rgba(252, 154, 67, 0.4);
+  --green: rgb(43, 212, 141);
+  --green60: rgba(43, 212, 141, 0.35);
+  --error: rgb(243, 38, 38);
+  --error60: rgba(243, 38, 38, 0.35);
+  --error40: rgba(243, 38, 38, 0.4);
+  --border-red20: rgba(242, 180, 180, 0.2);
+  --info: rgb(41, 184, 245);
+  --info60: rgba(41, 184, 245, 0.35);
+  --card-magento: #ede8ff;
+  --border-magento20: rgba(196, 150, 241, 0.2);
+  --card-lightblue: #d3fcfc;
+  --border-azure20: rgba(91, 239, 239, 0.2);
+  --card-red: #fff0f0;
+  --card-blue: #e0f2fe;
+  --border-blue20: rgba(150, 192, 255, 0.2);
+  --card-green: #e7ffe7;
+  --border-green20: rgba(125, 214, 128, 0.2);
+  --blue-linear: linear-gradient(
+      139.18deg,
+      #7345fc 2.11%,
+      rgba(114, 69, 250, 0.26) 95.79%
+    ),
+    #341580;
+  --bloc-shadow: 0px 0px 8px rgba(18, 17, 97, 0.06);
+  --hover-shadow: 0px 2px 4px rgba(84, 51, 181, 0.15),
+    0px 0px 12px rgba(55, 32, 149, 0.04);
+  --hover-warn-shadow: 0px 2px 4px rgba(252, 154, 67, 0.15),
+    0px 0px 12px rgba(252, 154, 67, 0.04);
+  --hover-danger-shadow: 0px 2px 4px rgba(243, 38, 38, 0.15),
+    0px 0px 12px rgba(243, 38, 38, 0.04);
+}
 
-  --blue: #5e72e4;
-  --indigo: #5603ad;
-  --purple: #8965e0;
-  --pink: #f3a4b5;
-  --red: #f5365c;
-  --orange: #fb6340;
-  --yellow: #ffd600;
-  --green: #2dce89;
-  --teal: #11cdef;
-  --cyan: #2bffc6;
-  --gray-dark: #32325d;
-  --light: #ced4da;
-  --lighter: #e9ecef;
-  --success: #2dce89;
-  --info: #11cdef;
-  --warning: #fb6340;
-  --danger: #f5365c;
-  --light: #adb5bd;
-  --default: #172b4d;
-  --white: #fff;
-  --neutral: #fff;
-  --darker: black;
-  --breakpoint-xs: 0;
-  --breakpoint-sm: 576px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 992px;
-  --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Source Sans Pro", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+h2 a {
+  vertical-align: middle;
+  margin-right: 10px;
+  font-size: 16px;
+  color: var(--somegray);
 }
