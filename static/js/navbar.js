@@ -1,8 +1,8 @@
-var backendUrl = '/api/v1/project-session';
-var projectSelectId = '#projectSelect';
+const backendUrl = '/api/v1/project-session';
+const projectSelectId = '#projectSelect';
 
 
-async function setSelectedProjectOnBackend(projectId) {
+const setSelectedProjectOnBackend = async projectId => {
     const resp = await fetch(`${backendUrl}/${projectId}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -15,7 +15,7 @@ async function setSelectedProjectOnBackend(projectId) {
 }
 
 
-async function getSelectedProjectIdFromBackend() {
+const getSelectedProjectIdFromBackend = async () => {
     const resp = await fetch(backendUrl);
     if (resp.ok) {
         const projectData = await resp.json();
@@ -25,24 +25,24 @@ async function getSelectedProjectIdFromBackend() {
 }
 
 
-function getProjectNameFromId(projectId) {
+const getProjectNameFromId = projectId => {
     return $(projectSelectId).find(`[project_id=${projectId}]`).val()
 }
 
 
-function setSelectedProjectOnPage(projectId) {
+const setSelectedProjectOnPage = projectId => {
     localStorage.setItem(selectedProjectLocalStorageKey, projectId);
     $(projectSelectId).selectpicker('val', getProjectNameFromId(projectId))
 }
 
 
-async function loadProject() {
+const loadProject = async () => {
     const projectId = await getSelectedProjectIdFromBackend();
     setSelectedProjectOnPage(projectId);
 };
 
 
-async function setProject(projectId) {
+const setProject = async projectId => {
     localStorage.setItem(selectedProjectLocalStorageKey, projectId);
     const responseMessage = setSelectedProjectOnBackend(projectId);
     console.log(await responseMessage);
