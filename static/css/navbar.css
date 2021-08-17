@@ -1,0 +1,79 @@
+.main-nav {
+  background-color: var(--white);
+  box-shadow: var(--bloc-shadow);
+  padding-left: 0;
+  padding-right: 0;
+  height: 60px;
+  max-height: 60px;
+}
+
+.main-nav .chapters {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.main-nav > .bootstrap-select {
+  width: -webkit-fit-content !important;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  left: 10px;
+  top: 10px;
+  margin-right: 10px;
+  background: var(--blue-linear);
+  border-radius: 4px;
+}
+
+.logo > img {
+  display: block;
+  margin: auto;
+  margin-top: 5px;
+}
+
+.main-nav .bootstrap-select .filter-option {
+  max-height: 20px;
+}
+
+.chapters .bootstrap-select .dropdown-item {
+  text-transform: uppercase;
+}
+
+.main-nav .navbar-nav {
+  margin-left: 20px;
+}
+
+.main-nav .nav-link {
+  color: var(--main-text);
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.main-nav .nav-link:hover {
+  color: var(--basic-hover);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.main-nav .nav-link.active {
+  color: var(--basic);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.main-nav .nav-link.disabled {
+  color: var(--disabled);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.vl {
+  margin-left: 10px;
+  margin-right: 10px;
+  max-width: 1px;
+  height: 24px;
+  border-left: 1px solid var(--borders);
+}
