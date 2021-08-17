@@ -50,7 +50,14 @@ function cleanAppTestModal() {
 }
 
 function test_name_button(value, row, index) {
-    return `<a class="test form-control-label" href="?chapter=Security&module=Result&page=list&project_id=${getSelectedProjectId()}&result_test_id=${row.id}&test_id=${row.test_id}" role="button">${row.name}</a>`
+    const projectId = localStorage.getItem(selectedProjectLocalStorageKey);
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('module', 'Result');
+    searchParams.set('page', 'list');
+    searchParams.set('project_id', projectId);
+    searchParams.set('result_test_id', row.id);
+    searchParams.set('test_id', row.test_id);
+    return `<a class="test form-control-label" href="?${searchParams.toString()}" role="button">${row.name}</a>`
 }
 
 var click_name = {
@@ -251,7 +258,8 @@ function submitAppTest(run_test=false) {
       var data = new FormData();
 
       data.append('name', $('#testname').val());
-      data.append('project_name', document.getElementById("selected-project").textContent);
+      // data.append('project_name', document.getElementById("selected-project").textContent);
+      data.append('project_name', getProjectNameFromId(getSelectedProjectId()));
       data.append('test_env', $("#test_env").val());
       data.append('urls_to_scan', JSON.stringify(urls_params[0]));
       data.append('urls_exclusions', JSON.stringify(urls_params[1]));
