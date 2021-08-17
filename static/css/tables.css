@@ -1,0 +1,57 @@
+.table-borderless {
+  border: 0;
+}
+
+.thead-light th {
+  background-color: var(--background) !important;
+  border-top: 1px solid var(--lines) !important;
+  border-bottom: 1px solid var(--lines) !important;
+  text-transform: uppercase;
+  font-size: 12px !important;
+  color: var(--somegray) !important;
+  font-weight: 400;
+}
+
+.card-table table tr {
+  border-bottom: 1px solid var(--lines);
+}
+
+.card-table table td {
+  font-size: 12px;
+  font-weight: 300px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.card-table .bootstrap-table .fixed-table-container .fixed-table-body {
+  height: unset;
+  min-height: 210px;
+}
+
+.card-table .pagination-info {
+  font-size: 12px;
+  font-weight: 300;
+  padding-left: 40px;
+}
+
+.card-table ul.pagination {
+  padding-right: 20px;
+}
+
+.card-table ul.pagination li {
+  margin-left: 5px;
+}
+
+.card-table .page-link {
+  font-size: 12px;
+  padding: 4px 8px;
+  height: 24px !important;
+  min-width: 24px;
+  max-width: 24px;
+  font-weight: 400;
+  border-radius: 4px;
+}
+
+.card-table table .bs-checkbox input {
+  font-size: 24px;
+}

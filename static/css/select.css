@@ -1,0 +1,27 @@
+.dropdown-menu > div > ul > li > a.colored-select-red {
+    border-color: #FFF0F0;
+    color: #F32626;
+}
+
+.dropdown-menu > div > ul > li > a.colored-select-orange {
+    border-color: #FFEDDD;
+    color: #E97912;
+}
+
+.dropdown-menu > div > ul > li > a.colored-select-yellow {
+    border-color: #FFFBE7;
+    color: #DBC714;
+}
+.dropdown-menu > div > ul > li > a.colored-select-green {
+    border-color: #E7FFE7;
+    color: #18B64D;
+}
+.dropdown-menu > div > ul > li > a.colored-select-blue {
+    border-color: #E0F2FE;
+    color: #2F7DF1;
+}
+
+.dropdown-menu > div > ul > li > a.colored-select-darkblue {
+    border-color: #E0E8F3;
+    color: #32325D;
+}
