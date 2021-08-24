@@ -1,8 +1,0 @@
-body {
-  min-width: 1220px;
-  background-color: var(--background);
-}
-
-.vertical-center {
-  align-items: center;
-}
