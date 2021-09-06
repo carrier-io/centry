@@ -1,3 +1,7 @@
+var scanners_cards = {};
+var edit_test = false;
+
+
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
         sanitizeFn: function(content) {return content}
@@ -13,6 +17,11 @@ $('#severity_filter').click(function() {
 })
 
 $('#createApplicationTest').on('hide.bs.modal', function(e) {
+    edit_test = false;
+    $("#submit").html(`<i class="fas fa-play"></i>`);
+    $("#save").html(`<i class="fas fa-save"></i>`);
+    $("#submit").removeClass("disabled");
+    $("#save").removeClass("disabled");
     cleanAppTestModal()
 });
 
@@ -41,7 +50,14 @@ function cleanAppTestModal() {
 }
 
 function test_name_button(value, row, index) {
-    return `<a class="test form-control-label" href="#" role="button">${row.name}</a>`
+    const projectId = localStorage.getItem(selectedProjectLocalStorageKey);
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('module', 'Result');
+    searchParams.set('page', 'list');
+    searchParams.set('project_id', projectId);
+    searchParams.set('result_test_id', row.id);
+    searchParams.set('test_id', row.test_id);
+    return `<a class="test form-control-label" href="?${searchParams.toString()}" role="button">${row.name}</a>`
 }
 
 var click_name = {
@@ -117,6 +133,7 @@ var status_events = {
     },
 
     "click .settings": function (e, value, row, index) {
+        edit_test = row['test_uid'];
         $("#createApplicationTest").modal('show');
 
 //        Fill main data
@@ -158,65 +175,37 @@ var status_events = {
     }
 }
 
+function getScannersData(){
+    scannersContainer = document.getElementById("scannersCardsContainer");
+    cards = scannersContainer.getElementsByClassName("card");
 
-function submitAppTest(run_test=false) {
-      $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
-      $("#save").html(`<span class="spinner-border spinner-border-sm"></span>`);
-      $("#submit").addClass("disabled");
-      $("#save").addClass("disabled");
+    for (i = 0; i < cards.length; i++) {
+        scanner_id = cards[i].id
+        window[scanner_id]();
+    }
+}
 
-//      Main variables
-      var urls_params = [[], []]
-      var scanners_cards = {qualys: {}}
-      var run_test = run_test
-      var processing_cards = {"minimal_security_filter": null}
-
-//      Urls to scan and extensions
-      $("#url_to_scan .row").each(function(_, item) {
-        var url_ = $(item).find('input[type=text]')
-        urls_params[0].push(url_.val())
-      })
-      $("#exclusions .row").slice(1,).each(function(_, item) {
-        var url_ = $(item).find('input[type=text]')
-        urls_params[1].push(url_.val())
-      })
-
-//      --Scanner's cards--
-//      Qualys
-      if ($("#qualys_checkbox").prop("checked")){
-        scanners_cards.qualys["qualys_profile_id"] = $("#qualys_profile_id").val()
-        scanners_cards.qualys["qualys_template_id"] = $("#qualys_template_id").val()
-        scanners_cards.qualys["scanner_type"] = $("input[name=scanner_type]:checked", "#qualys_scanner_type").val()
-        scanners_cards.qualys["scanner_pool"] = []
-
-        $("#scanner_pool .row").slice(1,).each(function(_, item) {
-            var scanner_pool = $(item).find('input[type=text]')
-            scanners_cards.qualys["scanner_pool"].push(scanner_pool.val())
-        })
-      }
-
-//      --Processing's cards--
-//      Min security filter
-      processing_cards["minimal_security_filter"] = $("#severity").val()
-
-      var data = new FormData();
-
-      data.append('name', $('#testname').val());
-      data.append('project_name', document.getElementById("selected-project").textContent);
-      data.append('test_env', $("#test_env").val());
-      data.append('urls_to_scan', JSON.stringify(urls_params[0]));
-      data.append('urls_exclusions', JSON.stringify(urls_params[1]));
-      data.append('scanners_cards', JSON.stringify(scanners_cards));
-      data.append('reporting', JSON.stringify({}));
-      data.append('processing', JSON.stringify(processing_cards));
-      data.append('run_test', run_test)
-
-//      TODO: write reporting cards parser
-//      var reporting_cards = reportingCards()
-//      data.append("reporting_cards", JSON.stringify(reporting_cards))
-
-
-      $.ajax({
+function saveTest(data) {
+    if (edit_test) {
+        $.ajax({
+          url: `/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'PUT',
+          success: function(data){
+              $("#submit").html(`<i class="fas fa-play"></i>`);
+              $("#save").html(`<i class="fas fa-save"></i>`);
+              $("#submit").removeClass("disabled");
+              $("#save").addClass("disabled");
+              $("#createApplicationTest").modal('hide');
+              $("#tests-list").bootstrapTable('refresh');
+              $("#results-list").bootstrapTable('refresh');
+          }
+        });
+    } else {
+        $.ajax({
           url: `/api/v1/security/${getSelectedProjectId()}/dast`,
           data: data,
           cache: false,
@@ -234,4 +223,73 @@ function submitAppTest(run_test=false) {
           }
         }
       );
+    }
+    edit_test = false;
+}
+
+function submitAppTest(run_test=false) {
+      $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
+      $("#save").html(`<span class="spinner-border spinner-border-sm"></span>`);
+      $("#submit").addClass("disabled");
+      $("#save").addClass("disabled");
+
+//      Main variables
+      var urls_params = [[], []]
+      var run_test = run_test
+      var processing_cards = {"minimal_security_filter": null}
+
+//      Urls to scan and extensions
+      $("#url_to_scan .row").each(function(_, item) {
+        var url_ = $(item).find('input[type=text]')
+        urls_params[0].push(url_.val())
+      })
+      $("#exclusions .row").slice(1,).each(function(_, item) {
+        var url_ = $(item).find('input[type=text]')
+        urls_params[1].push(url_.val())
+      })
+
+//      --Scanner's cards--
+      getScannersData();
+
+//      --Processing's cards--
+//      Min security filter
+      processing_cards["minimal_security_filter"] = $("#severity").val()
+
+      var data = new FormData();
+
+      data.append('name', $('#testname').val());
+      // data.append('project_name', document.getElementById("selected-project").textContent);
+      data.append('project_name', getProjectNameFromId(getSelectedProjectId()));
+      data.append('test_env', $("#test_env").val());
+      data.append('urls_to_scan', JSON.stringify(urls_params[0]));
+      data.append('urls_exclusions', JSON.stringify(urls_params[1]));
+      data.append('scanners_cards', JSON.stringify(scanners_cards));
+      data.append('reporting', JSON.stringify({}));
+      data.append('processing', JSON.stringify(processing_cards));
+      data.append('run_test', run_test)
+
+//      TODO: write reporting cards parser
+//      var reporting_cards = reportingCards()
+//      data.append("reporting_cards", JSON.stringify(reporting_cards))
+
+       saveTest(data)
+
+//      $.ajax({
+//          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
+//          data: data,
+//          cache: false,
+//          contentType: false,
+//          processData: false,
+//          method: 'POST',
+//          success: function(data){
+//              $("#submit").html(`<i class="fas fa-play"></i>`);
+//              $("#save").html(`<i class="fas fa-save"></i>`);
+//              $("#submit").removeClass("disabled");
+//              $("#save").addClass("disabled");
+//              $("#createApplicationTest").modal('hide');
+//              $("#tests-list").bootstrapTable('refresh');
+//              $("#results-list").bootstrapTable('refresh');
+//          }
+//        }
+//      );
     }

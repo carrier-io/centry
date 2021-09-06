@@ -119,6 +119,16 @@ All settings located in .yml
       "metadata": "https://url/to/plugin/metadata/metadata.json"
     }
   },
+  "plugin_2": {
+    "source": {
+      "type": "git",
+      "url": "https://my/git/url/plugin_1.git",
+      "branch": "dev"
+    },
+    "objects": {
+      "metadata": "https://url/to/plugin/metadata/metadata.json"
+    }
+  },
   "plugin_3": {
     "source": {
       "type": "http",
