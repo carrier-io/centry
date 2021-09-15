@@ -44,6 +44,9 @@ function createTest() {
         var inp = $(item).find('input[type=text]')
         params[0][inp[0].value] = inp[1].value
       })
+      params[0]["test_name"] = $('#test_name').val()
+      params[0]["test_type"] = $('#test_type').val()
+      params[0]["env_type"] = $('#test_env').val()
       $("#extCard .row").slice(1,).each(function(_,item){
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
@@ -72,8 +75,10 @@ function createTest() {
       }
 
 
-      data.append('name', $('#testname').val());
-      data.append('parallel', $('#parallel').val());
+      data.append('name', $('#test_name').val());
+      // TODO add in test planner UI
+      //data.append('parallel', $('#parallel').val());
+      data.append('parallel', 1);
       data.append('region', $('#region').val());
       data.append('entrypoint', $('#entrypoint').val());
       data.append('runner', $('#runner').val());
@@ -146,7 +151,7 @@ function lgFormatter(value, row, index) {
     }
 }
 
-function actionFormatter(value, row, index) {
+function backendTestActionFormatter(value, row, index) {
     return `<button class="mr-1 btn btn-sx" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
     <button class="mr-1 btn btn-sx" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
     <div class="dropdown">

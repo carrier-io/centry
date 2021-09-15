@@ -99,13 +99,13 @@ function hideSecret(key) {
     });
 }
 
-function actionFormatter(value, row, index) {
+function secretsActionFormatter(value, row, index) {
     var key = row.name;
     return [
-    `<a class="project-select mr-2" href="javascript:void(0)" onclick="displaySecret('${key}', false)"><i class="far fa-eye"></i></span></a>`,
-    `<a class="project-select mr-2" href="javascript:void(0)" onclick="editSecret('${key}')"><i class="fas fa-pen"></i></span></a>`,
-    `<a class="project-select mr-2" href="javascript:void(0)" onclick="hideSecret('${key}')"><i class="fas fa-lock"></i></span></a>`,
-    `<a class="project-select mr-2" href="javascript:void(0)" onclick="deleteSecret('${key}')"><i class="fa fa-trash"></i></span></a>`
+    `<button type="button" class="btn btn-16 btn-action" onclick="displaySecret('${key}', false)"><i class="far fa-eye"></i></button>`,
+    `<button type="button" class="btn btn-16 btn-action" onclick="editSecret('${key}')"><i class="fas fa-pen"></i></button>`,
+    `<button type="button" class="btn btn-16 btn-action" onclick="hideSecret('${key}')"><i class="fas fa-lock"></i></button>`,
+    `<button type="button" class="btn btn-16 btn-action" onclick="deleteSecret('${key}')"><i class="fa fa-trash"></i></button>`
     ].join('')
 }
 
