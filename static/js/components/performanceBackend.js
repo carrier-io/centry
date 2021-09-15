@@ -110,18 +110,18 @@ function createTest() {
     }
 
 function addCSVSplit(id, key="", is_header="") {
-    $(`#${id}`).append(`<div class="row mt-2">
-    <div class="col-6 ml-0">
-        <input type="text" class="form-control" placeholder="File Path" value="${key}">
+    $(`#${id}`).append(`<div class="d-flex flex-row">
+    <div class="flex-fill">
+        <input type="text" class="form-control form-control-alternative" placeholder="File Path" value="${key}">
     </div>
-    <div class="col pt-2">
+    <div class="flex-fill m-auto pl-3">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="">
-          <label class="form-check-label">file contains header</label>
+          <label class="form-check-label">Ignore first line</label>
         </div>
     </div>
-    <div class="col-xs text-right">
-        <button type="button" class="btn btn-nooutline-secondary mr-2" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
+    <div class="m-auto">
+        <button type="button" class="btn btn-32 btn-action" onclick="removeParam(event)"><i class="fas fa-minus"></i></button>
     </div>
 </div>`)
 }
