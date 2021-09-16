@@ -66,14 +66,88 @@ var click_name = {
     }
 }
 
+const badgeClasses = {
+    'badge-dark': 0,
+    'badge-light': 0,
+    'badge-info': 0,
+    'badge-warning': 0,
+    'badge-danger': 0,
+    'badge-success': 0,
+    'badge-secondary': 0,
+    'badge-primary': 0,
+}
+
+let tagBadgeMapping = {}
+
+const getTagBadge = tag => {
+    const tagLower = tag.toLowerCase()
+    if (tagBadgeMapping[tagLower] === undefined) {
+        const leastChosenClassName = Object.keys(badgeClasses).reduce(
+            (className, current, index, item) =>
+                badgeClasses[className] < badgeClasses[current] ? className : current
+        )
+        tagBadgeMapping[tagLower] = leastChosenClassName
+        badgeClasses[leastChosenClassName]++
+    }
+    return tagBadgeMapping[tagLower]
+}
+
+function reportsTagFormatter(value, row, index) {
+    const result = value?.map(item => {
+        return `<span class="badge badge-pill ${getTagBadge(item)}">${item}</span>`
+    })
+    return result?.join(' ')
+}
+
+function reportsStatusFormatter(value, row, index) {
+    switch (value.toLowerCase()) {
+        case 'error':
+        case 'failed':
+            return `<div style="color: var(--red)">${value} <i class="fas fa-exclamation-circle error"></i></div>`
+        case 'stopped':
+            return `<div style="color: var(--yellow)">${value} <i class="fas fa-exclamation-triangle"></i></div>`
+        case 'aborted':
+            return `<div style="color: var(--gray)">${value} <i class="fas fa-times-circle"></i></div>`
+        case 'finished':
+            return `<div style="color: var(--info)">${value} <i class="fas fa-check-circle"></i></div>`
+        case 'passed':
+            return `<div style="color: var(--green)">${value} <i class="fas fa-check-circle"></i></div>`
+        case 'pending...':
+            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+        default:
+            return value
+    }
+}
+
 function actions_buttons(value, row, index) {
     return [
         '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
-        '<button id="test_settings" class="settings btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-cog fa-lg"></i></span></button>',
-        '<button id="integrations" class="integrations btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-share-alt-square fa-lg"></i></span></button>',
-        '<button id="delete" class="trash btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-trash fa-lg"></i></span></button>'
+        '<div class="dropdown action-menu">',
+        '<button class="btn btn-secondary dropdown-toggle no-arrow btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+        '<i class="fas fa-ellipsis-v"></i></button>',
+        '<div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">',
+        '<a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>',
+        '<div class="dropdown-menu">',
+        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Docker command</a>',
+        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Jenkins stage</a>',
+        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Azure DevOps yaml</a>',
+        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Test UID</a>',
+        '</div>',
+        '<a class="dropdown-item" href="#" onclick="console.log(55)"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>',
+        '<a class="dropdown-item" href="#" onclick="console.log(66)"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>',
+        '</div>',
+        '</div>'
     ].join(' ')
 }
+
+// function actions_buttons(value, row, index) {
+//     return [
+//         '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
+//         '<button id="test_settings" class="settings btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-cog fa-lg"></i></span></button>',
+//         '<button id="integrations" class="integrations btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-share-alt-square fa-lg"></i></span></button>',
+//         '<button id="delete" class="trash btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-trash fa-lg"></i></span></button>'
+//     ].join(' ')
+// }
 
 function fillCardSettings(card_name, data) {
     if (card_name === "qualys"){
