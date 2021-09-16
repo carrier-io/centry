@@ -1,0 +1,30 @@
+.bulkActions > .dropdown-menu {
+	top: auto;
+	transform: translate(-100%, -2rem);
+}
+.bulkActions > .dropdown-item + .dropdown-menu {
+	display: none;
+}
+.bulkActions > .dropdown-item.submenu::before {
+	color: var(--basic);
+	/*content: '▸';*/
+	content: '◂';
+	/*margin-right: 0.5rem;*/
+	margin-right: 0.5rem;
+}
+.bulkActions > .dropdown-item:hover + .dropdown-menu,
+.bulkActions > .dropdown-menu:hover {
+	display: block;
+}
+
+.no-arrow:after {
+	content: none !important;
+}
+
+.action-menu {
+	display: inline-block;
+}
+
+.fa-secondary {
+	color: var(--basic)
+}
