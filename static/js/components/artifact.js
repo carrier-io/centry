@@ -77,20 +77,18 @@ function createBucket() {
 
 function deleteFiles(ev) {
     var url = `/api/v1/artifact/${getSelectedProjectId()}/${$("#bucket-name").text()}?`
-    const ajax = $.ajax({
-        url: url.substring(0, url.length - 1),
-        type: 'DELETE',
-        success: function (result) {
-            $("#artifact-list").bootstrapTable('refresh');
-            $("#buckets-list").bootstrapTable('refresh');
-        }
-    });
     if ($("#artifact-list").bootstrapTable('getSelections').length > 0) {
         $("#artifact-list").bootstrapTable('getSelections').forEach(item => {
             url += "fname[]=" + item["name"] + "&"
         });
-        ajax;
-    }
+        $.ajax({
+            url: url.substring(0, url.length - 1),
+            type: 'DELETE',
+            success: function (result) {
+                $("#artifact-list").bootstrapTable('refresh');
+                $("#buckets-list").bootstrapTable('refresh');
+            }
+        });
 }
 
 $(document).ready(function() {

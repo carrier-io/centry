@@ -140,15 +140,6 @@ function actions_buttons(value, row, index) {
     ].join(' ')
 }
 
-// function actions_buttons(value, row, index) {
-//     return [
-//         '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
-//         '<button id="test_settings" class="settings btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-cog fa-lg"></i></span></button>',
-//         '<button id="integrations" class="integrations btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-share-alt-square fa-lg"></i></span></button>',
-//         '<button id="delete" class="trash btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-trash fa-lg"></i></span></button>'
-//     ].join(' ')
-// }
-
 function fillCardSettings(card_name, data) {
     if (card_name === "qualys"){
         $('#qualys_profile_id').val(data["qualys_profile_id"]);
