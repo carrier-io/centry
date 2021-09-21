@@ -119,26 +119,30 @@ function reportsStatusFormatter(value, row, index) {
     }
 }
 
-function actions_buttons(value, row, index) {
-    return [
-        '<button id="run_test" class="run btn btn-secondary btn-sm"><span class="btn-inner--icon"><i class="fa fa-play fa-lg"></i></span></button>',
-        '<div class="dropdown action-menu">',
-        '<button class="btn btn-secondary dropdown-toggle no-arrow btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-        '<i class="fas fa-ellipsis-v"></i></button>',
-        '<div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">',
-        '<a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>',
-        '<div class="dropdown-menu">',
-        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Docker command</a>',
-        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Jenkins stage</a>',
-        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Azure DevOps yaml</a>',
-        '<a class="dropdown-item" href="#" onclick="console.log(76567)">Test UID</a>',
-        '</div>',
-        '<a class="dropdown-item" href="#" onclick="console.log(55)"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>',
-        '<a class="dropdown-item" href="#" onclick="console.log(66)"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>',
-        '</div>',
-        '</div>'
-    ].join(' ')
+function testActions(value, row, index) {
+    return `
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-16 btn-action"><i class="fas fa-play"></i></button>
+            <div class="dropdown action-menu">
+                <button type="button" class="btn btn-16 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">
+                    <a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="console.log('Docker command')">Docker command</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Jenkins stage')">Jenkins stage</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Azure DevOps yaml')">Azure DevOps yaml</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Test UID')">Test UID</a>
+                    </div>
+                        <a class="dropdown-item" href="#" onclick="console.log('Settings')"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Delete')"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+        `
 }
+
 
 function fillCardSettings(card_name, data) {
     if (card_name === "qualys"){
