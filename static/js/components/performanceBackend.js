@@ -1,23 +1,10 @@
 $('#createTestModal').on('hide.bs.modal', function(e) {
-    console.log("here 3")
     createTestModal()
 });
 
 $('#runTestModal').on('hide.bs.modal', function(e) {
-    console.log("here 4")
     createTestModal()
 });
-
-$('#createTestModal').on('show.bs.modal', function(e) {
-    console.log("here 1")
-    createTestModal()
-});
-
-$('#runTestModal').on('show.bs.modal', function(e) {
-    console.log("here 2")
-    createTestModal()
-});
-
 
 function createTestModal() {
     $('#repo').val($('#repo')[0].defaultValue)
@@ -153,29 +140,42 @@ function addDNSOverride(id, key="", value="") {
 </div>`)
 }
 
-function lgFormatter(value, row, index) {
+function backendLgFormatter(value, row, index) {
     if (row.job_type === "perfmeter") {
-        return '<img src="/static/ico/jmeter.png" width="20">'
+        return '<img src="/static/vendor/design-system/assets/ico/jmeter.png" width="20">'
     } else if (row.job_type === "perfgun") {
-        return '<img src="/static/ico/gatling.png" width="20">'
+        return '<img src="/static/vendor/design-system/assets/ico/gatling.png" width="20">'
     } else {
         return value
     }
 }
 
+function createLinkToTest(value, row, index) {
+    return '<a href="/report/backend?report_id=' + row['id'] + '">' + value + '</a>'
+}
+
 function backendTestActionFormatter(value, row, index) {
-    return `<button type="button" class="btn btn-16 btn-action" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
-    <button type="button" class="btn btn-16 btn-action" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
-    <div class="dropdown">
-        <button type="button" class="btn btn-16 btn-action" id="cidrop"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cube"></i></button>
-        <div class="dropdown-menu" aria-labelledby="cidrop">
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip"  data-placement="left" title="Copy docker execution command to clipboard" type="button">Docker command</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy Jenkins stage to clipboard"  type="button">Jenkins stage</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy ADO yaml to clipboard"  type="button">Azure DevOps yaml</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy unique test id to clipboard"  onclick="copyToClipboard('${row.test_uid}')" type="button">Test UID</button>
-          </div>
-    </div>
-    <button type="button" class="btn btn-16 btn-action" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></button>`
+    return `
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-16 btn-action run" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
+            <div class="dropdown action-menu">
+                <button type="button" class="btn btn-16 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">
+                    <a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="console.log('Docker command')">Docker command</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Jenkins stage')">Jenkins stage</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Azure DevOps yaml')">Azure DevOps yaml</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Test UID')">Test UID</a>
+                    </div>
+                    <a class="dropdown-item settings" href="#"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>
+                    <a class="dropdown-item trash" href="#"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+        `
 }
 
 function copyToClipboard(text) {
@@ -205,6 +205,8 @@ function runTestModal(test_id) {
     console.log(test_data);
     $('#run_test').removeAttr('onclick');
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
+    $('#runTest_region').val(test_data.region)
+    $('#runTest_parallel').val(test_data.parallel)
     $("#runTestModal").modal('show');
 }
 
@@ -241,7 +243,7 @@ function runTest(test_id) {
             contentType: 'application/json',
             type: 'POST',
             success: function (result) {
-                console.log("Test started")
+                $("#runTestModal").modal('hide');
             }
         });
     }
