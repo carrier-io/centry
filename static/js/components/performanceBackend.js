@@ -1,10 +1,23 @@
 $('#createTestModal').on('hide.bs.modal', function(e) {
+    console.log("here 3")
     createTestModal()
 });
 
 $('#runTestModal').on('hide.bs.modal', function(e) {
+    console.log("here 4")
     createTestModal()
 });
+
+$('#createTestModal').on('show.bs.modal', function(e) {
+    console.log("here 1")
+    createTestModal()
+});
+
+$('#runTestModal').on('show.bs.modal', function(e) {
+    console.log("here 2")
+    createTestModal()
+});
+
 
 function createTestModal() {
     $('#repo').val($('#repo')[0].defaultValue)
@@ -13,9 +26,8 @@ function createTestModal() {
     $('#repo_pass').val($('#repo_pass')[0].defaultValue)
     $('#repo_key').val($('#repo_key')[0].defaultValue)
     $('#repo_branch').val($('#repo_branch')[0].defaultValue)
-    $('#local_file').val($('#local_file')[0].defaultValue)
     $('#repo_branch_https').val($('#repo_branch_https')[0].defaultValue)
-    $('#testname').val($('#testname')[0].defaultValue)
+    $('#test_name').val($('#test_name')[0].defaultValue)
     $('#parallel').val($('#parallel')[0].defaultValue)
     $('#entrypoint').val($('#entrypoint')[0].defaultValue)
     $('#runner').val($('#runner option')[0].value)
@@ -152,10 +164,10 @@ function lgFormatter(value, row, index) {
 }
 
 function backendTestActionFormatter(value, row, index) {
-    return `<button class="mr-1 btn btn-sx" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
-    <button class="mr-1 btn btn-sx" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
+    return `<button type="button" class="btn btn-16 btn-action" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
+    <button type="button" class="btn btn-16 btn-action" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
     <div class="dropdown">
-        <button class="mr-1 btn btn-sx" id="cidrop"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cube"></i></button>
+        <button type="button" class="btn btn-16 btn-action" id="cidrop"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cube"></i></button>
         <div class="dropdown-menu" aria-labelledby="cidrop">
             <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip"  data-placement="left" title="Copy docker execution command to clipboard" type="button">Docker command</button>
             <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy Jenkins stage to clipboard"  type="button">Jenkins stage</button>
@@ -163,7 +175,7 @@ function backendTestActionFormatter(value, row, index) {
             <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy unique test id to clipboard"  onclick="copyToClipboard('${row.test_uid}')" type="button">Test UID</button>
           </div>
     </div>
-    <button class="btn btn-sx" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></button>`
+    <button type="button" class="btn btn-16 btn-action" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></button>`
 }
 
 function copyToClipboard(text) {
