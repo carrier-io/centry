@@ -43,21 +43,21 @@ page_params = new URLSearchParams(window.location.search);
 $(document).ready(function () {
     // $('#all').trigger( "click" );
     renderTableCustom();
-    filters();
+    // filters();
 })
 
-function filters() {
-    $("#errors").bootstrapTable('clearFilterControl');
-    if ($(".filter-control input").css("visibility") === "visible") {
-        $(".filter-control input").css("visibility", "hidden")
-        $(".filter-control select").css("visibility", "hidden")
-        $(".fht-cell").css("display", "none")
-    } else {
-        $(".filter-control input").css("visibility", "visible")
-        $(".filter-control select").css("visibility", "visible")
-        $(".fht-cell").css("display", "block")
-    }
-}
+// function filters() {
+//     $("#errors").bootstrapTable('clearFilterControl');
+//     if ($(".filter-control input").css("visibility") === "visible") {
+//         $(".filter-control input").css("visibility", "hidden")
+//         $(".filter-control select").css("visibility", "hidden")
+//         $(".fht-cell").css("display", "none")
+//     } else {
+//         $(".filter-control input").css("visibility", "visible")
+//         $(".filter-control select").css("visibility", "visible")
+//         $(".fht-cell").css("display", "block")
+//     }
+// }
 
 function renderTableCustom() {
     $('#errors').on('all.bs.table', function (e) {
@@ -66,7 +66,6 @@ function renderTableCustom() {
     })
     $("#errors").bootstrapTable('refresh', {
         url: `/api/v1/security/${page_params.get('project_id')}/findings/${page_params.get('test_id')}`,
-
     })
 
 }
