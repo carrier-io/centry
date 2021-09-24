@@ -10,10 +10,13 @@ from zipfile import ZipFile
 
 import asyncio
 
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession, ClientResponse, ClientTimeout
 from pylon.core.tools import log
 
 from .utils.plugin import Plugin
+
+
+timeout = ClientTimeout(sock_connect=5)
 
 
 # some windows asyncio patches
@@ -75,7 +78,7 @@ class GitSubprocessMixin:
 class WebMixin:
     @staticmethod
     async def fetch_txt(url: str) -> str:
-        async with ClientSession() as client:
+        async with ClientSession(timeout=timeout) as client:
             async with client.get(url) as response:
                 if response.ok:
                     return await response.text()
@@ -83,7 +86,7 @@ class WebMixin:
 
     @staticmethod
     async def download_plugin_zip(url: str, plugin: Plugin) -> None:
-        async with ClientSession() as client:
+        async with ClientSession(timeout=timeout) as client:
             async with client.get(url) as response:
                 if response.ok:
                     tmp_bytes = BytesIO(await response.read())
