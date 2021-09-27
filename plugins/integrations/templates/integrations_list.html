@@ -23,8 +23,15 @@
             <h3 style="text-transform: capitalize">{{ section }}</h3>
 <!--            <h9>Manage integrations with reporters</h9>-->
         </div>
-        <div class="card-body d-flex">
-            {{ template_slot("integrations_" + section, payload=config) | safe }}
+        <div class="card-body">
+            <div class="row d-flex">
+                {% for i in config['existing_integrations'].get(section, []) %}
+                    {{ template_slot("integration_card_" + i.name, payload=i) | safe }}
+                {% endfor %}
+            </div>
+            <div class="row d-flex">
+                {{ template_slot("integrations_" + section, payload=config) | safe }}
+            </div>
         </div>
     </div>
 </div>

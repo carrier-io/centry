@@ -46,7 +46,9 @@ def render_integrations(context, slot, payload):
         return cumulative
 
     results = reduce(reducer, results, defaultdict(list))
-    print(results)
+
+    print('existing_integrations', results)
+
     payload['existing_integrations'] = results
     payload['integrations_sections'] = {*context.rpc_manager.call.integrations_sections(), *results.keys()}
 
