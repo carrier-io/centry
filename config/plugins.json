@@ -187,5 +187,14 @@
     "objects": {
       "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_nmap/main/metadata.json"
     }
+  },
+  "integrations": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/integrations.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/integrations/main/metadata.json"
+    }
   }
 }
