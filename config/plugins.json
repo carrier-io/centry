@@ -116,7 +116,7 @@
       "metadata": "https://raw.githubusercontent.com/carrier-io/theme/main/metadata.json"
     }
   },
-    "security_scanner_zap": {
+  "security_scanner_zap": {
     "source": {
       "type": "git",
       "url": "https://github.com/carrier-io/security_scanner_zap.git"
@@ -170,7 +170,7 @@
       "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_nikto/main/metadata.json"
     }
   },
-    "security_scanner_sslyze": {
+  "security_scanner_sslyze": {
     "source": {
       "type": "git",
       "url": "https://github.com/carrier-io/security_scanner_sslyze.git"
@@ -179,7 +179,7 @@
       "metadata": "https://raw.githubusercontent.com/carrier-io/security_scanner_sslyze/main/metadata.json"
     }
   },
-    "security_scanner_nmap": {
+  "security_scanner_nmap": {
     "source": {
       "type": "git",
       "url": "https://github.com/carrier-io/security_scanner_nmap.git"
