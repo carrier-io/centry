@@ -33,19 +33,7 @@ def render_integrations(context, slot, payload):
     print(context.slot_manager.callbacks.get('integrations_scanners'))
     print('$'*88)
 
-    results = Integration.query.filter(Integration.project_id == payload['id']).group_by(
-        Integration.section,
-        Integration.id
-    ).all()
-    results = parse_obj_as(List[IntegrationPD], results)
-    from functools import reduce
-    from collections import defaultdict
-
-    def reducer(cumulative, new_value):
-        cumulative[new_value.section].append(new_value)
-        return cumulative
-
-    results = reduce(reducer, results, defaultdict(list))
+    results = context.rpc_manager.call.integrations_get_project_integrations(payload['id'])
 
     print('existing_integrations', results)
 

@@ -23,8 +23,8 @@ class IntegrationPD(BaseModel):
 
     @validator("settings")
     def validate_date(cls, value, values):
-        print('VALUE', value)
-        print('VALUESSS', values)
+        # print('VALUE', value)
+        # print('VALUESSS', values)
         return current_app.config['CONTEXT'].rpc_manager.call.integrations_get_integration(
             values['name']
         ).settings_model.parse_obj(value).dict(exclude={'password'})

@@ -29,7 +29,8 @@ from pylon.core.tools import module  # pylint: disable=E0611,E0401
 from plugins.integrations.api.validation import IntegrationsApi
 from plugins.integrations.components.integrations_list import render_integrations
 from plugins.integrations.init_db import init_db
-from plugins.integrations.rpc import register, get_integration
+from plugins.integrations.rpc import register, get_integration, get_project_integrations, \
+    get_project_integrations_by_name
 from plugins.shared.utils.api_utils import add_resource_to_api
 
 
@@ -66,7 +67,14 @@ class Module(module.ModuleModel):
             lambda: set((i.section for i in self.integrations.values())),
             name=f'{self.rpc_prefix}_sections'
         )
-
+        self.context.rpc_manager.register_function(
+            get_project_integrations,
+            name=f'{self.rpc_prefix}_get_project_integrations'
+        )
+        self.context.rpc_manager.register_function(
+            get_project_integrations_by_name,
+            name=f'{self.rpc_prefix}_get_project_integrations_by_name'
+        )
 
 
 
