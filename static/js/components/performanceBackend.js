@@ -38,14 +38,18 @@ function createTest() {
       $("#submit").addClass("disabled");
       $("#save").addClass("disabled");
 //      var checked = []
-      var params = [{}, {}, {}, {}]
-      $("#scriptCard .row").slice(1,).each(function(_,item){
-        var inp = $(item).find('input[type=text]')
-        params[0][inp[0].value] = inp[1].value
+      var params = [[], {}, {}, {}]
+//      $("#scriptCard .row").slice(1,).each(function(_,item){
+//        var inp = $(item).find('input[type=text]')
+//        params[0][inp[0].value] = inp[1].value
+//      })
+      $("#params_list").bootstrapTable('getData').forEach((param) => {
+          params[0].push(param)
       })
-      params[0]["test_name"] = $('#test_name').val()
-      params[0]["test_type"] = $('#test_type').val()
-      params[0]["env_type"] = $('#test_env').val()
+
+      params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
+      params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type", "type": "", "action": ""})
+      params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type", "type": "", "action": ""})
       $("#extCard .row").slice(1,).each(function(_,item){
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
