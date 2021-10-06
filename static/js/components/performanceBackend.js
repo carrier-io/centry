@@ -48,8 +48,8 @@ function createTest() {
       })
 
       params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
-      params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type", "type": "", "action": ""})
-      params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type", "type": "", "action": ""})
+      params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
+      params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
       $("#extCard .row").slice(1,).each(function(_,item){
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
