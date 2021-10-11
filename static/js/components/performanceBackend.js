@@ -13,9 +13,8 @@ function createTestModal() {
     $('#repo_pass').val($('#repo_pass')[0].defaultValue)
     $('#repo_key').val($('#repo_key')[0].defaultValue)
     $('#repo_branch').val($('#repo_branch')[0].defaultValue)
-    $('#local_file').val($('#local_file')[0].defaultValue)
     $('#repo_branch_https').val($('#repo_branch_https')[0].defaultValue)
-    $('#testname').val($('#testname')[0].defaultValue)
+    $('#test_name').val($('#test_name')[0].defaultValue)
     $('#parallel').val($('#parallel')[0].defaultValue)
     $('#entrypoint').val($('#entrypoint')[0].defaultValue)
     $('#runner').val($('#runner option')[0].value)
@@ -39,11 +38,18 @@ function createTest() {
       $("#submit").addClass("disabled");
       $("#save").addClass("disabled");
 //      var checked = []
-      var params = [{}, {}, {}, {}]
-      $("#scriptCard .row").slice(1,).each(function(_,item){
-        var inp = $(item).find('input[type=text]')
-        params[0][inp[0].value] = inp[1].value
+      var params = [[], {}, {}, {}]
+//      $("#scriptCard .row").slice(1,).each(function(_,item){
+//        var inp = $(item).find('input[type=text]')
+//        params[0][inp[0].value] = inp[1].value
+//      })
+      $("#params_list").bootstrapTable('getData').forEach((param) => {
+          params[0].push(param)
       })
+
+      params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
+      params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
+      params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
       $("#extCard .row").slice(1,).each(function(_,item){
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
@@ -72,8 +78,10 @@ function createTest() {
       }
 
 
-      data.append('name', $('#testname').val());
-      data.append('parallel', $('#parallel').val());
+      data.append('name', $('#test_name').val());
+      // TODO add in test planner UI
+      //data.append('parallel', $('#parallel').val());
+      data.append('parallel', 1);
       data.append('region', $('#region').val());
       data.append('entrypoint', $('#entrypoint').val());
       data.append('runner', $('#runner').val());
@@ -136,29 +144,42 @@ function addDNSOverride(id, key="", value="") {
 </div>`)
 }
 
-function lgFormatter(value, row, index) {
+function backendLgFormatter(value, row, index) {
     if (row.job_type === "perfmeter") {
-        return '<img src="/static/ico/jmeter.png" width="20">'
+        return '<img src="/static/vendor/design-system/assets/ico/jmeter.png" width="20">'
     } else if (row.job_type === "perfgun") {
-        return '<img src="/static/ico/gatling.png" width="20">'
+        return '<img src="/static/vendor/design-system/assets/ico/gatling.png" width="20">'
     } else {
         return value
     }
 }
 
-function actionFormatter(value, row, index) {
-    return `<button class="mr-1 btn btn-sx" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
-    <button class="mr-1 btn btn-sx" onclick="editItem('${row.id}')" data-toggle="tooltip" data-placement="top" title="Edit Test"><i class="fas fa-cog"></i></button>
-    <div class="dropdown">
-        <button class="mr-1 btn btn-sx" id="cidrop"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cube"></i></button>
-        <div class="dropdown-menu" aria-labelledby="cidrop">
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip"  data-placement="left" title="Copy docker execution command to clipboard" type="button">Docker command</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy Jenkins stage to clipboard"  type="button">Jenkins stage</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy ADO yaml to clipboard"  type="button">Azure DevOps yaml</button>
-            <button class="dropdown-item dropdown-item-sm" data-toggle="tooltip" data-placement="left" title="Copy unique test id to clipboard"  onclick="copyToClipboard('${row.test_uid}')" type="button">Test UID</button>
-          </div>
-    </div>
-    <button class="btn btn-sx" onclick="deleteTasks('${row.id}')" data-toggle="tooltip" data-placement="top" title="Delete Test"><i class="fa fa-trash-alt"></i></button>`
+function createLinkToTest(value, row, index) {
+    return '<a href="/report/backend?report_id=' + row['id'] + '">' + value + '</a>'
+}
+
+function backendTestActionFormatter(value, row, index) {
+    return `
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-16 btn-action run" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
+            <div class="dropdown action-menu">
+                <button type="button" class="btn btn-16 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">
+                    <a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="console.log('Docker command')">Docker command</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Jenkins stage')">Jenkins stage</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Azure DevOps yaml')">Azure DevOps yaml</a>
+                        <a class="dropdown-item" href="#" onclick="console.log('Test UID')">Test UID</a>
+                    </div>
+                    <a class="dropdown-item settings" href="#"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>
+                    <a class="dropdown-item trash" href="#"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+        `
 }
 
 function copyToClipboard(text) {
@@ -188,6 +209,8 @@ function runTestModal(test_id) {
     console.log(test_data);
     $('#run_test').removeAttr('onclick');
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
+    $('#runTest_region').val(test_data.region)
+    $('#runTest_parallel').val(test_data.parallel)
     $("#runTestModal").modal('show');
 }
 
@@ -224,7 +247,7 @@ function runTest(test_id) {
             contentType: 'application/json',
             type: 'POST',
             success: function (result) {
-                console.log("Test started")
+                $("#runTestModal").modal('hide');
             }
         });
     }

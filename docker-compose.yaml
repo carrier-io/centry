@@ -31,7 +31,7 @@ services:
     container_name: carrier-redis
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.7-management
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
@@ -120,6 +120,8 @@ services:
       - 8086:8086
     labels:
       - 'traefik.enable=false'
+    networks:
+      - pylon
     container_name: carrier-influx
 
   interceptor:
