@@ -31,6 +31,22 @@ function tableStatusButtonFormatter(value, row, index) {
 const compareValues = (value1, value2) => value1.toLowerCase() === value2.toLowerCase()
 
 
+/*
+
+$(document).ready(function () {
+    renderTableCustom();
+})
+
+
+ function renderTableCustom() {
+    $('#errors').on('all.bs.table', function (e) {
+      $('.selectpicker').selectpicker('render');
+      initColoredSelect();
+    })
+    $("#errors").bootstrapTable('refresh', {
+        url: `/api/v1/security/${page_params.get('project_id')}/findings/${page_params.get('test_id')}`,
+*/
+
 const onSelectChange = (fieldName, value, issueHashes) => {
     const data = {
         [fieldName]: value,
