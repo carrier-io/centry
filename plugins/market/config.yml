@@ -18,6 +18,8 @@ preordered_plugins:
   - secrets
   - artifacts
   - backend_performance
+  - integrations
+  - security_scanner_qualys
 
 git_config:
   default:
