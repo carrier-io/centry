@@ -2,56 +2,7 @@ var scanners_cards = {};
 var edit_test = false;
 
 
-$(document).ready(function () {
-    $('[data-toggle="popover"]').popover({
-        sanitizeFn: function (content) {
-            return content
-        }
-    });
-});
-
-$('#severity_filter').click(function () {
-    if ($(this).is(':checked')) {
-        $('#severity_filters').show();
-    } else {
-        $('#severity_filters').hide();
-    }
-})
-
-$('#createApplicationTest').on('hide.bs.modal', function (e) {
-    edit_test = false;
-    $("#submit").html(`<i class="fas fa-play"></i>`);
-    $("#save").html(`<i class="fas fa-save"></i>`);
-    $("#submit").removeClass("disabled");
-    $("#save").removeClass("disabled");
-    cleanAppTestModal()
-});
-
-function cleanAppTestModal() {
-    $("#testname").val($("#testname")[0].defaultValue)
-    $("#test_env").val($("#test_env")[0].defaultValue)
-    $('#url_to_scan .row').slice(1,).each(function (_, item) {
-        item.remove()
-    })
-    $("#scanURL").val($("#scanURL")[0].defaultValue)
-    $('#exclusions .row').slice(1,).each(function (_, item) {
-        item.remove()
-    })
-    $("#scanner_pool .row").slice(1,).each(function (_, item) {
-        item.remove();
-    })
-    var uncheck_flags = document.getElementsByTagName('input');
-    for (var i = 0; i < uncheck_flags.length; i++) {
-        if (uncheck_flags[i].type == 'checkbox' || uncheck_flags[i].type == 'radio') {  // uncheck all checkboxes and radio buttons
-            uncheck_flags[i].checked = false;
-        }
-    }
-    $("#severity").selectpicker('val', "Info")
-//    $("#qualys_checkbox").prop("checked", false)
-}
-
 function test_name_button(value, row, index) {
-    // const projectId = localStorage.getItem(selectedProjectLocalStorageKey);
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('module', 'Result');
     searchParams.set('page', 'list');
@@ -61,11 +12,6 @@ function test_name_button(value, row, index) {
     return `<a class="test form-control-label" href="?${searchParams.toString()}" role="button">${row.name}</a>`
 }
 
-// var click_name = {
-//     "click .test": function(e, value, row, index) {
-//         alert("Now it's just an alert.. It will be modal window for canceling test soon")
-//     }
-// }
 
 const badgeClasses = {
     'badge-dark': 0,
@@ -148,42 +94,49 @@ function cellStyle(value, row, index) {
     return {css: {"min-width": "165px"}}
 }
 
+
+
+
+
+
+
+
 function fillCardSettings(card_name, data) {
-    if (card_name === "qualys") {
-        $('#qualys_profile_id').val(data["qualys_profile_id"]);
-        $('#qualys_template_id').val(data["qualys_template_id"]);
-
-        if (data["scanner_type"] == "internal") {
-            $("#QualysScannerType2").prop("checked", true);
-        } else {
-            $("#QualysScannerType1").prop("checked", true);
-        }
-
-        compareLength(data["scanner_pool"], "#scanner_pool")
-
-        for (var indx = 0; indx < data["scanner_pool"].length; indx++) {
-            $($("#scanner_pool .row").slice(1,).find('input[type=text]')[indx]).val(data["scanner_pool"][indx])
-        }
-
-    }
+    // if (card_name === "qualys") {
+    //     $('#qualys_profile_id').val(data["qualys_profile_id"]);
+    //     $('#qualys_template_id').val(data["qualys_template_id"]);
+    //
+    //     if (data["scanner_type"] == "internal") {
+    //         $("#QualysScannerType2").prop("checked", true);
+    //     } else {
+    //         $("#QualysScannerType1").prop("checked", true);
+    //     }
+    //
+    //     compareLength(data["scanner_pool"], "#scanner_pool")
+    //
+    //     for (var indx = 0; indx < data["scanner_pool"].length; indx++) {
+    //         $($("#scanner_pool .row").slice(1,).find('input[type=text]')[indx]).val(data["scanner_pool"][indx])
+    //     }
+    //
+    // }
 }
 
 function compareLength(array, block_name) {
-    var list_ids = ["#exclusions", "#scanner_pool"]  // list of (blocks)IDs where we need to exclude first .row
-    if (list_ids.find((i) => i === block_name) === block_name) {
-        var block_length = $(block_name).length - 1
-    } else {
-        var block_length = $(block_name).length
-    }
-
-    if (array.length === block_length) {
-        return true
-    } else {
-        block_name = block_name.slice(1,)
-        for (var row_indx = 0; row_indx < array.length - block_length; row_indx++) {
-            addNewURL(block_name)
-        }
-    }
+    // var list_ids = ["#exclusions", "#scanner_pool"]  // list of (blocks)IDs where we need to exclude first .row
+    // if (list_ids.find((i) => i === block_name) === block_name) {
+    //     var block_length = $(block_name).length - 1
+    // } else {
+    //     var block_length = $(block_name).length
+    // }
+    //
+    // if (array.length === block_length) {
+    //     return true
+    // } else {
+    //     block_name = block_name.slice(1,)
+    //     for (var row_indx = 0; row_indx < array.length - block_length; row_indx++) {
+    //         addNewURL(block_name)
+    //     }
+    // }
 }
 
 const runTest = (id, name) => {
@@ -195,36 +148,34 @@ const runTest = (id, name) => {
     }).then(response => response.ok && $("#results-list").bootstrapTable('refresh'))
 }
 
-const openSettings = row => {
-    console.log('Open settings for row', row)
-    edit_test = row['test_uid'];
-    $("#createApplicationTest").modal('show');
+// const openSettings = row => {
+//     console.log('Open settings for row', row)
+
 
 //        Fill main data
-    $("#testname").val(row.name)
-    $("#test_env").val(row["test_environment"])
-
-    compareLength(row["urls_to_scan"], "#url_to_scan")
-    compareLength(row["urls_exclusions"], "#exclusions")
-
-    for (var indx = 0; indx < row["urls_to_scan"].length; indx++) {
-        $($("#url_to_scan .row").find('input[type=text]')[indx]).val(row["urls_to_scan"][indx])
-    }
-    for (var indx = 0; indx < row["urls_exclusions"].length; indx++) {
-        $($("#exclusions .row").find('input[type=text]')[indx]).val(row["urls_exclusions"][indx])
-    }
-//        Fill scanners data 'scanners_cards'
-    $.each(row["scanners_cards"], function (key, value) {
-        $("#" + `${key}_checkbox`).prop("checked", true)
-        fillCardSettings(key, row["scanners_cards"][key])
-    })
-//        Fill processing data
-    $("#severity").selectpicker('val', row["processing"]["minimal_security_filter"])
-}
+//     $("#testname").val(row.name)
+//     $("#test_env").val(row["test_environment"])
+//
+//     compareLength(row["urls_to_scan"], "#url_to_scan")
+//     compareLength(row["urls_exclusions"], "#exclusions")
+//
+//     for (var indx = 0; indx < row["urls_to_scan"].length; indx++) {
+//         $($("#url_to_scan .row").find('input[type=text]')[indx]).val(row["urls_to_scan"][indx])
+//     }
+//     for (var indx = 0; indx < row["urls_exclusions"].length; indx++) {
+//         $($("#exclusions .row").find('input[type=text]')[indx]).val(row["urls_exclusions"][indx])
+//     }
+// //        Fill scanners data 'scanners_cards'
+//     $.each(row["scanners_cards"], function (key, value) {
+//         $("#" + `${key}_checkbox`).prop("checked", true)
+//         fillCardSettings(key, row["scanners_cards"][key])
+//     })
+// //        Fill processing data
+//     $("#severity").selectpicker('val', row["processing"]["minimal_security_filter"])
+// }
 
 const deleteTest = id => {
     const url = `/api/v1/security/${getSelectedProjectId()}/dast?` + $.param({"id[]": id})
-    // const url = `/api/v1/security/${getSelectedProjectId()}/dast?$id[]=${id}` + $.param({"id[]": id})
     console.log('Delete test with id', id, url);
     fetch(url, {
         method: 'DELETE'
@@ -237,13 +188,16 @@ var statusEvents = {
     },
 
     "click .settings": function (e, value, row, index) {
-        openSettings(row)
+        setModalData(row)
+        edit_test = row['test_uid'];
+        $("#createApplicationTest").modal('show');
+
     },
 
-    "click .integrations": function (e, value, row, index) {
-        alert('You click INTEGRATIONS action')
-//        TODO: write this method
-    },
+//     "click .integrations": function (e, value, row, index) {
+//         alert('You click INTEGRATIONS action')
+// //        TODO: write this method
+//     },
 
     "click .trash": function (e, value, row, index) {
         deleteTest(row.id)
@@ -251,56 +205,49 @@ var statusEvents = {
 }
 
 function getScannersData() {
-    scannersContainer = document.getElementById("scannersCardsContainer");
-    cards = scannersContainer.getElementsByClassName("card");
+    // scannersContainer = document.getElementById("scannersCardsContainer");
+    // cards = scannersContainer.getElementsByClassName("card");
+    //
+    // for (i = 0; i < cards.length; i++) {
+    //     scanner_id = cards[i].id
+    //     window[scanner_id]();
+    // }
+}
 
-    for (i = 0; i < cards.length; i++) {
-        scanner_id = cards[i].id
-        window[scanner_id]();
-    }
+const editTest = data => {
+    fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
+    }).then(response => response.ok && afterSaveTest())
+}
+
+const createTest = data => {
+    fetch(`/api/v1/security/${getSelectedProjectId()}/dast`, {
+        method: 'POST',
+        body: JSON.stringify(data)
+    }).then(response => response.ok && afterSaveTest())
+}
+
+const afterSaveTest = () => {
+    $("#submit").html(`<i class="fas fa-play"></i>`);
+    $("#save").html(`<i class="fas fa-save"></i>`);
+    $("#submit").removeClass("disabled");
+    $("#save").addClass("disabled");
+    $("#createApplicationTest").modal('hide');
+    $("#tests-list").bootstrapTable('refresh');
+    $("#results-list").bootstrapTable('refresh');
 }
 
 function saveTest(data) {
     if (edit_test) {
-        $.ajax({
-            url: `/api/v1/security/${getSelectedProjectId()}/dast/${edit_test}`,
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'PUT',
-            success: function (data) {
-                $("#submit").html(`<i class="fas fa-play"></i>`);
-                $("#save").html(`<i class="fas fa-save"></i>`);
-                $("#submit").removeClass("disabled");
-                $("#save").addClass("disabled");
-                $("#createApplicationTest").modal('hide');
-                $("#tests-list").bootstrapTable('refresh');
-                $("#results-list").bootstrapTable('refresh');
-            }
-        });
+        editTest(data)
     } else {
-        $.ajax({
-                url: `/api/v1/security/${getSelectedProjectId()}/dast`,
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                success: function (data) {
-                    $("#submit").html(`<i class="fas fa-play"></i>`);
-                    $("#save").html(`<i class="fas fa-save"></i>`);
-                    $("#submit").removeClass("disabled");
-                    $("#save").addClass("disabled");
-                    $("#createApplicationTest").modal('hide');
-                    $("#tests-list").bootstrapTable('refresh');
-                    $("#results-list").bootstrapTable('refresh');
-                }
-            }
-        );
+        createTest(data)
     }
     edit_test = false;
 }
+
+
 
 function submitAppTest(run_test = false) {
     $("#submit").html(`<span class="spinner-border spinner-border-sm"></span>`);
@@ -348,23 +295,85 @@ function submitAppTest(run_test = false) {
 //      data.append("reporting_cards", JSON.stringify(reporting_cards))
 
     saveTest(data)
-
-//      $.ajax({
-//          url: `/api/v1/security/${getSelectedProjectId()}/dast`,
-//          data: data,
-//          cache: false,
-//          contentType: false,
-//          processData: false,
-//          method: 'POST',
-//          success: function(data){
-//              $("#submit").html(`<i class="fas fa-play"></i>`);
-//              $("#save").html(`<i class="fas fa-save"></i>`);
-//              $("#submit").removeClass("disabled");
-//              $("#save").addClass("disabled");
-//              $("#createApplicationTest").modal('hide');
-//              $("#tests-list").bootstrapTable('refresh');
-//              $("#results-list").bootstrapTable('refresh');
-//          }
-//        }
-//      );
 }
+
+
+
+
+$('#createApplicationTest').on('hide.bs.modal', function (e) {
+    edit_test = false;
+    // $("#submit").html(`<i class="fas fa-play"></i>`);
+    // $("#save").html(`<i class="fas fa-save"></i>`);
+    // $("#submit").removeClass("disabled");
+    // $("#save").removeClass("disabled");
+    // cleanAppTestModal()
+    clearModal()
+});
+
+
+const deleteParams = index => {
+    console.log('deleting index', index)
+}
+
+
+const defaultModalData = {
+    test_name: '',
+    test_description: '',
+    test_parameters: [
+        { urls_to_scan: [],  urls_exclusions: [], }
+    ],
+    integrations: {
+        scanners: [
+
+        ]
+    },
+    processing: {
+        minimal_security_filter: 'Info'
+    }
+}
+
+const modalDataModel = {
+    test_name: {
+        get: () => $('#test_name').val(),
+        set: value => $('#test_name').val(value),
+        default: ''
+    },
+    test_description: {
+        get: () => $('#test_description').val(),
+        set: value => $('#test_description').val(value),
+        default: ''
+    },
+    test_parameters: {
+        get: () => $('#params_list').bootstrapTable('getData'),
+        set: values => console.log('SET PARAMETERS', values),
+        default: []
+    },
+    integrations: {
+        get: () => $('input.integration_enabled:checked').parentsUntil('.security_scanner').find('#reporter_settings_qualys').map((index, item) => $(item).attr('data-selected')),
+        set: values => console.log('SET integrations', values),
+        default: []
+    },
+    processing: {
+        get: () => null,
+        set: values => console.log('SET PROCESSING', values),
+        default: []
+    }
+}
+
+
+
+const collectModalData = () => {
+    let data = {}
+    Object.keys(modalDataModel).forEach(item  => {
+        data[item] = modalDataModel[item].get()
+    })
+    return data
+}
+
+const setModalData = data => {
+    console.log('setModalData', data)
+}
+
+const clearModal = () => Object.keys(modalDataModel).forEach(item  => {
+    modalDataModel[item].set(modalDataModel[item].default)
+})
