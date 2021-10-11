@@ -57,7 +57,7 @@
                 owner: "",
                 vuh_limit: $("#vuh-slider")[0].noUiSlider.get(),
                 plugins: plugins,
-                invitations: vm.$data.invitations
+//                invitations: vm.$data.invitations
             }
             $.ajax({
                 url: `/api/v1/project`,
