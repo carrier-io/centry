@@ -122,12 +122,12 @@ var statusEvents = {
         $('#security_test_save').on('click', () => {
             const data = collectModalData()
             console.log('Editing test with data', data)
-            // editTest(row['test_uid'], data)
+            editTest(row['test_uid'], data)
         })
         $('#security_test_save_and_run').on('click', () => {
             const data = collectModalData()
             console.log('Editing and running test with data', data)
-            // createAndRunTest(row['test_uid'], data)
+            createAndRunTest(row['test_uid'], data)
         })
         $("#createApplicationTest").modal('show');
 
@@ -148,6 +148,7 @@ const editTest = (testUID, data) => {
     beforeSaveTest()
     fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${testUID}`, {
         method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
@@ -156,15 +157,16 @@ const editTest = (testUID, data) => {
 }
 
 const editAndRunTest = (testUID, data) => {
-    beforeSaveTest()
+    // beforeSaveTest()
     data['run_test'] = true
-    fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${testUID}`, {
-        method: 'PUT',
-        body: JSON.stringify(data)
-    }).then(response => {
-        afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
-    })
+    // fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${testUID}`, {
+    //     method: 'PUT',
+    //     body: JSON.stringify(data)
+    // }).then(response => {
+    //     afterSaveTest()
+    //     response.ok && $("#createApplicationTest").modal('hide');
+    // })
+    return editTest(testUID, data)
 }
 
 
@@ -172,6 +174,7 @@ const createTest = data => {
     beforeSaveTest()
     fetch(`/api/v1/security/${getSelectedProjectId()}/dast`, {
         method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
@@ -180,15 +183,16 @@ const createTest = data => {
 }
 
 const createAndRunTest = data => {
-    beforeSaveTest()
+    // beforeSaveTest()
     data['run_test'] = true
-    fetch(`/api/v1/security/${getSelectedProjectId()}/dast`, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    }).then(response => {
-        afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
-    })
+    return createTest(data)
+    // fetch(`/api/v1/security/${getSelectedProjectId()}/dast`, {
+    //     method: 'POST',
+    //     body: JSON.stringify(data)
+    // }).then(response => {
+    //     afterSaveTest()
+    //     response.ok && $("#createApplicationTest").modal('hide');
+    // })
 }
 
 const beforeSaveTest = () => {
@@ -372,7 +376,7 @@ $(document).ready(function () {
         $('#security_test_save').on('click', () => {
             const data = collectModalData()
             console.log('Creating test with data', data)
-            // createTest(data)
+            createTest(data)
         })
         $('#security_test_save_and_run').on('click', () => {
             const data = collectModalData()
