@@ -1,7 +1,3 @@
-// var scanners_cards = {};
-// var edit_test = false;
-
-
 function test_name_button(value, row, index) {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('module', 'Result');
@@ -157,15 +153,7 @@ const editTest = (testUID, data) => {
 }
 
 const editAndRunTest = (testUID, data) => {
-    // beforeSaveTest()
     data['run_test'] = true
-    // fetch(`/api/v1/security/${getSelectedProjectId()}/dast/${testUID}`, {
-    //     method: 'PUT',
-    //     body: JSON.stringify(data)
-    // }).then(response => {
-    //     afterSaveTest()
-    //     response.ok && $("#createApplicationTest").modal('hide');
-    // })
     return editTest(testUID, data)
 }
 
@@ -183,16 +171,8 @@ const createTest = data => {
 }
 
 const createAndRunTest = data => {
-    // beforeSaveTest()
     data['run_test'] = true
     return createTest(data)
-    // fetch(`/api/v1/security/${getSelectedProjectId()}/dast`, {
-    //     method: 'POST',
-    //     body: JSON.stringify(data)
-    // }).then(response => {
-    //     afterSaveTest()
-    //     response.ok && $("#createApplicationTest").modal('hide');
-    // })
 }
 
 const beforeSaveTest = () => {
@@ -212,57 +192,12 @@ $('#createApplicationTest').on('hide.bs.modal', function (e) {
 });
 
 
-
-// function submitAppTest(run_test = false) {
-// $("#security_test_save").html(`<span class="spinner-border spinner-border-sm"></span>`);
-// $("#security_test_save_and_run").html(`<span class="spinner-border spinner-border-sm"></span>`);
-
-
-// //      Main variables
-//     var urls_params = [[], []]
-//     var run_test = run_test
-//     var processing_cards = {"minimal_security_filter": null}
-//
-// //      Urls to scan and extensions
-//     $("#url_to_scan .row").each(function (_, item) {
-//         var url_ = $(item).find('input[type=text]')
-//         urls_params[0].push(url_.val())
-//     })
-//     $("#exclusions .row").slice(1,).each(function (_, item) {
-//         var url_ = $(item).find('input[type=text]')
-//         urls_params[1].push(url_.val())
-//     })
-//
-// //      --Scanner's cards--
-//     getScannersData();
-//
-// //      --Processing's cards--
-// //      Min security filter
-//     processing_cards["minimal_security_filter"] = $("#severity").val()
-//
-//     var data = new FormData();
-//
-//     data.append('name', $('#testname').val());
-//     // data.append('project_name', document.getElementById("selected-project").textContent);
-//     data.append('project_name', getProjectNameFromId(getSelectedProjectId()));
-//     data.append('test_env', $("#test_env").val());
-//     data.append('urls_to_scan', JSON.stringify(urls_params[0]));
-//     data.append('urls_exclusions', JSON.stringify(urls_params[1]));
-//     data.append('scanners_cards', JSON.stringify(scanners_cards));
-//     data.append('reporting', JSON.stringify({}));
-//     data.append('processing', JSON.stringify(processing_cards));
-//     data.append('run_test', run_test)
-
-//      TODO: write reporting cards parser
-//      var reporting_cards = reportingCards()
-//      data.append("reporting_cards", JSON.stringify(reporting_cards))
-
-//     saveTest(data)
-// }
-
-
 var deleteParams = index => {
     console.log('deleting index', index)
+    $('.params-table').bootstrapTable('remove', {
+        field: '$index',
+        values: [index]
+      })
 }
 
 
@@ -281,7 +216,7 @@ const modalDataModel = {
         get: () => $('#params_list').bootstrapTable('getData'),
         set: (urls_to_scan, urls_exclusions, scan_location, test_parameters=[]) => {
             console.log('SET PARAMETERS', urls_to_scan, urls_exclusions, scan_location, test_parameters)
-            table_data = [
+            const table_data = [
                 {
                     default: urls_to_scan.join(','),
                     description: "Data",
@@ -309,15 +244,13 @@ const modalDataModel = {
                     _name_class: "disabled",
                     _type_class: "disabled",
                 },
-                // ...test_parameters
+                ...test_parameters
             ]
-            // $('#params_list').bootstrapTable('load', table_data)
             $('#params_list').bootstrapTable('load', table_data)
-            test_parameters.forEach(item => $('#params_list').bootstrapTable('append', item))
         },
         clear: () => {
             console.log('CLEARING TEST PARAMS TABLE')
-            table_data = [
+            const table_data = [
                 {
                     default: '',
                     description: "Data",
@@ -451,6 +384,6 @@ $(document).ready(function () {
         })
     })
 
-    clearModal()
+    // clearModal()
 
 })
