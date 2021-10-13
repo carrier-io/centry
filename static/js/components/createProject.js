@@ -61,9 +61,14 @@ function renderUsersProjects() {
                     </div>
                 </div>`)
                 result.forEach(function(item) {
-                    $("#projectSelect .list-group").append(`<button type="button" class="list-group-item list-group-item-sm list-group-item-action" onclick="selectProject(this)" project_id=${item.id}>${item.name}</button>`)
+                    $("#projectSelect .list-group").append(`<button type="button" class="list-group-item list-group-item-sm list-group-item-action" onclick="selectProject(${item.id})" project_id=${item.id}>${item.name}</button>`)
                 })
             }
         }
     });
+}
+
+function selectProject(project_id){
+    setProject(project_id);
+    document.location.href="/";
 }
