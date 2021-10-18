@@ -223,8 +223,10 @@ function runTestModal(test_id) {
 
 function runTest(test_id) {
         console.log(`going to run test ${test_id}`)
-        var params = {}
-        // TODO read params and merge on backend
+        var params = []
+        $("#runner_test_params").bootstrapTable('getData').forEach((param) => {
+          params.push(param)
+        })
         $("#nav-test-params .test_param").each(function() {
            if ($(this).children()[0].innerText !== "" && $(this).children()[1].value !== "") {
                 params[$(this).children()[0].innerText] = $(this).children()[1].value;
