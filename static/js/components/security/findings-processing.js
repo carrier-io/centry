@@ -5,7 +5,7 @@ window['processing_all'] = {
         }
     },
     set_data: data => {
-        $('#MSF .selectpicker').val(data.minimal_security_filter).selectpicker('refresh')
+        $('#MSF .selectpicker').val(data.minimal_security_filter || 'Info').selectpicker('refresh')
     },
     clear_data: () => {
         $('#MSF .selectpicker').val('Info').selectpicker('refresh')
