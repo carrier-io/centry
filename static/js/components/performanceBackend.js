@@ -1,9 +1,9 @@
-$('#createTestModal').on('hide.bs.modal', function(e) {
-    createTestModal()
-});
+//$('#createTestModal').on('hide.bs.modal', function(e) {
+//    createTestModal()
+//});
 
 $('#runTestModal').on('hide.bs.modal', function(e) {
-    createTestModal()
+   console.log("Create run backend test modal")
 });
 
 function createTestModal() {
@@ -47,7 +47,7 @@ function createTest() {
       params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
       params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
       params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
-      $("#params_list").bootstrapTable('getData').forEach((param) => {
+      $("#backend_test_params").bootstrapTable('getData').forEach((param) => {
           params[0].push(param)
       })
 
@@ -81,9 +81,8 @@ function createTest() {
 
       data.append('name', $('#test_name').val());
       // TODO add in test planner UI
-      //data.append('parallel', $('#parallel').val());
-      data.append('parallel', 1);
-      data.append('region', $('#region').val());
+      data.append('parallel', $('#backend_parallel').val());
+      data.append('region', $('#backend_region option:selected').text());
       data.append('entrypoint', $('#entrypoint').val());
       data.append('runner', $('#runner').val());
       data.append('reporting', JSON.stringify({}));
@@ -217,8 +216,8 @@ function runTestModal(test_id) {
     $('#run_test').removeAttr('onclick');
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
     // TODO set region and load generators
-    $('#runTest_region').val(test_data.region)
-    $('#runTest_parallel').val(test_data.parallel)
+    $('#runner_region').val(test_data.region)
+    $('#runner_parallel').val(test_data.parallel)
 }
 
 function runTest(test_id) {
