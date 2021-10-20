@@ -1,35 +1,36 @@
-$('#createTestModal').on('hide.bs.modal', function(e) {
-    createTestModal()
-});
+//$('#createTestModal').on('hide.bs.modal', function(e) {
+//    createTestModal()
+//});
 
 $('#runTestModal').on('hide.bs.modal', function(e) {
-    createTestModal()
+   console.log("Create run backend test modal")
 });
 
 function createTestModal() {
-    $('#repo').val($('#repo')[0].defaultValue)
-    $('#repo_https').val($('#repo_https')[0].defaultValue)
-    $('#repo_user').val($('#repo_user')[0].defaultValue)
-    $('#repo_pass').val($('#repo_pass')[0].defaultValue)
-    $('#repo_key').val($('#repo_key')[0].defaultValue)
-    $('#repo_branch').val($('#repo_branch')[0].defaultValue)
-    $('#repo_branch_https').val($('#repo_branch_https')[0].defaultValue)
-    $('#test_name').val($('#test_name')[0].defaultValue)
-    $('#parallel').val($('#parallel')[0].defaultValue)
-    $('#entrypoint').val($('#entrypoint')[0].defaultValue)
-    $('#runner').val($('#runner option')[0].value)
-    $('#runner').selectpicker('refresh');
-    $('#region').val($('#region option')[0].value)
-    $('#region').selectpicker('refresh');
-    $("#extCard .row").slice(1,).each(function(_, item){
-      item.remove();
-    })
-    $("#scriptCard .row").slice(1,).each(function(_, item){
-      item.remove();
-    })
-    $("#splitCSV .row").slice(1,).each(function(_, item){
-      item.remove();
-    })
+      console.log("Create modal")
+//    $('#repo').val($('#repo')[0].defaultValue)
+//    $('#repo_https').val($('#repo_https')[0].defaultValue)
+//    $('#repo_user').val($('#repo_user')[0].defaultValue)
+//    $('#repo_pass').val($('#repo_pass')[0].defaultValue)
+//    $('#repo_key').val($('#repo_key')[0].defaultValue)
+//    $('#repo_branch').val($('#repo_branch')[0].defaultValue)
+//    $('#repo_branch_https').val($('#repo_branch_https')[0].defaultValue)
+//    $('#test_name').val($('#test_name')[0].defaultValue)
+//    $('#parallel').val($('#parallel')[0].defaultValue)
+//    $('#entrypoint').val($('#entrypoint')[0].defaultValue)
+//    $('#runner').val($('#runner option')[0].value)
+//    $('#runner').selectpicker('refresh');
+//    $('#region').val($('#region option')[0].value)
+//    $('#region').selectpicker('refresh');
+//    $("#extCard .row").slice(1,).each(function(_, item){
+//      item.remove();
+//    })
+//    $("#scriptCard .row").slice(1,).each(function(_, item){
+//      item.remove();
+//    })
+//    $("#splitCSV .row").slice(1,).each(function(_, item){
+//      item.remove();
+//    })
 }
 
 function createTest() {
@@ -43,13 +44,13 @@ function createTest() {
 //        var inp = $(item).find('input[type=text]')
 //        params[0][inp[0].value] = inp[1].value
 //      })
-      $("#params_list").bootstrapTable('getData').forEach((param) => {
-          params[0].push(param)
-      })
-
       params[0].push({"name": "test_name", "default": $('#test_name').val(), "description": "Name of the test", "type": "", "action": ""})
       params[0].push({"name": "env_type", "default": $('#test_env').val(), "description": "Env type (tag for filtering)", "type": "", "action": ""})
       params[0].push({"name": "test_type", "default": $('#test_type').val(), "description": "Test type (tag for filtering)", "type": "", "action": ""})
+      $("#backend_test_params").bootstrapTable('getData').forEach((param) => {
+          params[0].push(param)
+      })
+
       $("#extCard .row").slice(1,).each(function(_,item){
         var inp = $(item).find('input[type=text]')
         params[3][inp[0].value] = inp[1].value
@@ -80,9 +81,8 @@ function createTest() {
 
       data.append('name', $('#test_name').val());
       // TODO add in test planner UI
-      //data.append('parallel', $('#parallel').val());
-      data.append('parallel', 1);
-      data.append('region', $('#region').val());
+      data.append('parallel', $('#backend_parallel').val());
+      data.append('region', $('#backend_region option:selected').text());
       data.append('entrypoint', $('#entrypoint').val());
       data.append('runner', $('#runner').val());
       data.append('reporting', JSON.stringify({}));
@@ -205,18 +205,27 @@ function nameStyle(value, row, index) {
 }
 
 function runTestModal(test_id) {
+    $("#runTestModal").modal('show');
     var test_data = $('#tests-list').bootstrapTable('getRowByUniqueId', test_id);
     console.log(test_data);
+    $('#runner_test_params').bootstrapTable('removeAll')
+    test_data.params.forEach((param) => {
+        console.log(param)
+        $('#runner_test_params').bootstrapTable('append', param)
+    })
     $('#run_test').removeAttr('onclick');
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
-    $('#runTest_region').val(test_data.region)
-    $('#runTest_parallel').val(test_data.parallel)
-    $("#runTestModal").modal('show');
+    // TODO set region and load generators
+    $('#runner_region').val(test_data.region)
+    $('#runner_parallel').val(test_data.parallel)
 }
 
 function runTest(test_id) {
         console.log(`going to run test ${test_id}`)
-        var params = {}
+        var params = []
+        $("#runner_test_params").bootstrapTable('getData').forEach((param) => {
+          params.push(param)
+        })
         $("#nav-test-params .test_param").each(function() {
            if ($(this).children()[0].innerText !== "" && $(this).children()[1].value !== "") {
                 params[$(this).children()[0].innerText] = $(this).children()[1].value;
