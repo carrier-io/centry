@@ -231,7 +231,7 @@ const modalDataModel = {
         clear: () => $('#test_description').val('')
     },
     parameters: {
-        get: () => $('#params_list').bootstrapTable('getData'),
+        get: () => $('#security_test_params').bootstrapTable('getData'),
         set: (urls_to_scan, urls_exclusions, scan_location, test_parameters=[]) => {
             console.log('SET PARAMETERS', urls_to_scan, urls_exclusions, scan_location, test_parameters)
             const table_data = [
@@ -264,7 +264,7 @@ const modalDataModel = {
                 },
                 ...test_parameters
             ]
-            $('#params_list').bootstrapTable('load', table_data)
+            $('#security_test_params').bootstrapTable('load', table_data)
         },
         clear: () => {
             console.log('CLEARING TEST PARAMS TABLE')
@@ -297,11 +297,11 @@ const modalDataModel = {
                     _type_class: "disabled",
                 }
             ]
-            $('#params_list').bootstrapTable('load', table_data)
+            $('#security_test_params').bootstrapTable('load', table_data)
         },
         setError: data => {
             Object.keys(data).forEach(item => {
-                $(`#params_list tr[data-index=${item}] td:nth-child(2) input`)
+                $(`#security_test_params tr[data-index=${item}] td:nth-child(2) input`)
                     .addClass('is-invalid')
                     .next('div.invalid-tooltip-custom')
                     .text(data[item])
