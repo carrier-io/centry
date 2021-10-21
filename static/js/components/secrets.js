@@ -17,11 +17,13 @@ function addSecret(ev) {
 function editSecret(key) {
     var cell = $(`#${key}`).parent();
     $(`#${key}`).hide();
-    cell.prepend(`<form class="form-inline">
-<input type="text" class="form-control form-control-sm form-control-alternative w-75" id="edit_value" placeholder="Secret">
-<button type="button" class="btn btn-nooutline-secondary ml-4 mt-2 mr-2" onclick="updateSecret('${key}')"><i class="fas fa-save"></i></button>
-<button type="button" class="btn btn-nooutline-secondary mt-2 mr-4" onclick="cancelUpdate('${key}')"><i class="fas fa-times"></i></button>
-</form>`)
+    cell.prepend(`
+        <form class="form-inline m-0">
+            <input type="text" class="form-control flex-grow-1 m-0" id="edit_value" placeholder="Secret">
+            <button type="button" class="btn btn-37 btn-action mL-1" onclick="updateSecret('${key}')"><i class="fas fa-check"></i></button>
+            <button type="button" class="btn btn-37 btn-action mL-1" onclick="cancelUpdate('${key}')"><i class="fas fa-times"></i></button>
+        </form>
+    `)
 }
 
 
@@ -61,7 +63,7 @@ function displaySecret(key, clipboard) {
             type: 'GET',
             contentType: 'application/json',
             success: function (result) {
-                if (!clipboard){
+                if (!clipboard) {
                     $(`#${key}`).text(result.secret);
                 } else {
                     console.log("Copied");
@@ -101,16 +103,30 @@ function hideSecret(key) {
 
 function secretsActionFormatter(value, row, index) {
     var key = row.name;
-    return [
-    `<button type="button" class="btn btn-16 btn-action" onclick="displaySecret('${key}', false)"><i class="far fa-eye"></i></button>`,
-    `<button type="button" class="btn btn-16 btn-action" onclick="editSecret('${key}')"><i class="fas fa-pen"></i></button>`,
-    `<button type="button" class="btn btn-16 btn-action" onclick="hideSecret('${key}')"><i class="fas fa-lock"></i></button>`,
-    `<button type="button" class="btn btn-16 btn-action" onclick="deleteSecret('${key}')"><i class="fa fa-trash"></i></button>`
-    ].join('')
+    return `
+        <button type="button" class="btn btn-24 btn-action" 
+            data-toggle="tooltip" data-placement="top" title="Show"
+            onclick="displaySecret('${key}', false)"><i class="far fa-eye"></i></button>
+        <button type="button" class="btn btn-24 btn-action" 
+            data-toggle="tooltip" data-placement="top" title="Edit"
+            onclick="editSecret('${key}')"><i class="fas fa-pen"></i></button>
+        <button type="button" class="btn btn-24 btn-action" 
+            data-toggle="tooltip" data-placement="top" title="Hide"
+            onclick="hideSecret('${key}')"><i class="fas fa-lock"></i></button>
+        <button type="button" class="btn btn-24 btn-action" 
+            data-toggle="tooltip" data-placement="top" title="Delete"
+            onclick="deleteSecret('${key}')"><i class="fa fa-trash"></i></button>
+    `
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     $("[data-toggle=popover]").popover({
-        sanitizeFn: function(content) {return content}
+        sanitizeFn: function (content) {
+            return content
+        }
     });
+    $('#secrets').bootstrapTable({
+      onLoadSuccess: () => $('[data-toggle="tooltip"]').tooltip()
+    })
+
 });
