@@ -123,9 +123,10 @@ var statusEvents = {
         $('#security_test_save_and_run').on('click', () => {
             const data = collectModalData()
             console.log('Editing and running test with data', data)
-            createAndRunTest(row['test_uid'], data)
+            editAndRunTest(row['test_uid'], data)
         })
         $("#createApplicationTest").modal('show');
+        $('#modal_title').text('Edit Application Test')
 
     },
 
@@ -148,9 +149,18 @@ const editTest = (testUID, data) => {
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
+        if (response.ok) {
+            $("#createApplicationTest").modal('hide');
+        } else {
+            response.json().then(data => setValidationErrors(data))
+        }
     })
 }
+
+const setValidationErrors = errorData => errorData.data?.forEach(item =>
+    modalDataModel[item.field]?.setError(item.feedback)
+)
+
 
 const editAndRunTest = (testUID, data) => {
     data['run_test'] = true
@@ -166,7 +176,11 @@ const createTest = data => {
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
+        if (response.ok) {
+            $("#createApplicationTest").modal('hide');
+        } else {
+            response.json().then(data => setValidationErrors(data))
+        }
     })
 }
 
@@ -178,11 +192,14 @@ const createAndRunTest = data => {
 const beforeSaveTest = () => {
     $("#security_test_save").addClass("disabled updating");
     $("#security_test_save_and_run").addClass("disabled updating");
+    clearErrors()
 }
 
 const afterSaveTest = () => {
     $("#tests-list").bootstrapTable('refresh');
     $("#results-list").bootstrapTable('refresh');
+    $("#security_test_save").removeClass("disabled updating");
+    $("#security_test_save_and_run").removeClass("disabled updating");
 }
 
 $('#createApplicationTest').on('hide.bs.modal', function (e) {
@@ -205,7 +222,8 @@ const modalDataModel = {
     name: {
         get: () => $('#test_name').val(),
         set: value => $('#test_name').val(value),
-        clear: () => $('#test_name').val('')
+        clear: () => $('#test_name').val(''),
+        setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data)
     },
     description: {
         get: () => $('#test_description').val(),
@@ -280,6 +298,14 @@ const modalDataModel = {
                 }
             ]
             $('#params_list').bootstrapTable('load', table_data)
+        },
+        setError: data => {
+            Object.keys(data).forEach(item => {
+                $(`#params_list tr[data-index=${item}] td:nth-child(2) input`)
+                    .addClass('is-invalid')
+                    .next('div.invalid-tooltip-custom')
+                    .text(data[item])
+            })
         }
     },
     integrations: {
@@ -365,9 +391,23 @@ const setModalData = data => {
 
 }
 
-const clearModal = () => Object.keys(modalDataModel).forEach(item => {
-    modalDataModel[item].clear()
-})
+const clearModal = () => {
+    Object.keys(modalDataModel).forEach(item => {
+        modalDataModel[item].clear()
+    })
+    $('#modal_title').text('Add Application Test')
+    clearErrors()
+
+}
+
+
+const clearErrors = () => {
+    const modalWindow = $('.modal-dialog')
+    modalWindow.find('input.is-invalid').removeClass('is-invalid')
+    modalWindow.find('.invalid-feedback').text('')
+    modalWindow.find('.invalid-tooltip').text('')
+}
+
 
 $(document).ready(function () {
 
