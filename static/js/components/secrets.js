@@ -1,14 +1,16 @@
 function addSecret(ev) {
-    _updateSecret($("#secret_key").val(), $("#secret_value").val())
+    const [secretKey, secretValue] = [$("#secret_key").val(), $("#secret_value").val()]
+    _updateSecret(secretKey, secretValue)
     $.ajax({
         url: `/api/v1/secrets/${getSelectedProjectId()}/${$("#secret_key").val()}`,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(secret_data),
+        data: JSON.stringify({secret: secretValue}),
         success: function (result) {
             $("#secret_value").val("");
             $("#secret_key").val("");
-            $('label[for="event"]').parent().parent().popover("hide");
+            // $('label[for="event"]').parent().parent().popover("hide");
+            $("#secrets_add[data-toggle=popover]").popover('hide')
             $("#secrets").bootstrapTable('refresh');
         }
     });
@@ -39,18 +41,16 @@ function updateSecret(key) {
 }
 
 function _updateSecret(key, value) {
-    var secret_data = {
-        secret: value
-    }
     $.ajax({
         url: `/api/v1/secrets/${getSelectedProjectId()}/${key}`,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(secret_data),
+        data: JSON.stringify({secret: value}),
         success: function (result) {
             $("#secret_value").val("");
             $("#secret_key").val("");
-            $('label[for="event"]').parent().parent().popover("hide");
+            // $('label[for="event"]').parent().parent().popover("hide");
+            $("#secrets_add[data-toggle=popover]").popover('hide')
             $("#secrets").bootstrapTable('refresh');
         }
     });
@@ -76,14 +76,22 @@ function displaySecret(key, clipboard) {
 }
 
 function deleteSecret(key) {
-    $.ajax({
-        url: `/api/v1/secrets/${getSelectedProjectId()}/${key}`,
-        type: 'DELETE',
-        contentType: 'application/json',
-        success: function (result) {
-            $("#secrets").bootstrapTable('refresh');
-        }
-    });
+    displayModal(
+        'Delete secret?',
+        `Please confirm that you want to delete ${key}`,
+        () => {
+            fetch(`/api/v1/secrets/${getSelectedProjectId()}/${key}`, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'}
+            }).then(response => {
+                if (response.ok) {
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+                    $("#secrets").bootstrapTable('refresh')
+                }
+            })
+        },
+        'Delete'
+    )
 }
 
 function viewValue(value, row, index) {
@@ -91,14 +99,22 @@ function viewValue(value, row, index) {
 }
 
 function hideSecret(key) {
-    $.ajax({
-        url: `/api/v1/secrets/${getSelectedProjectId()}/${key}`,
-        type: 'PUT',
-        contentType: 'application/json',
-        success: function (result) {
-            $("#secrets").bootstrapTable('refresh');
-        }
-    });
+    displayModal(
+        'Hide secret?',
+        `Please confirm that you want to hide ${key}`,
+        () => {
+            fetch(`/api/v1/secrets/${getSelectedProjectId()}/${key}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'}
+            }).then(response => {
+                if (response.ok) {
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+                    $("#secrets").bootstrapTable('refresh')
+                }
+            })
+        },
+        'Hide'
+    )
 }
 
 function secretsActionFormatter(value, row, index) {
@@ -119,14 +135,40 @@ function secretsActionFormatter(value, row, index) {
     `
 }
 
+
+const displayModal = (title, body, onOkCallback, okBtnText = 'OK') => {
+    console.log('modal', {title, body, onOkCallback, okBtnText})
+    $('#secrets_modal_title').text(title)
+    $('#secrets_modal_body').text(body)
+    $('#modal_save').text(okBtnText).prop('onclick', null).off('click').on('click', () => {
+        onOkCallback()
+        $('#secrets_modal').modal('hide')
+    })
+    $('#secrets_modal').modal('show')
+}
+
+
 $(document).ready(function () {
-    $("[data-toggle=popover]").popover({
+    $("#secrets_add[data-toggle=popover]").popover({
         sanitizeFn: function (content) {
             return content
-        }
+        },
+        content: `
+            <h9 class="form-control-label" for="secret_key">Name</h9>
+            <input type="text" id="secret_key" class="form-control form-control-alternative" placeholder="Name">
+            
+            <h9 class="form-control-label mt-1" htmlFor="secret_value">Value</h9>
+            <input type="text" id="secret_value" class="form-control form-control-alternative" placeholder="Value">
+            <button type="button" onClick="addSecret(event)" class="btn btn-secondary">
+                Add
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="$('#secrets_add[data-toggle=popover]').popover('hide')">
+                Cancel
+            </button>
+        `,
+        html: true
     });
     $('#secrets').bootstrapTable({
-      onLoadSuccess: () => $('[data-toggle="tooltip"]').tooltip()
+        onLoadSuccess: () => $('[data-toggle="tooltip"]').tooltip()
     })
-
 });
