@@ -6,6 +6,7 @@ function addSecret(ev) {
 }
 
 function editSecret(key, value, index) {
+
     $('#secrets').bootstrapTable('updateCell', {
         index: index,
         field: 'is_edited',
@@ -39,7 +40,6 @@ function cancelUpdate(restoredValue, index) {
 function updateSecret(key) {
     const newValue = $(`#edit_secret_${key}`).val()
     createOrUpdate(key, newValue).then(response => {
-        console.log('RRR', response)
         response.ok && cancelUpdate(newValue)
     })
 }
@@ -150,7 +150,6 @@ function secretsActionFormatter(value, row, index) {
 
 
 const displayModal = (title, body, onOkCallback, okBtnText = 'OK') => {
-    console.log('modal', {title, body, onOkCallback, okBtnText})
     $('#secrets_modal_title').text(title)
     $('#secrets_modal_body').text(body)
     $('#modal_save').text(okBtnText).prop('onclick', null).off('click').on('click', () => {
