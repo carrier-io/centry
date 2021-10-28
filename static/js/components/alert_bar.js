@@ -1,5 +1,5 @@
 class AlertBar {
-    alertVariants = [
+    static alertVariants = [
         'primary', 'secondary',
         'success', 'danger',
         'warning', 'info',
@@ -25,10 +25,10 @@ class AlertBar {
         closeIn = 0
     ) => {
 
-        const [variantOriginal, isOverlayed] = variant.toLowerCase().split('-')
+        const [variantOriginal, isOverlaid] = variant.toLowerCase().split('-', 2)
 
-        if (!this.alertVariants.includes(variantOriginal)) {
-            throw new Error(`Alert variant "${variant}" is not in available ${JSON.stringify(this.alertVariants)}`);
+        if (!AlertBar.alertVariants.includes(variantOriginal)) {
+            throw new Error(`Alert variant "${variant}" is not in available: ${JSON.stringify(AlertBar.alertVariants)}`);
         }
 
         const alertBarId = `alert_bar_${this.alertIdIndex}`
@@ -43,7 +43,7 @@ class AlertBar {
         const $alerts = this.getAlerts()
         $alerts.length >= this.maxAlerts && $alerts.first().alert('close')
 
-        if (isOverlayed) {
+        if (isOverlaid === 'overlay') {
             this.$alertContainerOverlay.append(`
                 <div 
                     class="alert alert-${variantOriginal} alert-dismissible fade show" 
@@ -87,4 +87,12 @@ class AlertBar {
         }
 
     }
+}
+
+
+if (Boolean(AlertBar.alertVariants.find(item => item.includes('-')))) {
+    throw new Error(`
+        Alert variants should not contain "-" symbol. 
+        Consider renaming or removing: ${AlertBar.alertVariants.filter(item => item.includes('-'))}
+    `);
 }
