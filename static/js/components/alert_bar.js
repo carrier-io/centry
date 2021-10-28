@@ -67,7 +67,6 @@ class AlertBar {
             `)
         }
 
-
         if (closeIn > 0) {
             const $countdown = $(`#${alertBarId}`).find('.countdown')
             let intrvl = -1
@@ -88,7 +87,6 @@ class AlertBar {
 
     }
 }
-
 
 if (Boolean(AlertBar.alertVariants.find(item => item.includes('-')))) {
     throw new Error(`
