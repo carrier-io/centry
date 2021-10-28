@@ -3,7 +3,7 @@ var state_refresh_interval = undefined;
 var page_params = new URLSearchParams(window.location.search);
 
 var app = new Vue({
-    el: "#logs-card",
+    el: "#all_logs",
     data: {
         state: "unknown",
         websocket: "unknown",
