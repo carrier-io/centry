@@ -10,6 +10,7 @@ class AlertBar {
     constructor(containerId) {
         this.containerId = containerId;
         this.$alertContainer = $(`#${containerId}`)
+        this.$alertContainerOverlay = this.$alertContainer.find('.overlaying')
         this.maxAlerts = this.$alertContainer.attr('data-max-alerts') || 1
     }
 
@@ -24,7 +25,9 @@ class AlertBar {
         closeIn = 0
     ) => {
 
-        if (!this.alertVariants.includes(variant.toLowerCase())) {
+        const [variantOriginal, isOverlayed] = variant.toLowerCase().split('-')
+
+        if (!this.alertVariants.includes(variantOriginal)) {
             throw new Error(`Alert variant "${variant}" is not in available ${JSON.stringify(this.alertVariants)}`);
         }
 
@@ -40,12 +43,30 @@ class AlertBar {
         const $alerts = this.getAlerts()
         $alerts.length >= this.maxAlerts && $alerts.first().alert('close')
 
-        this.$alertContainer.append(`
-            <div class="alert alert-${variant} alert-dismissible fade show" role="alert" id="${alertBarId}">
-                ${body}
-                ${closeable ? closeBtn : ''}
-            </div>
-        `)
+        if (isOverlayed) {
+            this.$alertContainerOverlay.append(`
+                <div 
+                    class="alert alert-${variantOriginal} alert-dismissible fade show" 
+                    role="alert" 
+                    id="${alertBarId}" 
+                >
+                        ${body}
+                        ${closeable ? closeBtn : ''}
+                </div>
+            `)
+        } else {
+            this.$alertContainerOverlay.before(`
+                <div 
+                    class="alert alert-${variantOriginal} alert-dismissible fade show" 
+                    role="alert" 
+                    id="${alertBarId}" 
+                >
+                        ${body}
+                        ${closeable ? closeBtn : ''}
+                </div>
+            `)
+        }
+
 
         if (closeIn > 0) {
             const $countdown = $(`#${alertBarId}`).find('.countdown')

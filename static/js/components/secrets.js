@@ -62,7 +62,7 @@ const createOrUpdate = (key, value) => {
 }
 
 function displaySecret(key, value, index, clipboard = false) {
-    console.log('displaySecret', key, value, index)
+    // console.log('displaySecret', key, value, index)
     if (value === SECRET_DEFAULT_VALUE) {
         fetch(`/api/v1/secrets/${getSelectedProjectId()}/${key}`).then(response => {
             if (response.ok) {
@@ -128,7 +128,7 @@ function hideSecret(key) {
 function secretsActionFormatter(value, row, index) {
     const key = row.name;
     const val = row.secret;
-    console.log('row', row, value, 'index', index)
+    // console.log('row', row, value, 'index', index)
     // removing stuck tooltips
     $('div.tooltip').remove()
     if (row.is_edited) {return ''}
@@ -150,7 +150,7 @@ function secretsActionFormatter(value, row, index) {
 
 
 const displayModal = (title, body, onOkCallback, okBtnText = 'OK') => {
-    console.log('modal', {title, body, onOkCallback, okBtnText})
+    // console.log('modal', {title, body, onOkCallback, okBtnText})
     $('#secrets_modal_title').text(title)
     $('#secrets_modal_body').text(body)
     $('#modal_save').text(okBtnText).prop('onclick', null).off('click').on('click', () => {
