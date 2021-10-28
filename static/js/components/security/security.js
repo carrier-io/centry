@@ -397,7 +397,7 @@ const clearModal = () => {
     })
     $('#modal_title').text('Add Application Test')
     clearErrors()
-
+    alertCreateTest?.clear()
 }
 
 
