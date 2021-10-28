@@ -20,6 +20,7 @@ preordered_plugins:
   - backend_performance
   - integrations
   - security_scanner_qualys
+  - security_scanner_zap
 
 git_config:
   default:
