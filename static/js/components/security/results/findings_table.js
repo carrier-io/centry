@@ -63,24 +63,26 @@ const onSelectChange = (fieldName, value, issueHashes) => {
 }
 
 const tableColoredSelectFormatter = (value, row, index, optionsList, fieldName) => {
-    const options = optionsList.map(item =>
-        `<option 
+    const options = optionsList.map(item => `
+        <option 
             class="${item.className}" 
             ${compareValues(item.name, value) ? 'selected' : ''}
-        >${item.name}</option>`
-    );
+        >
+            ${item.name}
+        </option>
+    `);
     const unexpectedValue = optionsList.find(item => compareValues(item.name, value))
-    unexpectedValue === undefined && options.push(
-        `<option selected>${value}</option>`
-    )
+    unexpectedValue === undefined && options.push(`<option selected>${value}</option>`)
 
-    return `<select 
+    return `
+        <select 
             class="selectpicker btn-colored-select" 
             data-style="btn-colored" 
             onchange="onSelectChange('${fieldName}', this.value, ['${row['issue_hash']}'])"
-            >
-                ${options.join('')}
-            </select>`
+        >
+            ${options.join('')}
+        </select>
+    `
 }
 
 
@@ -91,9 +93,9 @@ function renderTableFindings() {
 }
 
 const bulkModify = (dataType, value) => {
-    const issueHashes = $("#errors").bootstrapTable('getSelections').map(item => item.issue_hash)
+    const issueHashes = $('#errors').bootstrapTable('getSelections').map(item => item.issue_hash)
     if (issueHashes.length > 0) {
-        console.log('issues_ids', issueHashes);
+        // console.log('issues_ids', issueHashes);
         const data = {
             issue_hashes: issueHashes,
             [dataType]: value
@@ -117,10 +119,10 @@ const statusFilter = value => {
         'false positive': 'false_positive',
         ignored: 'ignored'
     }
-    console.log('Filter Selected', valueMap[value])
+    // console.log('Filter Selected', valueMap[value])
     // urlParamsFindings = value.toLowerCase() === 'all' ? '' : `/?status=${valueMap[value.toLowerCase()]}`;
     urlParamsFindings = `/?status=${valueMap[value.toLowerCase()]}`;
-    console.log('new url', getTableUrlFindings())
+    // console.log('new url', getTableUrlFindings())
     renderTableFindings();
 }
 
@@ -139,7 +141,7 @@ const _findingsDetail = (index, row) => {
 }
 
 $.when( $.ready ).then(function() {
-  $('#errors').on('all.bs.table', function (e) {
+    $('#errors').on('all.bs.table', function (e) {
         $('.selectpicker').selectpicker('render');
         initColoredSelect();
     })
