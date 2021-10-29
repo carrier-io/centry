@@ -6,7 +6,6 @@ function addSecret(ev) {
 }
 
 function editSecret(key, value, index) {
-
     $('#secrets').bootstrapTable('updateCell', {
         index: index,
         field: 'is_edited',
@@ -62,7 +61,6 @@ const createOrUpdate = (key, value) => {
 }
 
 function displaySecret(key, value, index, clipboard = false) {
-    console.log('displaySecret', key, value, index)
     if (value === SECRET_DEFAULT_VALUE) {
         fetch(`/api/v1/secrets/${getSelectedProjectId()}/${key}`).then(response => {
             if (response.ok) {
@@ -128,7 +126,6 @@ function hideSecret(key) {
 function secretsActionFormatter(value, row, index) {
     const key = row.name;
     const val = row.secret;
-    console.log('row', row, value, 'index', index)
     // removing stuck tooltips
     $('div.tooltip').remove()
     if (row.is_edited) {return ''}
