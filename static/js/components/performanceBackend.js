@@ -1,3 +1,7 @@
+var presetsContext=document.getElementById("chart-requests").getContext("2d");
+var analyticsContext=document.getElementById("chart-analytics").getContext("2d");
+
+
 //$('#createTestModal').on('hide.bs.modal', function(e) {
 //    createTestModal()
 //});
@@ -80,7 +84,6 @@ function createTest() {
 
 
       data.append('name', $('#test_name').val());
-      // TODO add in test planner UI
       data.append('parallel', $('#backend_parallel').val());
       data.append('region', $('#backend_region option:selected').text());
       data.append('entrypoint', $('#entrypoint').val());
@@ -155,7 +158,13 @@ function backendLgFormatter(value, row, index) {
 }
 
 function createLinkToTest(value, row, index) {
-    return '<a href="/report/backend?report_id=' + row['id'] + '">' + value + '</a>'
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('module', 'Result');
+    searchParams.set('page', 'list');
+    searchParams.set('project_id', getSelectedProjectId());
+    searchParams.set('result_test_id', row.id);
+    searchParams.set('test_id', row.test_uid);
+    return `<a class="test form-control-label" href="?${searchParams.toString()}" role="button">${row.name}</a>`
 }
 
 function backendTestActionFormatter(value, row, index) {
@@ -215,7 +224,6 @@ function runTestModal(test_id) {
     })
     $('#run_test').removeAttr('onclick');
     $('#run_test').attr('onClick', `runTest("${test_data.test_uid}")`);
-    // TODO set region and load generators
     $('#runner_region').val(test_data.region)
     $('#runner_parallel').val(test_data.parallel)
 }
@@ -260,3 +268,155 @@ function runTest(test_id) {
             }
         });
     }
+
+
+function setParams(){
+    build_id = document.querySelector("[property~=build_id][content]").content;
+    lg_type = document.querySelector("[property~=lg_type][content]").content;
+    test_name = document.querySelector("[property~=test_name][content]").content;
+    environment = document.querySelector("[property~=environment][content]").content;
+//    samplerType = $("#sampler").val().toUpperCase();
+    // TODO set correct samplerType and statusType
+    samplerType = "REQUEST"
+   // statusType = $("#status").val().toLowerCase();
+    statusType = "ok"
+    aggregator = "auto";
+}
+
+
+function fillSummaryTable(){
+    console.log("fillSummaryTable")
+    $.get(
+    '/api/v1/chart/requests/table',
+    {
+        build_id: build_id,
+        test_name: test_name,
+        lg_type: lg_type,
+        sampler: samplerType,
+        status: statusType,
+        start_time: $("#start_time").html(),
+        end_time: $("#end_time").html(),
+        // TODO set correct low_value and high_value
+        //low_value: $("#input-slider-range-value-low").html(),
+        //high_value: $("#input-slider-range-value-high").html()
+        low_value: 0,
+        high_value: 100
+    },
+    function( data ) {
+        console.log(data)
+        data.forEach((item) => {
+            console.log(item)
+            $('#summary_table').bootstrapTable('append', item)
+        })
+    });
+}
+
+function loadRequestData(url, y_label) {
+    if ( ! $("#preset").is(":visible") ) {
+        $("#preset").show();
+        $("#analytics").hide();
+        if(analyticsLine!=null){
+            analyticsLine.destroy();
+        }
+    }
+//    if ($("#end_time").html() != "") {
+//        $("#PP").hide();
+//    }
+    $.get(
+      url,
+      {
+        build_id: build_id,
+        test_name: test_name,
+        lg_type: lg_type,
+        sampler: samplerType,
+        aggregator: aggregator,
+        status: statusType,
+        start_time: $("#start_time").html(),
+        end_time: $("#end_time").html(),
+        // TODO add time picker
+//        low_value: $("#input-slider-range-value-low").html(),
+//        high_value: $("#input-slider-range-value-high").html()
+        low_value: 0,
+        high_value: 100
+      }, function( data ) {
+        lineChartData = data;
+        if(window.presetLine!=null){
+            window.presetLine.destroy();
+        }
+        drawCanvas(y_label);
+        document.getElementById('chartjs-custom-legend').innerHTML = window.presetLine.generateLegend();
+      }
+     );
+}
+
+function switchAggregator() {
+    aggregator = $("#aggregator").val();
+    console.log(aggregator)
+    resizeChart();
+}
+
+function drawCanvas(y_label) {
+    window.presetLine = Chart.Line(presetsContext, {
+        data: lineChartData,
+        options: {
+            responsive: true,
+            hoverMode: 'index',
+            stacked: false,
+            legend: {
+                display: false,
+                position: 'right',
+                labels: {
+                    fontSize: 10,
+                    usePointStyle: false,
+                    filter: function(legendItem, data) {
+                        return legendItem.text != "Active Users";
+                    }
+                }
+            },
+            title:{
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                    display: true,
+                    position: "left",
+                    scaleLabel: {
+                        display: true,
+                        labelString: y_label
+                    },
+                    id: "response_time",
+                }, {
+                    type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                    display: true,
+                    position: "right",
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Active users"
+                    },
+                    id: "active_users",
+                    gridLines: {
+                        drawOnChartArea: false, // only want the grid lines for one axis to show up
+                    },
+                }],
+            }
+        }
+    });
+}
+
+function resizeChart() {
+    if ( $("#analytics").is(":visible") ){
+        analyticsData = null;
+        analyticsLine.destroy();
+        analyticsCanvas();
+        recalculateAnalytics();
+    }
+    ["RT", "AR", "HT", "AN"].forEach( item => {
+        if ($(`#${item}`).hasClass( "active" )) {
+            $(`#${item}`).trigger( "click" );
+        }
+    });
+    fillTable();
+    // TODO add error table
+   // fillErrorTable();
+}
