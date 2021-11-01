@@ -8,38 +8,7 @@ function test_name_button(value, row, index) {
     return `<a class="test form-control-label" href="?${searchParams.toString()}" role="button">${row.name}</a>`
 }
 
-const badgeClasses = {
-    'badge-dark': 0,
-    'badge-light': 0,
-    'badge-info': 0,
-    'badge-warning': 0,
-    'badge-danger': 0,
-    'badge-success': 0,
-    'badge-secondary': 0,
-    'badge-primary': 0,
-}
 
-let tagBadgeMapping = {}
-
-const getTagBadge = tag => {
-    const tagLower = tag.toLowerCase()
-    if (tagBadgeMapping[tagLower] === undefined) {
-        const leastChosenClassName = Object.keys(badgeClasses).reduce(
-            (className, current, index, item) =>
-                badgeClasses[className] < badgeClasses[current] ? className : current
-        )
-        tagBadgeMapping[tagLower] = leastChosenClassName
-        badgeClasses[leastChosenClassName]++
-    }
-    return tagBadgeMapping[tagLower]
-}
-
-function reportsTagFormatter(value, row, index) {
-    const result = value?.map(item => {
-        return `<span class="badge badge-pill ${getTagBadge(item)}">${item}</span>`
-    })
-    return result?.join(' ')
-}
 
 function reportsStatusFormatter(value, row, index) {
     switch (value.toLowerCase()) {
@@ -123,9 +92,10 @@ var statusEvents = {
         $('#security_test_save_and_run').on('click', () => {
             const data = collectModalData()
             console.log('Editing and running test with data', data)
-            createAndRunTest(row['test_uid'], data)
+            editAndRunTest(row['test_uid'], data)
         })
         $("#createApplicationTest").modal('show');
+        $('#modal_title').text('Edit Application Test')
 
     },
 
@@ -148,9 +118,18 @@ const editTest = (testUID, data) => {
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
+        if (response.ok) {
+            $("#createApplicationTest").modal('hide');
+        } else {
+            response.json().then(data => setValidationErrors(data))
+        }
     })
 }
+
+const setValidationErrors = errorData => errorData.data?.forEach(item =>
+    modalDataModel[item.field]?.setError(item.feedback)
+)
+
 
 const editAndRunTest = (testUID, data) => {
     data['run_test'] = true
@@ -166,7 +145,11 @@ const createTest = data => {
         body: JSON.stringify(data)
     }).then(response => {
         afterSaveTest()
-        response.ok && $("#createApplicationTest").modal('hide');
+        if (response.ok) {
+            $("#createApplicationTest").modal('hide');
+        } else {
+            response.json().then(data => setValidationErrors(data))
+        }
     })
 }
 
@@ -178,11 +161,14 @@ const createAndRunTest = data => {
 const beforeSaveTest = () => {
     $("#security_test_save").addClass("disabled updating");
     $("#security_test_save_and_run").addClass("disabled updating");
+    clearErrors()
 }
 
 const afterSaveTest = () => {
     $("#tests-list").bootstrapTable('refresh');
     $("#results-list").bootstrapTable('refresh');
+    $("#security_test_save").removeClass("disabled updating");
+    $("#security_test_save_and_run").removeClass("disabled updating");
 }
 
 $('#createApplicationTest').on('hide.bs.modal', function (e) {
@@ -205,7 +191,8 @@ const modalDataModel = {
     name: {
         get: () => $('#test_name').val(),
         set: value => $('#test_name').val(value),
-        clear: () => $('#test_name').val('')
+        clear: () => $('#test_name').val(''),
+        setError: data => $('#test_name').addClass('is-invalid').next('div.invalid-feedback').text(data)
     },
     description: {
         get: () => $('#test_description').val(),
@@ -213,7 +200,7 @@ const modalDataModel = {
         clear: () => $('#test_description').val('')
     },
     parameters: {
-        get: () => $('#params_list').bootstrapTable('getData'),
+        get: () => $('#security_test_params').bootstrapTable('getData'),
         set: (urls_to_scan, urls_exclusions, scan_location, test_parameters=[]) => {
             console.log('SET PARAMETERS', urls_to_scan, urls_exclusions, scan_location, test_parameters)
             const table_data = [
@@ -246,7 +233,7 @@ const modalDataModel = {
                 },
                 ...test_parameters
             ]
-            $('#params_list').bootstrapTable('load', table_data)
+            $('#security_test_params').bootstrapTable('load', table_data)
         },
         clear: () => {
             console.log('CLEARING TEST PARAMS TABLE')
@@ -279,7 +266,15 @@ const modalDataModel = {
                     _type_class: "disabled",
                 }
             ]
-            $('#params_list').bootstrapTable('load', table_data)
+            $('#security_test_params').bootstrapTable('load', table_data)
+        },
+        setError: data => {
+            Object.keys(data).forEach(item => {
+                $(`#security_test_params tr[data-index=${item}] td:nth-child(2) input`)
+                    .addClass('is-invalid')
+                    .next('div.invalid-tooltip-custom')
+                    .text(data[item])
+            })
         }
     },
     integrations: {
@@ -365,9 +360,23 @@ const setModalData = data => {
 
 }
 
-const clearModal = () => Object.keys(modalDataModel).forEach(item => {
-    modalDataModel[item].clear()
-})
+const clearModal = () => {
+    Object.keys(modalDataModel).forEach(item => {
+        modalDataModel[item].clear()
+    })
+    $('#modal_title').text('Add Application Test')
+    clearErrors()
+    alertCreateTest?.clear()
+}
+
+
+const clearErrors = () => {
+    const modalWindow = $('.modal-dialog')
+    modalWindow.find('input.is-invalid').removeClass('is-invalid')
+    modalWindow.find('.invalid-feedback').text('')
+    modalWindow.find('.invalid-tooltip').text('')
+}
+
 
 $(document).ready(function () {
 

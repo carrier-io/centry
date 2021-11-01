@@ -16,3 +16,8 @@
 #bulkActions > .dropdown-menu:hover {
 	display: block;
 }
+
+.space-progress {
+	border-radius: 4px;
+	background: rgba(43, 212, 141, 0.06);
+}
