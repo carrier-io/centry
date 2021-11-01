@@ -15,3 +15,13 @@ const updateSummary = async () => {
 
 
 $( document ).on( 'updateSummaryEvent', updateSummary);
+
+$( document ).ready(() => {
+    $('#show_config_btn').on('click', () => {
+        $('#showConfigModal button').attr('disabled', true)
+        $('#showConfigModal button[data-toggle=collapse]').attr('disabled', false)
+        $('#showConfigModal input').attr('disabled', true)
+        $('#showConfigModal input[type=text]').attr('readonly', true)
+
+    })
+})
