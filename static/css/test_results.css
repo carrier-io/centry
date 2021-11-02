@@ -24,11 +24,11 @@
 
 
 a.detail-icon > i.fa-plus:before {
-    content: "\f063";
+    content: "\f078";
 	color: var(--basic);
 }
 a.detail-icon > i.fa-minus:before {
-    content: "\f062";
+    content: "\f077";
 	color: var(--basic);
 }
 
