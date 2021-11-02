@@ -57,8 +57,9 @@ const onSelectChange = (fieldName, value, issueHashes) => {
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     }).then(response => {
-        console.log(response);
+        // console.log(response);
         renderTableFindings();
+        $( document ).trigger( 'updateSummaryEvent' );
     })
 }
 
@@ -105,8 +106,9 @@ const bulkModify = (dataType, value) => {
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
-            console.log(response);
+            // console.log(response);
             renderTableFindings();
+            $( document ).trigger( 'updateSummaryEvent' );
         })
     }
 }

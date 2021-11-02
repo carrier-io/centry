@@ -21,3 +21,14 @@
 	border-radius: 4px;
 	background: rgba(43, 212, 141, 0.06);
 }
+
+
+a.detail-icon > i.fa-plus:before {
+    content: "\f078";
+	color: var(--basic);
+}
+a.detail-icon > i.fa-minus:before {
+    content: "\f077";
+	color: var(--basic);
+}
+
