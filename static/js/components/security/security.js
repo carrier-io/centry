@@ -33,9 +33,9 @@ function reportsStatusFormatter(value, row, index) {
 function testActions(value, row, index) {
     return `
         <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-16 btn-action run"><i class="fas fa-play"></i></button>
+            <button type="button" class="btn btn-24 btn-action run"><i class="fas fa-play"></i></button>
             <div class="dropdown action-menu">
-                <button type="button" class="btn btn-16 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-24 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
                 <div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">

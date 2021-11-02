@@ -11,7 +11,7 @@ function renderTableArtifacts() {
 function artifactActionsFormatter(value, row, index) {return _artifactActionsFormatter(value, row, index)}
 
 const _artifactActionsFormatter = (value, row, index) => {
-    return `<a href="${getTableUrlArtifacts()}/${row['name']}" class="fa fa-download" download="${row['name']}"></a>`
+    return `<a href="${getTableUrlArtifacts()}/${row['name']}" class="fa fa-download btn-action fa-2x" download="${row['name']}"></a>`
 }
 
 $.when( $.ready ).then(function() {
