@@ -15,9 +15,13 @@ var app = new Vue({
     updated() {
         var item = $("#logs-body");
         item.scrollTop(item.prop("scrollHeight"));
+    },
+    computed: {
+        reversedLogs: function () {
+            return this.logs.reverse()
+        }
     }
-    }
-    );
+});
 
 function websocket_connect() {
     test_id = page_params.get('test_id')
@@ -29,14 +33,15 @@ function websocket_connect() {
         contentType: false,
         processData: false,
         method: 'GET',
-        success: function(data){
-            full_ws_url = data['websocket_url']
+        success: function (data) {
+            const full_ws_url = data['websocket_url']
             socket = new WebSocket(`${full_ws_url}`);
             socket.onmessage = on_websocket_message;
             socket.onopen = on_websocket_open;
             socket.onclose = on_websocket_close;
             socket.onerror = on_websocket_error;
-    }})
+        }
+    })
 }
 
 function on_websocket_message(message) {
@@ -48,9 +53,9 @@ function on_websocket_message(message) {
 
     var data = JSON.parse(message.data);
 
-    data.streams.forEach(function(stream_item) {
-        stream_item.values.forEach(function(message_item) {
-            app.logs.push(message_item[1]);
+    data.streams.forEach(function (stream_item) {
+        stream_item.values.forEach(function (message_item) {
+            app.logs.push([stream_item.stream.level, message_item[1]].join(' : '));
         });
     });
 }
