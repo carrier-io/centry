@@ -196,5 +196,14 @@
     "objects": {
       "metadata": "https://raw.githubusercontent.com/carrier-io/integrations/main/metadata.json"
     }
+  },
+  "reporter_email": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Aspect13/reporter_email.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/Aspect13/reporter_email/main/metadata.json"
+    }
   }
 }
