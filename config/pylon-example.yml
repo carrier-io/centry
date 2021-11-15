@@ -7,6 +7,30 @@ server:
   port: 8080
 
 # Local paths to modules and config
+modules:
+  plugins:
+    provider: archive
+    storage: minio
+    container: modules
+  requirements:
+    provider: plain
+    storage: local
+    container: reqs
+    strict: true
+  config:
+    provider: plain
+    storage: local
+    container: cfgs
+  preload:
+    market:
+      source:
+        provider: git
+        url: https://github.com/carrier-io/market.git
+        branch: main
+      metadata:
+        provider: http
+        url: https://raw.githubusercontent.com/carrier-io/market/main/metadata.json
+
 development:
   modules: plugins
   config: config
@@ -44,13 +68,13 @@ events:
 
 # Module/config storage
 storage:
-  endpoint: {{ IP_HERE }}:9000
-  access_key: admin
-  secret_key: password
-  secure: false
-  buckets:
-    module: module
-    config: config
+  minio:
+    endpoint: {{ IP_HERE }}:9000
+    access_key: admin
+    secret_key: password
+    secure: false
+  local:
+    path: /tmp/local
 
 # Loki logging settings
 loki:
