@@ -283,7 +283,7 @@ const modalDataModel = {
                 const sectionElement = $(item)
                 const sectionName = sectionElement.find('.integration_section_name').text().toLowerCase().replace(' ', '_')
 
-                const sectionData = sectionElement.find('.security_scanner').toArray().reduce((acc, i) => {
+                const sectionData = sectionElement.find('.security_integration_item').toArray().reduce((acc, i) => {
                     const integrationName = $(i).attr('data-name')
                     const dataCallbackName = `${sectionName}_${integrationName}`
                     const integrationData = window[dataCallbackName]?.get_data()
@@ -320,7 +320,7 @@ const modalDataModel = {
             $('.integration_section').toArray().forEach(item => {
                 const sectionElement = $(item)
                 const sectionName = sectionElement.find('.integration_section_name').text().toLowerCase().replace(' ', '_')
-                sectionElement.find('.security_scanner').toArray().forEach(i => {
+                sectionElement.find('.security_integration_item').toArray().forEach(i => {
                     const integrationName = $(i).attr('data-name')
                     const dataCallbackName = `${sectionName}_${integrationName}`
                     window[dataCallbackName]?.clear_data()
