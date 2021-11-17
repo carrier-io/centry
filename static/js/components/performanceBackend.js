@@ -404,6 +404,19 @@ function drawCanvas(y_label) {
     });
 }
 
+function fillErrorTable() {
+    console.log("fillErrorTable")
+    var start_time = $("#start_time").html()
+    var end_time = $("#end_time").html()
+    //var low_value = $("#input-slider-range-value-low").html()
+    //var high_value = $("#input-slider-range-value-high").html()
+    // TODO add time picker
+    var low_value = 0
+    var high_value = 100
+    test_name = document.querySelector("[property~=test_name][content]").content;
+    $('#errors').bootstrapTable('refreshOptions', {url: `/api/v1/chart/errors/table?test_name=${test_name}&start_time=${start_time}&end_time=${end_time}&low_value=${low_value}&high_value=${high_value}`})
+}
+
 function resizeChart() {
     if ( $("#analytics").is(":visible") ){
         analyticsData = null;
@@ -417,6 +430,17 @@ function resizeChart() {
         }
     });
     fillTable();
-    // TODO add error table
-   // fillErrorTable();
+    fillErrorTable();
+}
+
+
+
+function detailFormatter(index, row) {
+    var html = []
+    html.push('<p><b>Method:</b> ' + row['Method'] + '</p>')
+    html.push('<p><b>Request Params:</b> ' + row['Request params'] + '</p>')
+    html.push('<p><b>Headers:</b> ' + row['Headers'] + '</p>')
+    html.push('<p><b>Response body:</b></p>')
+    html.push('<textarea disabled style="width: 100%">'+row['Response body']+'</textarea>')
+    return html.join('')
 }

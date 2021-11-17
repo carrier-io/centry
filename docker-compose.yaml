@@ -107,7 +107,7 @@ services:
     container_name: carrier-minio
 
   influx:
-    image: influxdb:1.7
+    image: influxdb:1.8
     restart: unless-stopped
     environment:
       - INFLUXDB_META_DIR=$INFLUXDB_META_DIR
