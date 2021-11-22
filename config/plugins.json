@@ -205,5 +205,14 @@
     "objects": {
       "metadata": "https://raw.githubusercontent.com/Aspect13/reporter_email/main/metadata.json"
     }
+  },
+  "reporter_jira": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/Aspect13/reporter_jira.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/Aspect13/reporter_jira/main/metadata.json"
+    }
   }
 }
