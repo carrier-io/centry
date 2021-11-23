@@ -1,0 +1,18 @@
+.integration_card {
+    width: 333px;
+    height: 104px;
+}
+
+.integration_description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.integration_icon {
+    font-size: 28px;
+    background-color: #2BD48D;
+    border-radius: 50%;
+    border: 10px solid #2BD48D;
+    color: #fff;
+}

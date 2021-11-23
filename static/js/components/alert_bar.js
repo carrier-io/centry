@@ -12,9 +12,10 @@ class AlertBar {
         this.$alertContainer = $(`#${containerId}`)
         this.$alertContainerOverlay = this.$alertContainer.find('.overlaying')
         this.maxAlerts = this.$alertContainer.attr('data-max-alerts') || 1
+        this.maxAlerts = parseInt(this.maxAlerts)
     }
 
-    getAlerts = () => this.$alertContainer.find('.alert')
+    getAlerts = () => this.$alertContainer.find('.alert').sort((a, b)=> parseInt(a.id.split('_')[2]) - parseInt(b.id.split('_')[2]))
 
     clear = () => this.getAlerts().alert('close')
 
@@ -41,7 +42,10 @@ class AlertBar {
         `
 
         const $alerts = this.getAlerts()
-        $alerts.length >= this.maxAlerts && $alerts.first().alert('close')
+        if ($alerts.length >= this.maxAlerts) {
+            $alerts.splice($alerts.length - this.maxAlerts + 1)
+            $alerts.alert('close')
+        }
 
         if (isOverlaid === 'overlay') {
             this.$alertContainerOverlay.append(`
