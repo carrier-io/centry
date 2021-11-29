@@ -6,7 +6,7 @@ async function setSelectedProjectOnBackend(projectId) {
     const resp = await fetch(`${backendUrl}/${projectId}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: {}
+        body: "{}"
     });
     if (resp.ok) {
         return await resp.json()
@@ -44,8 +44,7 @@ async function loadProject() {
 
 async function setProject(projectId) {
     localStorage.setItem(selectedProjectLocalStorageKey, projectId);
-    const responseMessage = setSelectedProjectOnBackend(projectId);
-    console.log(await responseMessage);
+    await setSelectedProjectOnBackend(projectId);
 };
 
 

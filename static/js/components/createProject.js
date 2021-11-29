@@ -69,6 +69,5 @@ function renderUsersProjects() {
 }
 
 function selectProject(project_id){
-    setProject(project_id);
-    document.location.href="/";
+    setProject(project_id).then(() => document.location.href="/";);
 }
