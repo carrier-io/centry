@@ -169,26 +169,13 @@ function createLinkToTest(value, row, index) {
 
 function backendTestActionFormatter(value, row, index) {
     return `
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-16 btn-action run" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
-            <div class="dropdown action-menu">
-                <button type="button" class="btn btn-16 btn-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <div class="dropdown-menu bulkActions" aria-labelledby="bulkActionsBtn">
-                    <a class="dropdown-item submenu" href="#"><i class="fas fa-share-alt fa-secondary fa-xs"></i> Integrate with</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" onclick="console.log('Docker command')">Docker command</a>
-                        <a class="dropdown-item" href="#" onclick="console.log('Jenkins stage')">Jenkins stage</a>
-                        <a class="dropdown-item" href="#" onclick="console.log('Azure DevOps yaml')">Azure DevOps yaml</a>
-                        <a class="dropdown-item" href="#" onclick="console.log('Test UID')">Test UID</a>
-                    </div>
-                    <a class="dropdown-item settings" href="#"><i class="fas fa-cog fa-secondary fa-xs"></i> Settings</a>
-                    <a class="dropdown-item trash" href="#"><i class="fas fa-trash-alt fa-secondary fa-xs"></i> Delete</a>
-                </div>
-            </div>
-        </div>
-        `
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-24 btn-action" onclick="runTestModal('${row.id}')" data-toggle="tooltip" data-placement="top" title="Run Test"><i class="fas fa-play"></i></button>
+        <button type="button" class="btn btn-24 btn-action"><i class="fas fa-cog"></i></button>
+        <button type="button" class="btn btn-24 btn-action"><i class="fas fa-share-alt"></i></button>
+        <button type="button" class="btn btn-24 btn-action"><i class="fas fa-trash-alt"></i></button>
+    </div>
+    `
 }
 
 function copyToClipboard(text) {
