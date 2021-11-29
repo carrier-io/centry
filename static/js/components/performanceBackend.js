@@ -445,3 +445,38 @@ function detailFormatter(index, row) {
     html.push('<textarea disabled style="width: 100%">'+row['Response body']+'</textarea>')
     return html.join('')
 }
+
+function showConfig() {
+    //TODO
+    console.log("show test config")
+}
+
+function rerunTest() {
+    //TODO
+    console.log("rerun test with the same config")
+}
+
+function compareWithBaseline() {
+    //TODO
+    console.log("compare current report with baseline")
+}
+
+function setBaseline() {
+    //TODO
+    console.log("set current report as baseline")
+}
+
+function setThresholds() {
+    //TODO
+    console.log("set current report results as threshold")
+}
+
+function downloadReport() {
+    //TODO
+    console.log("download test report")
+}
+
+function shareTestReport() {
+    //TODO
+    console.log("share test report")
+}
