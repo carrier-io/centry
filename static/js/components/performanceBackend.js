@@ -178,6 +178,19 @@ function backendTestActionFormatter(value, row, index) {
     `
 }
 
+function reportsStatusFormatter(value, row, index) {
+    switch (value.toLowerCase()) {
+        case 'canceled':
+            return `<div style="color: var(--gray)">${value} <i class="fas fa-times-circle"></i></div>`
+        case 'finished':
+            return `<div style="color: var(--info)">${value} <i class="fas fa-check-circle"></i></div>`
+        case 'in progress':
+            return `<div style="color: var(--basic)">${value} <i class="fas fa-spinner fa-spin fa-secondary"></i></div>`
+        default:
+            return value
+    }
+}
+
 function copyToClipboard(text) {
     var dummy = document.createElement("textarea");
     document.body.appendChild(dummy);
@@ -252,6 +265,7 @@ function runTest(test_id) {
             type: 'POST',
             success: function (result) {
                 $("#runTestModal").modal('hide');
+                $("#results-list").bootstrapTable('refresh')
             }
         });
     }
