@@ -167,7 +167,7 @@ services:
     volumes:
       - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
       - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
-      - ./config/keycloak/themes:/opt/jboss/keycloak/themes
+      - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
     environment:
       - DB_ADDR=postgres
       - DB_VENDOR=$DATABASE_VENDOR
