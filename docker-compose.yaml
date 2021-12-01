@@ -259,7 +259,7 @@ services:
       - minio
       - redis
       - vault
-      - rabbit
+      - rabbitmq
       - keycloak
     volumes:
       - .:/data
