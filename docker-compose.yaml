@@ -252,6 +252,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     container_name: carrier-pylon
+    user: ${UID}
     depends_on:
       - postgres
       - traefik
