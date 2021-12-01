@@ -35,14 +35,14 @@ modules:
 # Session storage
 sessions:
   redis:
-    host: {{ IP_HERE }}
+    host: redis
     password: password
   prefix: pylon_session_
 
 # Traefik config
 traefik:
   redis:
-    host: {{ IP_HERE }}
+    host: redis
     password: password
   rootkey: traefik
   entrypoint: http
@@ -54,7 +54,7 @@ traefik:
 # Events queue
 events:
   rabbitmq:
-    host: {{ IP_HERE }}
+    host: rabbitmq
     port: 5672
     user: user
     password: password
@@ -65,7 +65,7 @@ events:
 
 # Module/config storage
 storage:
-  endpoint: {{ IP_HERE }}:9000
+  endpoint: minio:9000
   access_key: admin
   secret_key: password
   secure: false
@@ -81,7 +81,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: {{ IP_HERE }}:3100
+  url: loki:3100
 
 
 # Settings for Flask application
