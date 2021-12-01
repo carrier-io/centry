@@ -1,6 +1,12 @@
 # centry
 New Generation of Carrier UI
 
+## (New!) Deployment
+* Clone this repo
+* Change `.env`: replace `{{ IP_HERE }}` with your IP address
+  * You can use: `sed -i -e 's!{{ IP_HERE }}!192.168.0.101!g' .env`
+* Run: `docker-compose up -d`
+
 ## Deployment
 
 * First step is to create an entrypoint for the app e.g. `app.py` and set up environment variables in `.env` to toggle development mode, paths to docker containers and location of pylon `.yml` config
@@ -49,7 +55,7 @@ New Generation of Carrier UI
 
 ## Market plugin info:
 * Downloads plugins from defined source
-  * supported sources are `git` and `http` containing zipped plugin 
+  * supported sources are `git` and `http` containing zipped plugin
 * Updates plugins automatically _(if set)_ or just notifies
 * Installs dependencies for every plugin
 
@@ -71,12 +77,12 @@ All settings located in .yml
     raise_on_attention: false
   ```
   _throws error on non-conflicting requirements that need manual attention_
-  
+
 * ```yaml
   auto_update_plugins: false
   ```
   _updates plugins automatically whenever update detected_
-  
+
 * ```yaml
   ignore_updates:
     - plugin_1
@@ -91,7 +97,7 @@ All settings located in .yml
   ```
    _used to set plugins that you require regardless of dependencies.
    This option can also be set in PREORDERED_PLUGINS env variable in `plugin_1,plugin_3` format_
-  
+
 * ```yaml
   git_config:
     default:
@@ -103,7 +109,7 @@ All settings located in .yml
       username: us3r
       password: passw0rd
   ```
-  _sets git configuration for market's git manager. 
+  _sets git configuration for market's git manager.
   `default` is used globally, but special settings can be set for each plugin individually with named section like `plugin_1`_
 
 
