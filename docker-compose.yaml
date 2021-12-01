@@ -269,8 +269,8 @@ services:
       - pylon
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.keycloak.rule=PathPrefix(`/`)'
-      - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
+      - 'traefik.http.routers.pylon.rule=PathPrefix(`/`)'
+      - 'traefik.http.services.pylon.loadbalancer.server.port=8080'
 
 volumes:
   postgre-data:
