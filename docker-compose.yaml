@@ -3,6 +3,7 @@ services:
   traefik:
     image: traefik:picodon
     environment:
+      - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS_REDIS_ENDPOINTS=redis:6379
       - TRAEFIK_PROVIDERS_REDIS_ROOTKEY=traefik
       - TRAEFIK_PROVIDERS_REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -16,6 +17,8 @@ services:
       - pylon
     ports:
       - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis
 
