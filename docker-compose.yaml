@@ -243,7 +243,7 @@ services:
     user: root
     container_name: carrier-grafana
 
-  keycloak:
+  pylon:
     image: getcarrier/pylon:latest
     logging:
       driver: "json-file"
