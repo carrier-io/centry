@@ -243,6 +243,29 @@ services:
     user: root
     container_name: carrier-grafana
 
+  keycloak:
+    image: getcarrier/pylon:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    container_name: carrier-pylon
+    depends_on:
+      - postgres
+      - traefik
+    volumes:
+      - .:/data
+    env_file:
+      - .env
+    networks:
+      - pylon
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.keycloak.rule=PathPrefix(`/`)'
+      - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
+
 volumes:
   postgre-data:
   redis-data:

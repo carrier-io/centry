@@ -7,9 +7,30 @@ server:
   port: 8080
 
 # Local paths to modules and config
-development:
-  modules: plugins
-  config: config
+modules:
+  plugins:
+    provider:
+      type: folder
+      path: /data/pylon/plugins
+  #
+  requirements:
+    mode: relaxed
+    provider:
+      type: folder
+      path: /data/pylon/requirements
+  #
+  config:
+    provider:
+      type: folder
+      path: /data/pylon/configs
+  #
+  preload:
+    market:
+      provider:
+        type: git
+        delete_git_dir: false
+        depth: null
+      source: https://github.com/carrier-io/market.git
 
 # Session storage
 sessions:

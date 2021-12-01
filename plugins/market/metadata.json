@@ -1,8 +1,0 @@
-{
-  "name": "Market Plugin",
-  "version": "0.1",
-  "module": "plugins.market",
-  "extract": false,
-  "depends_on": [],
-  "init_after": []
-}
