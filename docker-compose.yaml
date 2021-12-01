@@ -255,6 +255,12 @@ services:
     depends_on:
       - postgres
       - traefik
+      - loki
+      - minio
+      - redis
+      - vault
+      - rabbit
+      - keycloak
     volumes:
       - .:/data
     env_file:
