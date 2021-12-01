@@ -214,5 +214,14 @@
     "objects": {
       "metadata": "https://raw.githubusercontent.com/Aspect13/reporter_jira/main/metadata.json"
     }
+  },
+  "processing_severity_filter": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/carrier-io/processing_severity_filter.git"
+    },
+    "objects": {
+      "metadata": "https://raw.githubusercontent.com/carrier-io/processing_severity_filter/main/metadata.json"
+    }
   }
 }

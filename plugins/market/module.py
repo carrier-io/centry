@@ -107,8 +107,8 @@ class Module(module.ModuleModel):
         log.info('De-initializing module Market')
 
     @property
-    def plugin_list(self):
-        return storage.list_development_modules(self.context.settings)
+    def plugin_list(self) -> list:
+        return [i for i in storage.list_development_modules(self.context.settings) if i]
 
     def download_plugins(self, plugin_list):
         loop = asyncio.get_event_loop()
