@@ -54,6 +54,10 @@ function testActions(value, row, index) {
         `
 }
 
+function testTools(value, row, index) {
+    return Object.keys(value.scanners || {})
+}
+
 function cellStyle(value, row, index) {
     return {css: {"min-width": "165px"}}
 }
