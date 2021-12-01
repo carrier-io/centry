@@ -81,7 +81,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: loki:3100
+  url: http://loki:3100
 
 
 # Settings for Flask application
