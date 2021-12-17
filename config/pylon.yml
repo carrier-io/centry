@@ -85,8 +85,8 @@ loki:
 
 
 # Settings for Flask application
-# application:
-#   EXPLAIN_TEMPLATE_LOADING: true
+#application:
+#  EXPLAIN_TEMPLATE_LOADING: true
 
 # dulwich git manager
 git_manager:
