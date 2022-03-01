@@ -76,7 +76,7 @@ storage:
 # Loki logging settings
 loki:
   buffering: true
-  buffer_capacity: 20
+  buffer_capacity: 70
   include_node_name: true
   include_level_name: true
   include_logger_name: true
