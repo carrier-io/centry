@@ -308,8 +308,8 @@ services:
       - pylon
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.pylon.rule=PathPrefix(`/forward-auth`)'
-      - 'traefik.http.services.pylon.loadbalancer.server.port=8080'
+      - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
+      - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
 
 volumes:
   postgre-data:
