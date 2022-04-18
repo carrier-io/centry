@@ -62,6 +62,21 @@ events:
     queue: events
     hmac_key: key
     hmac_digest: sha512
+    callback_workers: 16
+
+# RPC
+rpc:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    user: user
+    password: password
+    vhost: carrier
+    queue: rpc
+    hmac_key: key
+    hmac_digest: sha512
+    callback_workers: 16
+  id_prefix: "core_"
 
 # Module/config storage
 storage:
@@ -85,8 +100,11 @@ loki:
 
 
 # Settings for Flask application
-#application:
-#  EXPLAIN_TEMPLATE_LOADING: true
+application:
+  # EXPLAIN_TEMPLATE_LOADING: true
+  # Sessions
+  SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
+  SESSION_COOKIE_NAME: session_id
 
 # dulwich git manager
 git_manager:
