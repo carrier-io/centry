@@ -166,18 +166,17 @@ services:
       - traefik
     volumes:
       - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/keycloak/admin.json:/opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json:ro
       - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
       - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
     environment:
-      - DB_ADDR=postgres
       - DB_VENDOR=$DATABASE_VENDOR
-      - KEYCLOAK_USER=$KEYCLOAK_USER
-      - KEYCLOAK_PASSWORD=$KEYCLOAK_PASSWORD
-      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
-      - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
+      - DB_ADDR=postgres
       - DB_DATABASE=$POSTGRES_DB
+      - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
       - DB_USER=$POSTGRES_USER
       - DB_PASSWORD=$POSTGRES_PASSWORD
+      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
       - PROXY_ADDRESS_FORWARDING=$PROXY_ADDRESS_FORWARDING
     networks:
       - pylon
