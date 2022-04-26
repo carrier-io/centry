@@ -139,3 +139,4 @@ docker-compose.yaml
 /config/keycloak/themes/
 
 /pylon
+/pylon_auth

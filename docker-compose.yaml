@@ -166,18 +166,17 @@ services:
       - traefik
     volumes:
       - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/keycloak/admin.json:/opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json:ro
       - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
       - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
     environment:
-      - DB_ADDR=postgres
       - DB_VENDOR=$DATABASE_VENDOR
-      - KEYCLOAK_USER=$KEYCLOAK_USER
-      - KEYCLOAK_PASSWORD=$KEYCLOAK_PASSWORD
-      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
-      - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
+      - DB_ADDR=postgres
       - DB_DATABASE=$POSTGRES_DB
+      - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
       - DB_USER=$POSTGRES_USER
       - DB_PASSWORD=$POSTGRES_PASSWORD
+      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
       - PROXY_ADDRESS_FORWARDING=$PROXY_ADDRESS_FORWARDING
     networks:
       - pylon
@@ -239,8 +238,8 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.grafana.rule=PathPrefix(`/grafana`)'
       - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
-      - 'traefik.http.middlewares.grafana-auth.forwardauth.address=http://carrier-auth/forward-auth/auth?target=header&scope=grafana'
-      - 'traefik.http.middlewares.grafana-auth.forwardauth.authResponseHeaders=X-WEBAUTH-USER, X-WEBAUTH-NAME, X-WEBAUTH-EMAIL'
+      - 'traefik.http.middlewares.grafana-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=header&scope=grafana'
+      - 'traefik.http.middlewares.grafana-auth.forwardauth.authResponseHeaders=X-WEBAUTH-USER,X-WEBAUTH-NAME,X-WEBAUTH-EMAIL'
       - 'traefik.http.routers.grafana.middlewares=grafana-auth@docker'
       - 'carrier=grafana'
     user: root
@@ -275,6 +274,41 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.pylon.rule=PathPrefix(`/`)'
       - 'traefik.http.services.pylon.loadbalancer.server.port=8080'
+      - 'traefik.http.middlewares.pylon-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=rpc'
+      - 'traefik.http.middlewares.pylon-auth.forwardauth.authResponseHeaders=X-Auth-Type,X-Auth-ID,X-Auth-Reference'
+      - 'traefik.http.routers.pylon.middlewares=pylon-auth@docker'
+
+  pylon_auth:
+    image: getcarrier/pylon:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    container_name: carrier-pylon-auth
+    user: ${UID}
+    depends_on:
+      - postgres
+      - traefik
+      - loki
+      - minio
+      - redis
+      - vault
+      - rabbitmq
+      - keycloak
+    volumes:
+      - .:/data
+    env_file:
+      - .env
+    environment:
+      - CORE_CONFIG_SEED=file:/data/config/pylon_auth.yml
+    networks:
+      - pylon
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
+      - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
 
 volumes:
   postgre-data:
