@@ -36,18 +36,9 @@ configs:
   market:
     preordered_plugins:
     - auth
-    - security
     - theme
     - secrets
-    - artifacts
-    - backend_performance
-    - integrations
-    - security_scanner_qualys
-    - security_scanner_zap
-    - processing_severity_filter
-    - reporter_email
-    - reporter_jira
-    - scheduling
+    - tasks
     plugin_repo:
     # - type: config
     #   data:

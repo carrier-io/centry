@@ -205,7 +205,7 @@ services:
     container_name: carrier-loki
 
   grafana:
-    image: grafana/grafana:6.4.4
+    image: grafana/grafana:latest
     logging:
       driver: "json-file"
       options:
