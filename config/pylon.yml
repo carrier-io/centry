@@ -74,6 +74,13 @@ configs:
             branch: next
           objects:
             metadata: "https://raw.githubusercontent.com/carrier-io/projects/next/metadata.json"
+        design-system:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/design-system.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
     - type: resource
       name: data/plugins.json
 
