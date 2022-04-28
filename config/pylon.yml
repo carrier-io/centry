@@ -37,18 +37,63 @@ configs:
     preordered_plugins:
     - auth
     - theme
+    - shared
+    - projects
+    - security
     - secrets
     - tasks
     plugin_repo:
-    # - type: config
-    #   data:
-    #     auth_oidc:
-    #       source:
-    #         type: git
-    #         source: "https://github.com/carrier-io/auth_oidc.git"
-    #         branch: next
-    #       objects:
-    #         metadata: "https://raw.githubusercontent.com/carrier-io/auth_oidc/next/metadata.json"
+    - type: config
+      data:
+        theme:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/theme.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/theme/next/metadata.json"
+        shared:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/shared.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/shared/next/metadata.json"
+        projects:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/projects.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/projects/next/metadata.json"
+        security:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/security.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/security/next/metadata.json"
+        secrets:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/secrets.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/secrets/next/metadata.json"
+        tasks:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/tasks.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/tasks/next/metadata.json"
+        design-system:
+          source:
+            type: git
+            source: "https://github.com/carrier-io/design-system.git"
+            branch: next
+          objects:
+            metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
     - type: resource
       name: data/plugins.json
 
