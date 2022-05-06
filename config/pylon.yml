@@ -29,7 +29,7 @@ modules:
         type: git
         delete_git_dir: false
         depth: null
-      source: https://github.com/aspect13/market.git
+      source: https://github.com/carrier-io/market.git
 
 configs:
   market:
