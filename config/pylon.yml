@@ -41,6 +41,7 @@ configs:
       - security
       - secrets
       - tasks
+      - backend_performance
     plugin_repo:
       - type: config
         data:
@@ -93,6 +94,13 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
+          backend_performance:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/backend_performance.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/backend_performance/next/metadata.json"
       - type: resource
         name: data/plugins.json
 
