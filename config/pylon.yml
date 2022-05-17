@@ -41,6 +41,8 @@ configs:
       - security
       - secrets
       - tasks
+      - reporter_email
+      - security_scanner_zap
     plugin_repo:
       - type: config
         data:
@@ -93,6 +95,27 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
+          integrations:
+            source:
+              type: git
+              source: "https://github.com/aspect13/integrations.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/aspect13/integrations/next/metadata.json"
+          reporter_email:
+            source:
+              type: git
+              source: "https://github.com/Aspect13/reporter_email.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/aspect13/reporter_email/next/metadata.json"
+          security_scanner_zap:
+            source:
+              type: git
+              source: "https://github.com/Aspect13/security_scanner_zap.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/aspect13/security_scanner_zap/next/metadata.json"
       - type: resource
         name: data/plugins.json
 
