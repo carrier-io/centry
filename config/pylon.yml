@@ -143,16 +143,16 @@ sessions:
   prefix: pylon_session_
 
 # Traefik config
-traefik:
-  redis:
-    host: redis
-    password: password
-  rootkey: traefik
-  entrypoint: http
-  rule: PathPrefix(`/`)
-  node_name: core
-  node_hostname: pylon
-  # node_url: http://pylon:8080
+# traefik:
+#   redis:
+#     host: redis
+#     password: password
+#   rootkey: traefik
+#   entrypoint: http
+#   rule: PathPrefix(`/`)
+#   node_name: core
+#   node_hostname: pylon
+#   # node_url: http://pylon:8080
 
 # Events queue
 events:

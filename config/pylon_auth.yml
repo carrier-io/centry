@@ -102,16 +102,16 @@ sessions:
   prefix: pylon_auth_session_
 
 # Traefik config
-traefik:
-  redis:
-    host: redis
-    password: password
-  rootkey: traefik
-  entrypoint: http
-  rule: PathPrefix(`/forward-auth`)
-  # node_name: auth
-  # node_hostname: pylon_auth
-  node_url: http://carrier-pylon-auth:8080
+# traefik:
+#   redis:
+#     host: redis
+#     password: password
+#   rootkey: traefik
+#   entrypoint: http
+#   rule: PathPrefix(`/forward-auth`)
+#   # node_name: auth
+#   # node_hostname: pylon_auth
+#   node_url: http://carrier-pylon-auth:8080
 
 # Events queue
 events:

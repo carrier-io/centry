@@ -133,6 +133,9 @@ dmypy.json
 .idea
 
 tmp
+
+.env
+/.env
 docker-compose.yaml
 /config/keycloak/themes/
 
