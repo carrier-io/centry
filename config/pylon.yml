@@ -41,6 +41,7 @@ configs:
       - security
       - secrets
       - tasks
+      - backend_performance
       - reporter_email
       - security_scanner_zap
     plugin_repo:
@@ -95,6 +96,13 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
+          backend_performance:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/backend_performance.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/backend_performance/next/metadata.json"
           integrations:
             source:
               type: git
