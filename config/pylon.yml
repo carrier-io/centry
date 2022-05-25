@@ -44,6 +44,7 @@ configs:
       - backend_performance
       - reporter_email
       - security_scanner_zap
+      - scheduling
     plugin_repo:
       - type: config
         data:
@@ -124,6 +125,13 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/aspect13/security_scanner_zap/next/metadata.json"
+          scheduling:
+            source:
+              type: git
+              source: "https://github.com/Aspect13/scheduling.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/aspect13/scheduling/next/metadata.json"
       - type: resource
         name: data/plugins.json
 
