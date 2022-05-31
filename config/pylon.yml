@@ -123,31 +123,31 @@ configs:
           integrations:
             source:
               type: git
-              source: "https://github.com/aspect13/integrations.git"
+              source: "https://github.com/carrier-io/integrations.git"
               branch: next
             objects:
-              metadata: "https://raw.githubusercontent.com/aspect13/integrations/next/metadata.json"
+              metadata: "https://raw.githubusercontent.com/carrier-io/integrations/next/metadata.json"
           reporter_email:
             source:
               type: git
-              source: "https://github.com/Aspect13/reporter_email.git"
+              source: "https://github.com/carrier-io/reporter_email.git"
               branch: next
             objects:
-              metadata: "https://raw.githubusercontent.com/aspect13/reporter_email/next/metadata.json"
+              metadata: "https://raw.githubusercontent.com/carrier-io/reporter_email/next/metadata.json"
           security_scanner_zap:
             source:
               type: git
-              source: "https://github.com/Aspect13/security_scanner_zap.git"
+              source: "https://github.com/carrier-io/security_scanner_zap.git"
               branch: next
             objects:
-              metadata: "https://raw.githubusercontent.com/aspect13/security_scanner_zap/next/metadata.json"
+              metadata: "https://raw.githubusercontent.com/carrier-io/security_scanner_zap/next/metadata.json"
           scheduling:
             source:
               type: git
-              source: "https://github.com/Aspect13/scheduling.git"
+              source: "https://github.com/carrier-io/scheduling.git"
               branch: next
             objects:
-              metadata: "https://raw.githubusercontent.com/aspect13/scheduling/next/metadata.json"
+              metadata: "https://raw.githubusercontent.com/carrier-io/scheduling/next/metadata.json"
       - type: resource
         name: data/plugins.json
 
