@@ -47,6 +47,7 @@ configs:
       - reporter_email
       - security_scanner_zap
       - scheduling
+      - processing_severity_filter
     plugin_repo:
       - type: config
         data:
