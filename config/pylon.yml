@@ -149,6 +149,13 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/carrier-io/scheduling/next/metadata.json"
+          processing_severity_filter:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/processing_severity_filter.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/processing_severity_filter/next/metadata.json"
       - type: resource
         name: data/plugins.json
 
