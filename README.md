@@ -3,8 +3,10 @@ New Generation of Carrier UI
 
 ## (New!) Deployment
 * Clone this repo
-* Change `.env`: replace `{{ IP_HERE }}` with your IP address
-  * You can use: `sed -i -e 's!{{ IP_HERE }}!192.168.0.101!g' .env`
+  * Change `.env`: replace `{{ IP_HERE }}` with your IP address
+    * You can use: `sed -i -e 's!{{ IP_HERE }}!192.168.0.101!g' .env`
+      * or `CURRENT_IP=$(ifconfig | grep 'inet 192' | cut -d ' ' -f 2) sed -i -e "s+DEV_IP=.*+DEV_IP=${CURRENT_IP}+g" .env`
+    
 * Run: `docker-compose up -d`
 
 ## Deployment
