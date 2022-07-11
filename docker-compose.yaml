@@ -151,6 +151,29 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+  interceptor_internal:
+    image: getcarrier/interceptor:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    container_name: carrier-interceptor_internal
+    environment:
+      - CPU_CORES=$INTERPECTOR_TASKS_INTERNAL
+      - RABBIT_HOST=carrier-rabbit
+      - RABBIT_PASSWORD=$RABBITMQ_PASSWORD
+      - RABBIT_USER=$RABBITMQ_USER
+      - LOKI_HOST=$APP_HOST
+      - QUEUE_NAME=$INTERNAL_QUEUE
+    networks:
+      - pylon
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
 
   keycloak:
     image: jboss/keycloak:9.0.0

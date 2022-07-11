@@ -37,6 +37,7 @@ configs:
       - auth
       - admin
       - theme
+      - design-system
       - shared
       - projects
       - security
