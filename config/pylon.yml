@@ -45,6 +45,7 @@ configs:
       - tasks
       - artifacts
       - backend_performance
+      - ui_performance
       - reporter_email
       - security_scanner_zap
       - scheduling
@@ -122,6 +123,13 @@ configs:
               branch: next
             objects:
               metadata: "https://raw.githubusercontent.com/carrier-io/backend_performance/next/metadata.json"
+          ui_performance:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/ui_performance.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/ui_performance/next/metadata.json"
           integrations:
             source:
               type: git
