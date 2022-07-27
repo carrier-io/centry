@@ -44,6 +44,8 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
     depends_on:
       - redis
     container_name: carrier-rabbit
@@ -335,6 +337,7 @@ services:
 
 volumes:
   postgre-data:
+  rabbit-data:
   redis-data:
   minio-data:
   influx-data:
