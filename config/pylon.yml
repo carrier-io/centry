@@ -1,8 +1,7 @@
-
 # General server config
 server:
-#  path: /
-#  proxy: true
+  #  path: /
+  #  proxy: true
   host: "0.0.0.0"
   port: 8080
 
@@ -32,61 +31,53 @@ modules:
         depth: null
       source: https://github.com/carrier-io/market.git
 
-# Session storage
-sessions:
-  redis:
-    host: redis
-    password: password
-  prefix: pylon_session_
-
-# Traefik config
-traefik:
-  redis:
-    host: redis
-    password: password
-  rootkey: traefik
-  entrypoint: http
-  rule: PathPrefix(`/`)
-  node_name: core
-  node_hostname: pylon
-  # node_url: http://pylon:8080
-
-# Events queue
-events:
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    user: user
-    password: password
-    vhost: carrier
-    queue: events
-    hmac_key: key
-    hmac_digest: sha512
-
-# Module/config storage
-storage:
-  endpoint: minio:9000
-  access_key: admin
-  secret_key: password
-  secure: false
-  buckets:
-    module: module
-    config: config
-
-# Loki logging settings
-loki:
-  buffering: true
-  buffer_capacity: 20
-  include_node_name: true
-  include_level_name: true
-  include_logger_name: true
-  verify: true
-  url: ${LOKI_HOST}
-
+configs:
+  market:
+    preordered_plugins:
+      - auth
+      - theme
+      - shared
+      - design-system
+    plugin_repo:
+      - type: config
+        data:
+          theme:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/theme.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/theme/next/metadata.json"
+          shared:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/shared.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/shared/next/metadata.json"
+          design-system:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/design-system.git"
+              branch: next
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
+          auth:
+            source:
+              type: git
+              source: "https://github.com/carrier-io/auth.git"
+              branch: dummy
+            objects:
+              metadata: "https://raw.githubusercontent.com/carrier-io/auth/dummy/metadata.json"
+      - type: resource
+        name: data/plugins.json
 
 # Settings for Flask application
-#application:
-#  EXPLAIN_TEMPLATE_LOADING: true
+application:
+  # EXPLAIN_TEMPLATE_LOADING: true
+  # Sessions
+  SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
+  SESSION_COOKIE_NAME: session_id
 
 # dulwich git manager
 git_manager:

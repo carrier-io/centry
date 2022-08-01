@@ -103,6 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env-e
 .venv
 env/
 venv/
@@ -139,3 +140,4 @@ docker-compose.yaml
 /config/keycloak/themes/
 
 /pylon
+/pylon_auth
