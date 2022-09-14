@@ -73,6 +73,26 @@ services:
     networks:
       - pylon
 
+  mongo:
+    image: mongo
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    container_name: carrier-mongo
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_DB}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    networks:
+      - pylon
+
   vault:
     image: vault:1.4.2
     logging:
@@ -294,6 +314,7 @@ services:
       - vault
       - rabbitmq
       - keycloak
+      - mongo
     volumes:
       - .:/data
     env_file:
@@ -347,6 +368,7 @@ volumes:
   minio-data:
   influx-data:
   grafana-data:
+  mongo-data:
 
 networks:
   pylon:

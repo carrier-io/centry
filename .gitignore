@@ -141,3 +141,4 @@ docker-compose.yaml
 
 /pylon
 /pylon_auth
+/pylon_worker
