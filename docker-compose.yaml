@@ -105,6 +105,7 @@ services:
     environment:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_API_SELECT_PARQUET=on
     volumes:
       - minio-data:/data
     networks:
