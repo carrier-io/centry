@@ -235,7 +235,7 @@ services:
       - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
 
   loki:
-    image: grafana/loki:1.6.0
+    image: grafana/loki:2.3.0
     logging:
       driver: "json-file"
       options:
@@ -360,6 +360,35 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
       - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
+
+  pylon_worker:
+    image: getcarrier/pylon:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped
+    container_name: carrier-pylon-worker
+    user: ${UID}
+    depends_on:
+      - traefik
+      - loki
+      - minio
+      - redis
+      - vault
+      - rabbitmq
+      - mongo
+    volumes:
+      - .:/data
+    env_file:
+      - .env
+    environment:
+      - CORE_CONFIG_SEED=file:/data/config/pylon_worker.yml
+    networks:
+      - pylon
+    labels:
+      - 'traefik.enable=false'
 
 volumes:
   postgre-data:
