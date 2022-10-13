@@ -52,6 +52,10 @@ configs:
       - processing_severity_filter
       - tasklets
     plugin_repo:
+      - type: config_key
+        name: local_repo
+      - type: config_key
+        name: customer_repo
       - type: config
         data:
           admin:
@@ -175,10 +179,6 @@ configs:
               metadata: "https://raw.githubusercontent.com/carrier-io/tasklets/main/metadata.json"
       - type: resource
         name: data/plugins.json
-      - type: config_key
-        name: local_repo
-      - type: config_key
-        name: customer_repo
 
 # Session storage
 sessions:
