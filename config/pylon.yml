@@ -33,17 +33,17 @@ modules:
 #  skip:
 #    - ui_performance
 
-configs:
-  market:
-    plugin_repo:
-      - type: config_key
-        name: local_repo
-      - type: config_key
-        name: customer_repo
+#configs:
+#  market:
+#    plugin_repo:
+#      - type: config_key
+#        name: local_repo
+#      - type: config_key
+#        name: customer_repo
 #      - type: resource
 #        name: data/plugins.json
-#    preordered_plugins:
-#      - shared
+#    local_preordered_plugins:
+#      - reporter_jira
 
 # Session storage
 sessions:
