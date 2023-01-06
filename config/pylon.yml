@@ -35,15 +35,24 @@ modules:
 
 #configs:
 #  market:
+#    local_preordered_plugins:
+#      - reporter_jira
 #    plugin_repo:
+#      - type: config
+#        data:
+#          YOUR_PLUGIN_NAME:
+#            source:
+#              type: git
+#              source: "https://path.to/your/git"
+#              branch: main
+#            objects:
+#              metadata: "https://path/to/your/metadata.json"
 #      - type: config_key
 #        name: local_repo
 #      - type: config_key
 #        name: customer_repo
 #      - type: resource
 #        name: data/plugins.json
-#    local_preordered_plugins:
-#      - reporter_jira
 
 # Session storage
 sessions:

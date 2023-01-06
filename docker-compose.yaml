@@ -1,7 +1,8 @@
 version: '3'
 services:
   traefik:
-    image: traefik:picodon
+    image: traefik:latest
+    command: --api.insecure=true --providers.docker
     environment:
       - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS_REDIS_ENDPOINTS=redis:6379
@@ -16,7 +17,8 @@ services:
     networks:
       - pylon
     ports:
-      - 80:80
+      - "80:80"
+#      - "8888:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
@@ -26,12 +28,11 @@ services:
     image: redis:alpine
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
       - redis-data:/data
     networks:
       - pylon
-    container_name: carrier-redis
 
   rabbitmq:
     image: rabbitmq:3.7-management
@@ -42,8 +43,8 @@ services:
     networks:
       - pylon
     ports:
-      - 15672:15672
-      - 5672:5672
+      - "15672:15672"
+      - "5672:5672"
     volumes:
       - rabbit-data:/var/lib/rabbitmq
     depends_on:
@@ -51,7 +52,7 @@ services:
     container_name: carrier-rabbit
 
   postgres:
-    image: postgres:12.2
+    image: postgres:15.1
     logging:
       driver: "json-file"
       options:
@@ -59,8 +60,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     ports:
-      - 5432:5432
-    container_name: carrier-postgres
+      - "5432:5432"
     volumes:
       - postgre-data:/var/lib/postgresql/data
       - ./config/extras/postgre_schemas.sh:/docker-entrypoint-initdb.d/postgre_schemas.sh
@@ -82,8 +82,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     ports:
-      - 27017:27017
-    container_name: carrier-mongo
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
     environment:
@@ -94,7 +93,7 @@ services:
       - pylon
 
   vault:
-    image: vault:1.4.2
+    image: vault:latest
     logging:
       driver: "json-file"
       options:
@@ -105,12 +104,11 @@ services:
       - 'VAULT_LOCAL_CONFIG={"disable_mlock":true,"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable": 1}},"storage":{"postgresql":{"connection_url":"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable"}},"ui":false}'
     command: vault server -config=/vault/config/local.json
     ports:
-    - 8200:8200
+    - "8200:8200"
     networks:
       - pylon
     depends_on:
       - postgres
-    container_name: carrier-vault
 
   minio:
     image: minio/minio:latest
@@ -121,7 +119,7 @@ services:
         max-file: "5"
         max-size: "10m"
     ports:
-      - 9000:9000
+      - "9000:9000"
     environment:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
@@ -130,7 +128,6 @@ services:
       - minio-data:/data
     networks:
       - pylon
-    container_name: carrier-minio
 
   influx:
     image: influxdb:1.8
@@ -144,12 +141,11 @@ services:
     volumes:
       - influx-data:/var/lib/influxdb
     ports:
-      - 8086:8086
+      - "8086:8086"
     labels:
       - 'traefik.enable=false'
     networks:
       - pylon
-    container_name: carrier-influx
 
   interceptor:
     image: getcarrier/interceptor:latest
@@ -161,7 +157,6 @@ services:
     depends_on:
       - rabbitmq
     restart: unless-stopped
-    container_name: carrier-interceptor
     environment:
       - RAM_QUOTA=$RAM_QUOTA
       - CPU_QUOTA=$CPU_QUOTA
@@ -185,7 +180,6 @@ services:
     depends_on:
       - rabbitmq
     restart: unless-stopped
-    container_name: carrier-interceptor_internal
     environment:
       - CPU_CORES=$INTERPECTOR_TASKS_INTERNAL
       - RABBIT_HOST=carrier-rabbit
@@ -207,7 +201,6 @@ services:
         max-file: "5"
         max-size: "10m"
     restart: unless-stopped
-    container_name: carrier-keycloak
     depends_on:
       - postgres
       - traefik
@@ -228,14 +221,14 @@ services:
     networks:
       - pylon
     ports:
-      - 8081:8080
+      - "8081:8080"
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.keycloak.rule=PathPrefix(`/auth`)'
       - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
 
   loki:
-    image: grafana/loki:2.3.0
+    image: grafana/loki:latest
     logging:
       driver: "json-file"
       options:
@@ -252,7 +245,6 @@ services:
       - 'traefik.http.routers.loki.rule=PathPrefix(`/loki`)'
       - 'traefik.http.services.loki.loadbalancer.server.port=3100'
       - 'carrier=loki'
-    container_name: carrier-loki
 
   grafana:
     image: grafana/grafana:latest
@@ -293,7 +285,6 @@ services:
       - 'traefik.http.routers.grafana.middlewares=grafana-auth@docker'
       - 'carrier=grafana'
     user: root
-    container_name: carrier-grafana
 
   pylon:
     image: getcarrier/pylon:latest
