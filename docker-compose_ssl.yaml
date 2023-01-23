@@ -62,7 +62,7 @@ services:
     container_name: carrier-rabbit
 
   postgres:
-    image: postgres:12.2
+    image: postgres:15.1
     logging:
       driver: "json-file"
       options:
@@ -192,6 +192,7 @@ services:
 
   keycloak:
     image: jboss/keycloak:9.0.0
+    #image: getcarrier/keycloak:9.0.0-arm
     logging:
       driver: "json-file"
       options:
