@@ -152,6 +152,7 @@ services:
     container_name: carrier-influx
 
   interceptor:
+    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
@@ -176,6 +177,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   interceptor_internal:
+    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
@@ -200,8 +202,8 @@ services:
 
 
   keycloak:
-    image: jboss/keycloak:9.0.0
-    #image: getcarrier/keycloak:9.0.0-arm
+#    image: jboss/keycloak:9.0.0
+    image: getcarrier/keycloak:9.0.0-arm
     logging:
       driver: "json-file"
       options:
