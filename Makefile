@@ -8,7 +8,7 @@ export UID
 SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
 GET_CENTRY_VOLUMES=$(shell docker volume ls -q | grep centry)
 
-.PHONY: all list_interfaces ip fix_permissions up down 
+.PHONY: all list_interfaces ip fix_permissions up down purge
 	
 all:
 	@echo Please read this info carefully for centry to properly work
