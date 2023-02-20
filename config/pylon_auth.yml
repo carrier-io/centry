@@ -41,22 +41,6 @@ configs:
     - auth_oidc
     - auth_init
     plugin_repo:
-    - type: config
-      data:
-        auth_mappers:
-          source:
-            type: git
-            source: "https://github.com/carrier-io/auth_mappers.git"
-            branch: next
-          objects:
-            metadata: "https://raw.githubusercontent.com/carrier-io/auth_mappers/next/metadata.json"
-        auth_oidc:
-          source:
-            type: git
-            source: "https://github.com/carrier-io/auth_oidc.git"
-            branch: next
-          objects:
-            metadata: "https://raw.githubusercontent.com/carrier-io/auth_oidc/next/metadata.json"
     - type: resource
       name: data/plugins.json
   #

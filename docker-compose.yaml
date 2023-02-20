@@ -268,7 +268,7 @@ services:
     depends_on:
       - influx
     volumes:
-      - $CARRIER_PATH/grafana:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=$GF_PANELS_DISABLE_SANITIZE_HTML
       - GF_AUTH_PROXY_ENABLED=$GF_AUTH_PROXY_ENABLED
