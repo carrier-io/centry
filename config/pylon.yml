@@ -33,17 +33,40 @@ modules:
 #  skip:
 #    - ui_performance
 
-#configs:
-#  market:
-#    plugin_repo:
-#      - type: config_key
-#        name: local_repo
-#      - type: config_key
-#        name: customer_repo
-#      - type: resource
-#        name: data/plugins.json
-#    local_preordered_plugins:
-#      - reporter_jira
+configs:
+  market:
+    local_preordered_plugins:
+      - integrations
+      - backend_performance
+      - performance_analysis
+      - ui_performance
+      - reporter_email
+      - reporter_jira
+      - security_scanner_zap
+#      - design-system
+#      - auth
+#      - projects
+#      - shared
+#      - tasks
+#      - security
+#      - secrets
+#      - artifacts
+#      - theme
+#      - processing_severity_filter
+#      - scheduling
+#      - admin
+#      - tasklets
+#      - aws_integration
+#      - azure_devops
+#      - kubernetes
+#      - shared_orch
+#      - engagements
+#      - kanban
+#      - issues
+#      - kb
+#      - reporter_engagement
+#        - type: resource
+#          name: data/plugins.json
 
 # Session storage
 sessions:

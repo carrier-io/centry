@@ -30,143 +30,41 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
+#  skip:
+#    - ui_performance
 
 configs:
   market:
-    preordered_plugins:
-      - auth
-      - admin
-      - theme
+    local_preordered_plugins:
       - design-system
-      - shared
+      - auth
       - projects
+      - shared
+      - tasks
       - security
       - secrets
-      - tasks
-      - artifacts
       - backend_performance
-      - ui_performance
-      - reporter_email
+      - artifacts
+      - theme
       - security_scanner_zap
-      - scheduling
+      - integrations
+      - reporter_email
+      - reporter_jira
       - processing_severity_filter
-    plugin_repo:
-      - type: config
-        data:
-          admin:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/admin.git"
-              branch: main
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/admin/main/metadata.json"
-          theme:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/theme.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/theme/next/metadata.json"
-          shared:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/shared.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/shared/next/metadata.json"
-          projects:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/projects.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/projects/next/metadata.json"
-          security:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/security.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/security/next/metadata.json"
-          secrets:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/secrets.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/secrets/next/metadata.json"
-          tasks:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/tasks.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/tasks/next/metadata.json"
-          artifacts:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/artifacts.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/artifacts/next/metadata.json"
-          design-system:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/design-system.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/design-system/next/metadata.json"
-          backend_performance:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/backend_performance.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/backend_performance/next/metadata.json"
-          ui_performance:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/ui_performance.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/ui_performance/next/metadata.json"
-          integrations:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/integrations.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/integrations/next/metadata.json"
-          reporter_email:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/reporter_email.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/reporter_email/next/metadata.json"
-          security_scanner_zap:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/security_scanner_zap.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/security_scanner_zap/next/metadata.json"
-          scheduling:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/scheduling.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/scheduling/next/metadata.json"
-          processing_severity_filter:
-            source:
-              type: git
-              source: "https://github.com/carrier-io/processing_severity_filter.git"
-              branch: next
-            objects:
-              metadata: "https://raw.githubusercontent.com/carrier-io/processing_severity_filter/next/metadata.json"
-      - type: resource
-        name: data/plugins.json
+      - scheduling
+      - admin
+      - ui_performance
+      - tasklets
+      - aws_integration
+      - azure_devops
+      - kubernetes
+      - shared_orch
+      - engagements
+      - kanban
+      - issues
+      - kb
+      - reporter_engagement
+      - performance_analysis
 
 # Session storage
 sessions:
@@ -185,7 +83,6 @@ traefik:
   rule: PathPrefix(`/`)
   node_name: core
   node_hostname: pylon
-   # node_url: http://pylon:8080
 
 # Events queue
 events:
@@ -239,6 +136,7 @@ loki:
 application:
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
+#  PREFERRED_URL_SCHEME: https
   SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
   SESSION_COOKIE_NAME: session_id
 
