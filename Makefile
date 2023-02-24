@@ -16,13 +16,16 @@ all:
 	@echo These recipes will help to run centry locally
 	@echo But first some preconfiguration is needed
 	@echo ----------------------------------------
-	@echo First configure external DEV_IP in .env file
+	@echo 1. Copy config/pylon-example.yml to config/pylon.yml
+	@echo If needed change conifguration in config/pylon.yml
+	@echo More in README.md
+	@echo ----------------------------------------
+	@echo 2. Configure external DEV_IP in .env file
 	@echo To do so run \`make list_interfaces\` 
 	@echo This will show list of interfaces and their corresponding ipv4
 	@echo Choose the interface through which you have access
-	@echo \!\! Disable any firewall'('allow all traffic')' rules on this interface
 	@echo ------------------------------------------------------------------------
-	@echo Secondly run \`make up INTERFACE=\<name_of_the_interface\>\`
+	@echo 3. Run \`make up INTERFACE=\<name_of_the_interface\>\`
 	@echo This will setup environment properly and start docker containers
 
 list_interfaces:
