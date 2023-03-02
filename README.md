@@ -1,24 +1,28 @@
 # centry
 New Generation of Carrier UI
 
-## (New!) Deployment
-* Clone this repo
-  * Change `.env`: replace `$DEV_IP` with your IP address
-    * You can use: `sed -i -e 's!$DEV_IP!192.168.0.101!g' .env`
-      * or `CURRENT_IP=$(ifconfig | grep 'inet 192' | cut -d ' ' -f 2) sed -i -e "s+DEV_IP=.*+DEV_IP=${CURRENT_IP}+g" .env`
-    
-* Run: `docker-compose up -d`
-
 ## Deployment
-
-* First step is to create an entrypoint for the app e.g. `app.py` and set up environment variables in `.env` to toggle development mode, paths to docker containers and location of pylon `.yml` config
-  * *_consider using python-dotenv to load variables if launching locally_
-* Install requirements for centry with `pip install -r requirements.txt`
+### Requirements:
+* GNU make >=4.3 should be installed
+* docker, installed according to [official installation guide](https://docs.docker.com/desktop/)
+* Configure firewall to allow traffic from anywhere to ports:
+    * 5432
+    * 80
+    * 3100
+    * 8086
+    * 27017
+    * 5672
+    * 8200
+    * 6379
+    * 9000
+    * 8080
+### Configuration:
 * Locate and edit pylon `.yml` config as indicated in `.env` variable `CORE_CONFIG_SEED`
     * _defaults can be found in `./config/pylon-example.yml`_
-* Make sure your `plugins` _*(default)_ folder matches the config and contains the `market` plugin inside
-* Execute `pylon.main()` inside of entrypoint
-    * _make sure you load env **!before!** importing `main()` from `pylon`_
+### Starting carrier:
+* Run: `make` and **read** instructions carefully
+### Destroy carrier and everything associated:
+* Run: `make down`
 
 
 ## Creating a new plugin
