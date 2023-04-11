@@ -102,13 +102,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
-ENV/
-env.bak/
-venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -134,8 +130,9 @@ dmypy.json
 tmp
 
 .env
-/.env
-docker-compose.yaml
 /config/keycloak/themes/
 
 /pylon
+/pylon_auth
+/pylon_worker
+pylon.yml

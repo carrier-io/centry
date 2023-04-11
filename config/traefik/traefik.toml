@@ -1,0 +1,27 @@
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+  exposedByDefault = false
+  network = "pylon"
+
+[providers.file]
+  filename = "/etc/traefik/ssl.toml"
+
+[api]
+  dashboard = true
+
+[ping]
+  manualRouting = true
+
+[entryPoints]
+ [entryPoints.http]
+    address = ":80"
+    [entryPoints.http.forwardedHeaders]
+      insecure = true
+ [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.forwardedHeaders]
+      insecure = true
+[certificatesResolvers.le.acme]
+  email = "some@email.com"
+  storage = "/config/acme.json"
+  [certificatesResolvers.le.acme.tlsChallenge]
