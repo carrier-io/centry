@@ -1,0 +1,27 @@
+# Intended to be used together with the base docker-compose.yaml file for cases when a custom CA cert is needed for the system.
+# CUSTOM_CA_CERT env var must be set.
+# See an example usage at Makefile -> up_with_custom_CA_cert.
+
+version: '3'
+services:
+  pylon:
+    environment:
+      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+    volumes:
+      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+  pylon_auth:
+    environment:
+      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+    volumes:
+      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+  pylon_worker:
+    environment:
+      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+    volumes:
+      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
