@@ -42,7 +42,6 @@ services:
   mongo:
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
-    command: [ "docker-entrypoint.sh", "mongod", "--tlsCAFile=/etc/ssl/certs/custom-ca-cert.pem" ]
   interceptor:
     environment:
       SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
