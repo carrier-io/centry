@@ -127,6 +127,21 @@ mitmproxy_iptables_list:
 mitmproxy_start_transparent:
 	mitmproxy --mode transparent --showhost
 
+mitmdump_start_transparent:
+	mitmdump --mode transparent --showhost > mitmlog.log
+
+mitmdump_follow_all:
+	tail -f mitmlog.log
+
+mitmdump_follow_TLS_failed:
+	tail -f mitmlog.log | grep "TLS handshake failed"
+
+mitmdump_print_TLS_failed:
+	cat mitmlog.log | grep "TLS handshake failed"
+
+docker_print_IPs:
+	@docker inspect -f '{{.Name}} - {{.Config.Image}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $$(docker ps -q)
+
 mitmproxy_prepare_system:
 	@(sudo sysctl -w net.ipv4.ip_forward=1)
 	@(sudo sysctl -w net.ipv6.conf.all.forwarding=1)
