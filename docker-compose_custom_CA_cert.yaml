@@ -6,54 +6,54 @@ version: '3'
 services:
   pylon:
     environment:
-      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   pylon_auth:
     environment:
-      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   pylon_worker:
     environment:
-      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   grafana:
     volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   traefik:
     volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   influx:
     volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   minio:
     environment:
       MINIO_SERVER_CA_CERTS_FILE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   mongo:
     volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
     command: [ "docker-entrypoint.sh", "mongod", "--tlsCAFile=/etc/ssl/certs/custom-ca-cert.pem" ]
   interceptor:
     environment:
-      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   interceptor_internal:
     environment:
-      SSL_CERT_FILE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /usr/local/share/ca-certificates/custom-ca-cert.pem
+      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
+      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
-      - $CUSTOM_CA_CERT:/usr/local/share/ca-certificates/custom-ca-cert.pem:ro
+      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
