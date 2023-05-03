@@ -102,10 +102,10 @@ docker_system_prune: down
 	docker system prune -a --volumes
 
 mitmproxy_interface_show:
-	$(IFCONFIG_CMD) | grep -P -o "$(REGEX_IFACE)" | grep -o -P "br-[^:]+"
+	ip a | grep -o -P "[[:digit:]]+: br-[^: ]+" | sort -t: -k1,1n | tail -n 1 | grep -o -P "br-[^: ]+"
 
 mitmproxy_iptables_register:
-	$(eval IF=$(shell $(IFCONFIG_CMD) | grep -P -o "$(REGEX_IFACE)" | grep -o -P "br-[^:]+"))
+	$(eval IF=$(shell ip a | grep -o -P "[[:digit:]]+: br-[^: ]+" | sort -t: -k1,1n | tail -n 1 | grep -o -P "br-[^: ]+"))
 	@echo Registering iptable rules to forward all traffic from $(IF) targeting ports 80/443 to mitmproxy...
 	@(sudo iptables -t nat -A PREROUTING -i $(IF) -p tcp --dport 80 -j REDIRECT --to-port 8080)
 	@(sudo iptables -t nat -A PREROUTING -i $(IF) -p tcp --dport 443 -j REDIRECT --to-port 8080)
@@ -113,12 +113,26 @@ mitmproxy_iptables_register:
 	@(sudo ip6tables -t nat -A PREROUTING -i $(IF) -p tcp --dport 443 -j REDIRECT --to-port 8080)
 
 mitmproxy_iptables_remove:
-	$(eval IF=$(shell $(IFCONFIG_CMD) | grep -P -o "$(REGEX_IFACE)" | grep -o -P "br-[^:]+"))
+	$(eval IF=$(shell ip a | grep -o -P "[[:digit:]]+: br-[^: ]+" | sort -t: -k1,1n | tail -n 1 | grep -o -P "br-[^: ]+"))
 	@echo Removing iptable rules to forward all traffic from $(IF) targeting ports 80/443 to mitmproxy...
 	@(sudo iptables -t nat -D PREROUTING -i $(IF) -p tcp --dport 80 -j REDIRECT --to-port 8080)
 	@(sudo iptables -t nat -D PREROUTING -i $(IF) -p tcp --dport 443 -j REDIRECT --to-port 8080)
 	@(sudo ip6tables -t nat -D PREROUTING -i $(IF) -p tcp --dport 80 -j REDIRECT --to-port 8080)
 	@(sudo ip6tables -t nat -D PREROUTING -i $(IF) -p tcp --dport 443 -j REDIRECT --to-port 8080)
+
+mitmproxy_k8s_iptables_register:
+	$(eval IF=$(shell ip a | grep -o -P "[[:digit:]]+: br-[^: ]+" | sort -t: -k1,1n | tail -n 1 | grep -o -P "br-[^: ]+"))
+	$(eval KUBE_PORT=$(shell kubectl config view | grep -oP 'server: https://[^:]+:\K\d+'))
+	@echo Registering iptable rules to forward k8s traffic from $(IF) targeting port $(KUBE_PORT) to mitmproxy...
+	@(sudo iptables -t nat -A PREROUTING -i $(IF) -p tcp --dport $(KUBE_PORT) -j REDIRECT --to-port 8080)
+	@(sudo ip6tables -t nat -A PREROUTING -i $(IF) -p tcp --dport $(KUBE_PORT) -j REDIRECT --to-port 8080)
+
+mitmproxy_k8s_iptables_remove:
+	$(eval IF=$(shell ip a | grep -o -P "[[:digit:]]+: br-[^: ]+" | sort -t: -k1,1n | tail -n 1 | grep -o -P "br-[^: ]+"))
+	$(eval KUBE_PORT=$(shell kubectl config view | grep -oP 'server: https://[^:]+:\K\d+'))
+	@echo Removing iptable rules to forward k8s traffic from $(IF) targeting port $(KUBE_PORT) to mitmproxy...
+	@(sudo iptables -t nat -D PREROUTING -i $(IF) -p tcp --dport $(KUBE_PORT) -j REDIRECT --to-port 8080)
+	@(sudo ip6tables -t nat -D PREROUTING -i $(IF) -p tcp --dport $(KUBE_PORT) -j REDIRECT --to-port 8080)
 
 mitmproxy_iptables_list:
 	@(sudo iptables -t nat -L -v --line-numbers | grep "redir ports 8080")
