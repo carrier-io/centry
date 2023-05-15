@@ -1,8 +1,7 @@
-
 # General server config
 server:
-#  path: /
-#  proxy: true
+  #  path: /
+  #  proxy: true
   host: "0.0.0.0"
   port: 8080
 
@@ -31,6 +30,41 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
+#  skip:
+#    - ui_performance
+
+configs:
+  market:
+    local_preordered_plugins:
+      - design-system
+      - auth
+      - projects
+      - shared
+      - tasks
+      - security
+      - secrets
+      - backend_performance
+      - artifacts
+      - theme
+      - security_scanner_zap
+      - integrations
+      - reporter_email
+      - reporter_jira
+      - processing_severity_filter
+      - scheduling
+      - admin
+      - ui_performance
+      - tasklets
+      - aws_integration
+      - azure_devops
+      - kubernetes
+      - shared_orch
+      - engagements
+      - kanban
+      - issues
+      - kb
+      - reporter_engagement
+      - performance_analysis
 
 # Session storage
 sessions:
@@ -45,11 +79,10 @@ traefik:
     host: redis
     password: password
   rootkey: traefik
-  entrypoint: http
+  entrypoint: https
   rule: PathPrefix(`/`)
   node_name: core
   node_hostname: pylon
-  # node_url: http://pylon:8080
 
 # Events queue
 events:
@@ -62,6 +95,21 @@ events:
     queue: events
     hmac_key: key
     hmac_digest: sha512
+    callback_workers: 16
+
+# RPC
+rpc:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    user: user
+    password: password
+    vhost: carrier
+    queue: rpc
+    hmac_key: key
+    hmac_digest: sha512
+    callback_workers: 16
+  id_prefix: "core_"
 
 # Module/config storage
 storage:
@@ -76,7 +124,7 @@ storage:
 # Loki logging settings
 loki:
   buffering: true
-  buffer_capacity: 20
+  buffer_capacity: 70
   include_node_name: true
   include_level_name: true
   include_logger_name: true
@@ -85,8 +133,12 @@ loki:
 
 
 # Settings for Flask application
-#application:
-#  EXPLAIN_TEMPLATE_LOADING: true
+application:
+  # EXPLAIN_TEMPLATE_LOADING: true
+  # Sessions
+#  PREFERRED_URL_SCHEME: https
+  SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
+  SESSION_COOKIE_NAME: session_id
 
 # dulwich git manager
 git_manager:
