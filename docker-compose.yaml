@@ -94,7 +94,7 @@ services:
       - pylon
 
   vault:
-    image: vault:1.4.2
+    image: vault:1.13.2
     logging:
       driver: "json-file"
       options:
