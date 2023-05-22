@@ -1,0 +1,166 @@
+# Default values for carrier-io.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+images:
+  nginx:
+    repository: nginx
+    tag: "latest"
+    pullPolicy: Always
+    containerPort: 80
+  pylon:
+    repository: getcarrier/pylon
+    tag: "latest"
+    pullPolicy: Always
+    containerPort: 8080
+
+services:
+  nginx:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 32222
+
+global:
+  app:
+    ip: 172.26.108.95
+  postgresql:
+    auth:
+      database: carrier
+      username: carrier
+      password: password
+    service:
+      ports:
+        postgresql: 5432
+    fullnameOverride: postgres-carrier
+
+redis:
+  usePassword: true
+  password: password
+  master:
+    name: carrier-redis
+    persistence:
+      enabled: true
+    extraArgs:
+      - "--appendonly"
+      - "yes"
+  replica:
+    replicaCount: 0
+  fullnameOverride: redis-carrier
+
+rabbitmq:
+  auth:
+    username: user
+    password: password
+  extraConfiguration: |-
+    default_vhost = carrier
+    default_permissions.configure = .*
+    default_permissions.read = .*
+    default_permissions.write = .*
+  service:
+    ports:
+      amqp: 5672
+      manager: 15672
+  fullnameOverride: rabbitmq-carrier
+
+postgresql:
+  primary:
+    initdb:
+      args: "--data-checksums"
+      scriptsConfigMap: postgresql-scripts
+    extraEnvVars:
+      - name: POSTGRES_SCHEMAS
+        value: "carrier,keycloak"
+  fullnameOverride: postgres-carrier
+
+mongodb:
+  auth:
+    enabled: true
+    rootUser: carrier
+    rootPassword: password
+    database: carrier
+    username: carrier-user
+    password: carrier-user-password
+  fullnameOverride: mongo-carrier
+
+vault:
+  server:
+    containerPorts:
+      http: 8200
+      internal: 8201
+    config: |
+      {
+        "disable_mlock": true,
+        "listener": {
+          "tcp": {
+            "address": "[::]:{{ .Values.server.containerPorts.http }}",
+            "cluster_address": "[::]:{{ .Values.server.containerPorts.internal }}",
+            "tls_disable": 1
+          }
+        },
+        "storage": {
+          "postgresql": {
+            "connection_url": "postgres://{{ .Values.global.postgresql.auth.username }}:{{ .Values.global.postgresql.auth.password }}@{{ .Values.global.postgresql.fullnameOverride }}:{{ .Values.global.postgresql.service.ports.postgresql }}/{{ .Values.global.postgresql.auth.database }}?sslmode=disable"
+          }
+        },
+        "ui": false
+      }
+  fullnameOverride: vault-carrier
+
+minio:
+  extraEnvVars:
+    - name: MINIO_ACCESS_KEY
+      value: admin
+    - name: MINIO_SECRET_KEY
+      value: password
+    - name: MINIO_API_SELECT_PARQUET
+      value: "on"
+  fullnameOverride: minio-carrier
+
+influxdb:
+  env:
+    - name: INFLUXDB_HTTP_ENABLED
+      value: "true"
+    - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
+      value: "0"
+  fullnameOverride: influx-carrier
+
+grafana-loki:
+  fullnameOverride: loki-carrier
+
+
+imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env
+data:
+  APP_HOST: http://{{ .Values.global.app.ip }}
+  AUTH_MANAGER_PASSWORD: carrier
+  AUTH_MANAGER_USERNAME: carrier
+  CARRIER_PATH: /tmp
+  CORE_CONFIG_SEED: file:/data/config/pylon.yml
+  CORE_DEBUG_LOGGING: "no"
+  CORE_DEVELOPMENT_MODE: "true"
+  CPU_QUOTA: "1"
+  DATABASE_VENDOR: postgres
+#{{/*  DB_POSTGRES_SCHEMAS: {{ .Values.postgresql.primary.extraEnvVars[0].value }}*/}}
+  GF_API_KEY: api_key
+  GF_AUTH_DISABLE_LOGIN_FORM: "true"
+  GF_AUTH_PROXY_AUTO_SIGN_UP: "true"
+  GF_AUTH_PROXY_ENABLED: "true"
+  GF_AUTH_PROXY_HEADER_NAME: X-WEBAUTH-USER
+  GF_AUTH_PROXY_HEADER_PROPERTY: username
+  GF_AUTH_PROXY_HEADERS: Name:X-WEBAUTH-NAME Email:X-WEBAUTH-EMAIL
+  GF_INSTALL_PLUGINS: natel-influx-admin-panel
+  GF_PANELS_DISABLE_SANITIZE_HTML: "true"
+  GF_SECURITY_ADMIN_PASSWORD: admin
+  GF_SECURITY_ADMIN_USER: admin
+  GF_SECURITY_ALLOW_EMBEDDING: "true"
+  GF_SECURITY_DISABLE_GRAVATAR: "true"
+  GF_SERVER_ROOT_URL: http://carrier-galloper/grafana
+  GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+  GL_POSTGRES_SCHEMA: carrier
+  INFLUXDB_DATA_DIR: /var/lib/influxdb/data
+  INFLUXDB_DATA_MAX_SERIES_PER_DATABASE: "0"
+  INFLUXDB_DATA_WAL_DIR: /var/lib/influxdb/wal
+  INFLUXDB_HTTP_ENABLED: "true"
+  INFLUXDB_META_DIR: /var/lib/influxdb/meta
+  INTERNAL_QUEUE: __internal
+  INTERPECTOR_TASKS: "5"
+  INTERPECTOR_TASKS_INTERNAL: "15"
+  KEYCLOAK_DB_SCHEMA: keycloak
+  KEYCLOAK_IMPORT: /realm/data/carrier.json
+  KEYCLOAK_PASSWORD: carrier
+  KEYCLOAK_SECRET: 9edcea33-3b8f-4129-8557-eb2ee2de1440
+  KEYCLOAK_USER: carrier
+  LOKI_HOST: http://{{ .Values.global.app.ip }}:3100/loki/api/v1/push
+  MINIO_ACCESS_KEY: admin  # TODO
+  MINIO_HOST: http://{{ .Values.minio.fullnameOverride }}:9000
+  MINIO_REGION: us-east-1
+  MINIO_SECRET_KEY: password
+  MODULES_PATH: plugins
+  MONGO_DB: {{ .Values.mongodb.auth.database }}
+  MONGO_HOST: {{ .Values.mongodb.fullnameOverride }}
+  MONGO_PASSWORD: {{ .Values.mongodb.auth.password }}
+  MONGO_USER: {{ .Values.mongodb.auth.username }}
+  POSTGRES_DB: {{ .Values.global.postgresql.auth.database }}
+  POSTGRES_HOST: {{ .Values.postgresql.fullnameOverride }}
+  POSTGRES_PASSWORD: {{ .Values.global.postgresql.auth.password }}
+  POSTGRES_PORT: "{{ .Values.global.postgresql.service.ports.postgresql }}"
+  POSTGRES_USER: {{ .Values.global.postgresql.auth.username }}
+  PROXY_ADDRESS_FORWARDING: "true"
+  RABBIT_HOST: {{ .Values.rabbitmq.fullnameOverride }}
+  RABBITMQ_PASSWORD: {{ .Values.rabbitmq.auth.password }}
+  RABBITMQ_USER: {{ .Values.rabbitmq.auth.username }}
+  RAM_QUOTA: 4g
+  REDIS_HOST: {{ .Values.redis.fullnameOverride }}-master
+  REDIS_PASSWORD: {{ .Values.redis.password }}
+  RETENTION_DELETES_ENABLE: "true"
+  RETENTION_PERIOD: 4200h
+  VAULT_URL: http://{{ .Values.vault.fullnameOverride }}-server:8200

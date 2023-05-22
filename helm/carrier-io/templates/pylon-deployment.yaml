@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "carrier-io.fullname" . }}-pylon
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      pylon-label: "definitely"
+  template:
+    metadata:
+      labels:
+        pylon-label: "definitely"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "carrier-io.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-pylon
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.pylon.repository }}:{{ .Values.images.pylon.tag }}"
+          imagePullPolicy: {{ .Values.images.pylon.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args: ["python -m pylon.main || sleep infinity"]
+          ports:
+            - containerPort: {{ .Values.images.pylon.containerPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/pylon
+              name: pylon-claim0
+            - mountPath: /data/config
+              name: pylon-config
+          envFrom:
+            - configMapRef:
+                name: env
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 80
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: 80
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: pylon-claim0
+          persistentVolumeClaim:
+            claimName: pylon-claim0
+        - name: pylon-config
+          configMap:
+            name: pylon-config-local

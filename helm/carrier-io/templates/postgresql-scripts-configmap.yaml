@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-scripts
+data:
+  postgre_schemas.sh: |-
+{{ .Files.Get "config/extras/postgre_schemas.sh" | toString | indent 4 }}
