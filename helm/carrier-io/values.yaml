@@ -87,6 +87,8 @@ mongodb:
 
 vault:
   server:
+    readinessProbe:
+      enabled: false  # otherwise pylon is unable to initialize vault
     containerPorts:
       http: 8200
       internal: 8201
