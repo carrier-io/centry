@@ -15,6 +15,16 @@ images:
     tag: "latest"
     pullPolicy: Always
     containerPort: 8080
+  pylon_auth:
+    repository: getcarrier/pylon
+    tag: "latest"
+    pullPolicy: Always
+    containerPort: 8080
+  interceptor:
+    repository: getcarrier/interceptor
+    tag: "latest"
+    pullPolicy: Always
+    containerPort: 8080
 
 services:
   nginx:
@@ -22,6 +32,11 @@ services:
     port: 80
     targetPort: 80
     nodePort: 32222
+  pylon:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 80
 
 global:
   app:
@@ -112,6 +127,9 @@ vault:
   fullnameOverride: vault-carrier
 
 minio:
+  auth:
+    accessKey: admin  # TODO extract to configmap to be able to reuse it in extraEnvVars below
+    secretKey: password  # TODO extract to configmap to be able to reuse it in extraEnvVars below
   extraEnvVars:
     - name: MINIO_ACCESS_KEY
       value: admin
@@ -131,6 +149,8 @@ influxdb:
 
 grafana-loki:
   fullnameOverride: loki-carrier
+  memcached:
+    fullnameOverride: memcached-carrier
 
 
 imagePullSecrets: []

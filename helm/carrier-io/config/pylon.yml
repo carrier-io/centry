@@ -76,8 +76,8 @@ configs:
 # Session storage
 sessions:
   redis:
-    host: redis
-    password: password
+    host: {{ .Values.redis.fullnameOverride }}-master
+    password: {{ .Values.redis.password }}
   prefix: pylon_session_
 
 # Traefik config
@@ -122,8 +122,8 @@ rpc:
 # Module/config storage
 storage:
   endpoint: {{ .Values.minio.fullnameOverride }}:9000
-  access_key: admin # TODO
-  secret_key: password
+  access_key: {{ .Values.minio.auth.accessKey }}
+  secret_key: {{ .Values.minio.auth.secretKey }}
   secure: false
   buckets:
     module: module

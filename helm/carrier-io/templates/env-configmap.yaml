@@ -7,7 +7,6 @@ data:
   AUTH_MANAGER_PASSWORD: carrier
   AUTH_MANAGER_USERNAME: carrier
   CARRIER_PATH: /tmp
-  CORE_CONFIG_SEED: file:/data/config/pylon.yml
   CORE_DEBUG_LOGGING: "no"
   CORE_DEVELOPMENT_MODE: "true"
   CPU_QUOTA: "1"
@@ -50,8 +49,8 @@ data:
   MODULES_PATH: plugins
   MONGO_DB: {{ .Values.mongodb.auth.database }}
   MONGO_HOST: {{ .Values.mongodb.fullnameOverride }}
-  MONGO_PASSWORD: {{ .Values.mongodb.auth.password }}
-  MONGO_USER: {{ .Values.mongodb.auth.username }}
+  MONGO_PASSWORD: {{ .Values.mongodb.auth.rootPassword }}  # TODO discuss with carrier team, should not be using root user+pass
+  MONGO_USER: {{ .Values.mongodb.auth.rootUser }}
   POSTGRES_DB: {{ .Values.global.postgresql.auth.database }}
   POSTGRES_HOST: {{ .Values.postgresql.fullnameOverride }}
   POSTGRES_PASSWORD: {{ .Values.global.postgresql.auth.password }}

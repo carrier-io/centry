@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pylon-carrier
+  name: interceptor-carrier
   labels:
     {{- include "carrier-io.labels" . | nindent 4 }}
 spec:
@@ -22,27 +22,38 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-pylon
+        - name: {{ .Chart.Name }}-interceptor
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.images.pylon.repository }}:{{ .Values.images.pylon.tag }}"
-          imagePullPolicy: {{ .Values.images.pylon.pullPolicy }}
-          command: ["/bin/sh","-c"]
-          args: ["python -m pylon.main || sleep infinity"]
+          image: "{{ .Values.images.interceptor.repository }}:{{ .Values.images.interceptor.tag }}"
+          imagePullPolicy: {{ .Values.images.interceptor.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.images.pylon.containerPort }}
+            - containerPort: {{ .Values.images.interceptor.containerPort }}
               protocol: TCP
-          volumeMounts:
-            - mountPath: /data/pylon
-              name: pylon-claim0
-            - mountPath: /data/config
-              name: pylon-config
           envFrom:
             - configMapRef:
                 name: env
           env:
-            - name: CORE_CONFIG_SEED
-              value: "file:/data/config/pylon.yml"
+            - name: CPU_CORES
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: INTERPECTOR_TASKS
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: RABBITMQ_PASSWORD
+            - name: RABBIT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: RABBITMQ_USER
+            - name: LOKI_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: APP_HOST
 #          livenessProbe:
 #            httpGet:
 #              path: /
@@ -53,10 +64,3 @@ spec:
 #              port: 80
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-        - name: pylon-claim0
-          persistentVolumeClaim:
-            claimName: pylon-claim0
-        - name: pylon-config
-          configMap:
-            name: pylon-config-local

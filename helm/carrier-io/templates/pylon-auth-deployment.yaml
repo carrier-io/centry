@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pylon-carrier
+  name: pylon-auth-carrier
   labels:
     {{- include "carrier-io.labels" . | nindent 4 }}
 spec:
@@ -22,10 +22,10 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-pylon
+        - name: {{ .Chart.Name }}-pylon-auth
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.images.pylon.repository }}:{{ .Values.images.pylon.tag }}"
+          image: "{{ .Values.images.pylon_auth.repository }}:{{ .Values.images.pylon.tag }}"
           imagePullPolicy: {{ .Values.images.pylon.pullPolicy }}
           command: ["/bin/sh","-c"]
           args: ["python -m pylon.main || sleep infinity"]
@@ -34,15 +34,15 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /data/pylon
-              name: pylon-claim0
+              name: pylon-auth-claim0
             - mountPath: /data/config
-              name: pylon-config
+              name: pylon-auth-config
           envFrom:
             - configMapRef:
                 name: env
           env:
             - name: CORE_CONFIG_SEED
-              value: "file:/data/config/pylon.yml"
+              value: "file:/data/config/pylon_auth.yml"
 #          livenessProbe:
 #            httpGet:
 #              path: /
@@ -54,9 +54,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        - name: pylon-claim0
+        - name: pylon-auth-claim0
           persistentVolumeClaim:
-            claimName: pylon-claim0
-        - name: pylon-config
+            claimName: pylon-auth-claim0
+        - name: pylon-auth-config
           configMap:
-            name: pylon-config-local
+            name: pylon-auth-config-local
