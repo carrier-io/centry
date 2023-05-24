@@ -49,17 +49,17 @@ configs:
     db_options:  # DB options
       pool_pre_ping: true
     auth_provider: oidc  # Main auth provider
-    default_login_url: "{{ .Values.global.app.ip }}/"  # URL to redirect on login with no target set
-    default_logout_url: "{{ .Values.global.app.ip }}/"  # URL to redirect on logout with no target set
+    default_login_url: "{{ .Values.global.app.host }}/"  # URL to redirect on login with no target set
+    default_logout_url: "{{ .Values.global.app.host }}/"  # URL to redirect on logout with no target set
   #
   auth_oidc:
     url_prefix: "/oidc"
-    authorization_endpoint: "{{ .Values.global.app.ip }}/auth/realms/carrier/protocol/openid-connect/auth"
+    authorization_endpoint: "{{ .Values.global.app.host }}/auth/realms/carrier/protocol/openid-connect/auth"
     token_endpoint: "http://keycloak:8080/auth/realms/carrier/protocol/openid-connect/token"
     token_endpoint_verify: false
     userinfo_endpoint: "http://keycloak:8080/auth/realms/carrier/protocol/openid-connect/userinfo"
     userinfo_endpoint_verify: false
-    end_session_endpoint: "{{ .Values.global.app.ip }}/auth/realms/carrier/protocol/openid-connect/logout"
+    end_session_endpoint: "{{ .Values.global.app.host }}/auth/realms/carrier/protocol/openid-connect/logout"
     client_id: "carrier-oidc"
     client_secret: "${KEYCLOAK_SECRET}"
   #
@@ -127,8 +127,8 @@ rpc:
 # Module/config storage
 storage:
   endpoint: {{ .Values.minio.fullnameOverride }}:9000
-  access_key: {{ .Values.minio.auth.accessKey }}
-  secret_key: {{ .Values.minio.auth.secretKey }}
+  access_key: {{ .Values.minio.auth.rootUser }}
+  secret_key: {{ .Values.minio.auth.rootPassword }}
   secure: false
   buckets:
     module: module
@@ -142,7 +142,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: http://{{ .Values.global.app.ip }}:3100/loki/api/v1/push
+  url: http://{{ .Values.global.app.host }}:3100/loki/api/v1/push
 
 
 # Settings for Flask application

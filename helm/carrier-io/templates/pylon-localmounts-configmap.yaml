@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pylon-config-local
+  name: {{ .Values.services.pylon.name }}-config-local
 data:
   pylon.yml: |
     {{ (tpl (.Files.Get "config/pylon.yml") .) | nindent 4 }}

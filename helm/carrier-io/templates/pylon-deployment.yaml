@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pylon-carrier
+  name: {{ .Values.services.pylon.name }}-deployment
   labels:
     {{- include "carrier-io.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "carrier-io.selectorLabels" . | nindent 6 }}
+      {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon" "release" .Release.Name) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "carrier-io.selectorLabels" . | nindent 8 }}
+        {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon" "release" .Release.Name) | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -22,27 +22,29 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-pylon
+        - name: {{ .Values.services.pylon.name }}-container
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.pylon.repository }}:{{ .Values.images.pylon.tag }}"
           imagePullPolicy: {{ .Values.images.pylon.pullPolicy }}
-          command: ["/bin/sh","-c"]
-          args: ["python -m pylon.main || sleep infinity"]
+# to be able to debug, uncomment the following lines:
+#          command: ["/bin/sh","-c"]
+#          args: ["python -m pylon.main || sleep infinity"]
           ports:
             - containerPort: {{ .Values.images.pylon.containerPort }}
               protocol: TCP
           volumeMounts:
             - mountPath: /data/pylon
-              name: pylon-claim0
+              name: claim0
             - mountPath: /data/config
-              name: pylon-config
+              name: config
           envFrom:
             - configMapRef:
                 name: env
           env:
             - name: CORE_CONFIG_SEED
               value: "file:/data/config/pylon.yml"
+# TODO
 #          livenessProbe:
 #            httpGet:
 #              path: /
@@ -54,9 +56,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        - name: pylon-claim0
+        - name: claim0
           persistentVolumeClaim:
-            claimName: pylon-claim0
-        - name: pylon-config
+            claimName: {{ .Values.services.pylon.name }}-claim0
+        - name: config
           configMap:
-            name: pylon-config-local
+            name: {{ .Values.services.pylon.name }}-config-local

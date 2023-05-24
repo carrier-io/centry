@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pylon-auth-config-local
+  name: {{ .Values.services.pylon_auth.name }}-config-local
 data:
   pylon_auth.yml: |
     {{ (tpl (.Files.Get "config/pylon_auth.yml") .) | nindent 4 }}

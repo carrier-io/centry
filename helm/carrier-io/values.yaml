@@ -27,20 +27,24 @@ images:
     containerPort: 8080
 
 services:
-  nginx:
-    type: NodePort
-    port: 80
-    targetPort: 80
-    nodePort: 32222
   pylon:
-    type: NodePort
+    name: pylon-carrier
+    type: ClusterIP
     port: 80
-    targetPort: 80
-    nodePort: 80
+    targetPort: 8080
+  pylon_auth:
+    name: pylon-auth-carrier
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  interceptor:
+    name: interceptor-carrier
+
 
 global:
   app:
-    ip: 172.26.108.95
+    # hostname or IP using which the app is accessible from the browser
+    host: 172.26.108.95
   postgresql:
     auth:
       database: carrier
@@ -128,13 +132,9 @@ vault:
 
 minio:
   auth:
-    accessKey: admin  # TODO extract to configmap to be able to reuse it in extraEnvVars below
-    secretKey: password  # TODO extract to configmap to be able to reuse it in extraEnvVars below
+    rootUser: admin
+    rootPassword: password
   extraEnvVars:
-    - name: MINIO_ACCESS_KEY
-      value: admin
-    - name: MINIO_SECRET_KEY
-      value: password
     - name: MINIO_API_SELECT_PARQUET
       value: "on"
   fullnameOverride: minio-carrier

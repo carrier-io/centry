@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pylon-auth-claim0
+  name: {{ .Values.services.pylon_auth.name }}-claim0
 spec:
   accessModes:
     - ReadWriteOnce

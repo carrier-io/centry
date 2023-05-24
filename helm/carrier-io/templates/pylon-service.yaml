@@ -1,8 +1,7 @@
-{{ if false }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: pylon-carrier
+  name: {{ .Values.services.pylon.name }}
   labels:
     {{- include "carrier-io.labels" . | nindent 4 }}
 spec:
@@ -15,5 +14,4 @@ spec:
       targetPort: {{ .Values.services.pylon.targetPort }}
       protocol: TCP
   selector:
-    {{- include "carrier-io.selectorLabels" . | nindent 4 }}
-{{ end }}
+    {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon" "release" .Release.Name) | nindent 4 }}

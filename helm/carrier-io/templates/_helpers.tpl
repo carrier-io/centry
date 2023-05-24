@@ -51,6 +51,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Selector labels for a given service name and release
+*/}}
+{{- define "carrier-io.specificSelectorLabels" -}}
+app.kubernetes.io/name: {{ .name }}
+app.kubernetes.io/instance: {{ .release }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "carrier-io.serviceAccountName" -}}

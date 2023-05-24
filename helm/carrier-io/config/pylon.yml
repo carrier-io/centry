@@ -122,8 +122,8 @@ rpc:
 # Module/config storage
 storage:
   endpoint: {{ .Values.minio.fullnameOverride }}:9000
-  access_key: {{ .Values.minio.auth.accessKey }}
-  secret_key: {{ .Values.minio.auth.secretKey }}
+  access_key: {{ .Values.minio.auth.rootUser }}
+  secret_key: {{ .Values.minio.auth.rootPassword }}
   secure: false
   buckets:
     module: module
@@ -137,7 +137,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: http://{{ .Values.global.app.ip }}:3100/loki/api/v1/push
+  url: http://{{ .Values.global.app.host }}:3100/loki/api/v1/push
 
 
 # Settings for Flask application

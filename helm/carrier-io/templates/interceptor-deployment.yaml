@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: interceptor-carrier
+  name: {{ .Values.services.interceptor.name }}-deployment
   labels:
     {{- include "carrier-io.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "carrier-io.selectorLabels" . | nindent 6 }}
+      {{- include "carrier-io.specificSelectorLabels" (dict "name" "interceptor" "release" .Release.Name) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "carrier-io.selectorLabels" . | nindent 8 }}
+        {{- include "carrier-io.specificSelectorLabels" (dict "name" "interceptor" "release" .Release.Name) | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -22,7 +22,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-interceptor
+        - name: {{ .Values.services.interceptor.name }}-container
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.interceptor.repository }}:{{ .Values.images.interceptor.tag }}"
@@ -54,6 +54,7 @@ spec:
                 configMapKeyRef:
                   name: env
                   key: APP_HOST
+# TODO
 #          livenessProbe:
 #            httpGet:
 #              path: /
