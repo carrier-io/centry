@@ -2,63 +2,40 @@ version: '3'
 services:
   traefik:
     ports:
-      - 80:80
       - 443:443
     volumes:
       - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml
       - ./config/traefik/ssl.toml:/etc/traefik/ssl.toml
       - ./config/traefik/config:/config
-      - /var/run/docker.sock:/var/run/docker.sock
 
   keycloak:
     labels:
-      - 'traefik.enable=true'
       - 'traefik.http.routers.keycloak.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/auth`)'
       - 'traefik.http.routers.keycloak.tls=true'
       - 'traefik.http.routers.keycloak.tls.certresolver=le'
-      - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
-      - 'carrier=keycloak'
 
   loki:
     labels:
-      - 'traefik.enable=true'
       - 'traefik.http.routers.loki.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/loki`)'
-      - 'traefik.http.services.loki.loadbalancer.server.port=3100'
       - 'traefik.http.routers.loki.tls=true'
       - 'traefik.http.routers.loki.tls.certresolver=le'
-      - 'carrier=loki'
 
   grafana:
     labels:
-      - 'traefik.enable=true'
       - 'traefik.http.routers.grafana.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/grafana`)'
-      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
       - 'traefik.http.routers.grafana.tls=true'
       - 'traefik.http.routers.grafana.tls.certresolver=le'
-      - 'traefik.http.middlewares.grafana-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=header&scope=grafana'
-      - 'traefik.http.middlewares.grafana-auth.forwardauth.authResponseHeaders=X-WEBAUTH-USER,X-WEBAUTH-NAME,X-WEBAUTH-EMAIL'
-      - 'traefik.http.routers.grafana.middlewares=grafana-auth@docker'
-      - 'carrier=grafana'
 
   pylon:
     labels:
-      - 'traefik.enable=true'
       - 'traefik.http.routers.pylon.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/`)'
-      - 'traefik.http.services.pylon.loadbalancer.server.port=8080'
       - 'traefik.http.routers.pylon.tls=true'
       - 'traefik.http.routers.pylon.tls.certresolver=le'
-      - 'traefik.http.middlewares.pylon-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=rpc'
-      - 'traefik.http.middlewares.pylon-auth.forwardauth.authResponseHeaders=X-Auth-Type,X-Auth-ID,X-Auth-Reference'
-      - 'traefik.http.routers.pylon.middlewares=pylon-auth@docker'
-      - 'carrier=pylon'
 
   pylon_auth:
     environment:
       - CORE_CONFIG_SEED=file:/data/config/pylon_auth_ssl.yml
     labels:
-      - 'traefik.enable=true'
       - 'traefik.http.routers.pylon-auth.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/forward-auth`)'
       - 'traefik.http.routers.pylon-auth.tls=true'
       - 'traefik.http.routers.pylon-auth.tls.certresolver=le'
-      - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
-      - 'carrier=pylon-auth'

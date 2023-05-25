@@ -224,6 +224,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.keycloak.rule=PathPrefix(`/auth`)'
       - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
+      - 'carrier=keycloak'
 
   loki:
     image: grafana/loki:2.3.0
@@ -317,6 +318,7 @@ services:
       - 'traefik.http.middlewares.pylon-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=rpc'
       - 'traefik.http.middlewares.pylon-auth.forwardauth.authResponseHeaders=X-Auth-Type,X-Auth-ID,X-Auth-Reference'
       - 'traefik.http.routers.pylon.middlewares=pylon-auth@docker'
+      - 'carrier=pylon'
 
   pylon_auth:
     image: getcarrier/pylon:latest
@@ -349,6 +351,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
       - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
+      - 'carrier=pylon-auth'
 
   pylon_worker:
     image: getcarrier/pylon:latest

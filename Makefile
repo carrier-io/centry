@@ -1,3 +1,4 @@
+#DIRECT_IP=FORCE_SET_IP_HERE
 INTERFACE ?= lo
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
@@ -49,17 +50,17 @@ ip:
 	@echo DONE with IP=$(IP)
 
 fix_permissions:
-#	chmod a+rx ./config/extras/postgre_schemas.sh
-#	chmod a+rx ./config/keycloak/disablessl.sh
-	chmod a+rx -R ./config
+	chmod -R a+rx ./config
 
 config/pylon.yml:
 	./configure_pylon.sh
 
 up: fix_permissions ip config/pylon.yml
+	$(COMPOSE) up -d
 	@echo Select all the compose files to launch base on your needs
 	@echo By default centry launches with docker volumes from .override
-	$(COMPOSE) up -d
+	@echo this is example for configuration with local volumes:
+	# $(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
     ifneq ($(CUSTOM_CA_CERT),)
@@ -76,7 +77,7 @@ up_with_mitmproxy: ip
 	CUSTOM_CA_CERT=./mitmproxy-ca-cert.pem $(MAKE) up_with_custom_CA_cert
 
 down:
-	$(COMPOSE) ps
+	$(COMPOSE) down
 
 req:
 	rm -rf ./pylon/requirements/*

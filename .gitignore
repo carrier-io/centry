@@ -136,3 +136,4 @@ tmp
 /pylon_auth
 /pylon_worker
 pylon.yml
+/volumes
