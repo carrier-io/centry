@@ -27,8 +27,6 @@ services:
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     ports:
       - 6379:6379
-    volumes:
-      - redis-data:/data
     networks:
       - pylon
     container_name: carrier-redis
@@ -44,8 +42,6 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
-    volumes:
-      - rabbit-data:/var/lib/rabbitmq
     depends_on:
       - redis
     container_name: carrier-rabbit
@@ -62,7 +58,6 @@ services:
       - 5432:5432
     container_name: carrier-postgres
     volumes:
-      - postgre-data:/var/lib/postgresql/data
       - ./config/extras/postgre_schemas.sh:/docker-entrypoint-initdb.d/postgre_schemas.sh
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -84,8 +79,6 @@ services:
     ports:
       - 27017:27017
     container_name: carrier-mongo
-    volumes:
-      - mongo-data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=${MONGO_DB}
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
@@ -126,8 +119,6 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_API_SELECT_PARQUET=on
-    volumes:
-      - minio-data:/data
     networks:
       - pylon
     container_name: carrier-minio
@@ -141,8 +132,6 @@ services:
       - INFLUXDB_DATA_WAL_DIR=$INFLUXDB_DATA_WAL_DIR
       - INFLUXDB_HTTP_ENABLED=$INFLUXDB_HTTP_ENABLED
       - INFLUXDB_DATA_MAX_SERIES_PER_DATABASE=$INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
-    volumes:
-      - influx-data:/var/lib/influxdb
     ports:
       - 8086:8086
     labels:
@@ -152,7 +141,7 @@ services:
     container_name: carrier-influx
 
   interceptor:
-#    platform: linux/amd64
+    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
@@ -177,7 +166,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   interceptor_internal:
-#    platform: linux/amd64
+    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
@@ -202,8 +191,7 @@ services:
 
 
   keycloak:
-    image: jboss/keycloak:9.0.0
-#    image: getcarrier/keycloak:9.0.0-arm
+    image: aspect13/keycloak:9.0.0
     logging:
       driver: "json-file"
       options:
@@ -267,8 +255,6 @@ services:
     restart: unless-stopped
     depends_on:
       - influx
-    volumes:
-      - grafana-data:/var/lib/grafana
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=$GF_PANELS_DISABLE_SANITIZE_HTML
       - GF_AUTH_PROXY_ENABLED=$GF_AUTH_PROXY_ENABLED
@@ -307,7 +293,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     container_name: carrier-pylon
-    user: ${UID}
+#    user: ${UID}
     depends_on:
       - postgres
       - traefik
@@ -341,7 +327,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     container_name: carrier-pylon-auth
-    user: ${UID}
+#    user: ${UID}
     depends_on:
       - postgres
       - traefik
@@ -373,7 +359,7 @@ services:
         max-size: "10m"
     restart: unless-stopped
     container_name: carrier-pylon-worker
-    user: ${UID}
+#    user: ${UID}
     depends_on:
       - traefik
       - loki
@@ -392,15 +378,6 @@ services:
       - pylon
     labels:
       - 'traefik.enable=false'
-
-volumes:
-  postgre-data:
-  rabbit-data:
-  redis-data:
-  minio-data:
-  influx-data:
-  grafana-data:
-  mongo-data:
 
 networks:
   pylon:

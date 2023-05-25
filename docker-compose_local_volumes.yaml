@@ -1,0 +1,48 @@
+services:
+  traefik:
+
+  redis:
+    volumes:
+      - ${VOLUMES_PATH}/redis:/data
+
+  rabbitmq:
+    volumes:
+      - ${VOLUMES_PATH}/rabbitmq:/var/lib/rabbitmq/mnesia
+
+  postgres:
+    volumes:
+      - ${VOLUMES_PATH}/postgre:/var/lib/postgresql/data
+      - ./config/extras/postgre_schemas.sh:/docker-entrypoint-initdb.d/postgre_schemas.sh
+
+  mongo:
+    volumes:
+      - ${VOLUMES_PATH}/mongo:/data/db
+
+  vault:
+
+  minio:
+    volumes:
+      - ${VOLUMES_PATH}/minio:/data
+
+  influx:
+    volumes:
+      - ${VOLUMES_PATH}/influx:/var/lib/influxdb
+
+  interceptor:
+
+  interceptor_internal:
+
+
+  keycloak:
+
+  loki:
+
+  grafana:
+    volumes:
+      - ${VOLUMES_PATH}/grafana:/var/lib/grafana
+
+  pylon:
+
+  pylon_auth:
+
+  pylon_worker:

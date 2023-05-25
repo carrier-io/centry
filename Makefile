@@ -3,6 +3,7 @@ REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
 UID := $(shell id -u)
+COMPOSE := docker compose
 export UID
 
 SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
@@ -48,34 +49,42 @@ ip:
 	@echo DONE with IP=$(IP)
 
 fix_permissions:
-	chmod a+rx ./config/extras/postgre_schemas.sh
-	chmod a+rx ./config/keycloak/disablessl.sh
+#	chmod a+rx ./config/extras/postgre_schemas.sh
+#	chmod a+rx ./config/keycloak/disablessl.sh
+	chmod a+rx -R ./config
 
 config/pylon.yml:
 	./configure_pylon.sh
 
 up: fix_permissions ip config/pylon.yml
-	docker compose up -d
+	@echo Select all the compose files to launch base on your needs
+	@echo By default centry launches with docker volumes from .override
+	$(COMPOSE) up -d
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
     ifneq ($(CUSTOM_CA_CERT),)
 		@echo Running docker compose with custom CA certificate file: $(CUSTOM_CA_CERT)
-		docker compose -f docker-compose.yaml -f docker-compose_custom_CA_cert.yaml up -d
+		$(COMPOSE) -f docker-compose.yaml -f docker-compose_custom_CA_cert.yaml up -d
     else
 		@echo CUSTOM_CA_CERT environment variable is not set, aborting...
     endif
 
 up_with_mitmproxy: ip
 	@(cp ~/.mitmproxy/mitmproxy-ca-cert.pem ./mitmproxy-ca-cert.pem)
-	docker compose create
+	$(COMPOSE) create
 	$(MAKE) mitmproxy_iptables_register
 	CUSTOM_CA_CERT=./mitmproxy-ca-cert.pem $(MAKE) up_with_custom_CA_cert
 
 down:
-	docker compose down
+	$(COMPOSE) ps
+
+req:
+	rm -rf ./pylon/requirements/*
+	rm -rf ./pylon_auth/requirements/*
+	rm -rf ./pylon_worker/requirements/*
 
 down_with_mitmproxy: mitmproxy_iptables_remove
-	docker compose down
+	$(COMPOSE) down
 
 pylon_state_clean:
 	rm -rf ./pylon/plugins/*
