@@ -286,7 +286,7 @@ services:
     container_name: carrier-grafana
 
   pylon:
-    image: getcarrier/pylon:latest
+    image: getcarrier/pylon:1.1.0
     logging:
       driver: "json-file"
       options:
@@ -321,7 +321,7 @@ services:
       - 'carrier=pylon'
 
   pylon_auth:
-    image: getcarrier/pylon:latest
+    image: getcarrier/pylon:1.1.0
     logging:
       driver: "json-file"
       options:
@@ -354,7 +354,7 @@ services:
       - 'carrier=pylon-auth'
 
   pylon_worker:
-    image: getcarrier/pylon:latest
+    image: getcarrier/pylon:1.1.0
     logging:
       driver: "json-file"
       options:
