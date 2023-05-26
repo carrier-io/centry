@@ -4,7 +4,7 @@ REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
 UID := $(shell id -u)
-COMPOSE := docker compose
+COMPOSE := docker-compose
 export UID
 
 SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
@@ -56,11 +56,11 @@ config/pylon.yml:
 	./configure_pylon.sh
 
 up: fix_permissions ip config/pylon.yml
-	$(COMPOSE) up -d
+	$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
 	@echo Select all the compose files to launch base on your needs
-	@echo By default centry launches with docker volumes from .override
-	@echo this is example for configuration with local volumes:
-	# $(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
+	@echo By default centry launches with local volumes
+	# to launch with docker volumes use: $(COMPOSE) up -d
+	
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
     ifneq ($(CUSTOM_CA_CERT),)
