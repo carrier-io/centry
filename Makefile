@@ -1,5 +1,6 @@
-#DIRECT_IP=FORCE_SET_IP_HERE
+#DIRECT_IP=YOUR_IP_HERE
 INTERFACE ?= lo
+SSL=false
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
@@ -55,11 +56,20 @@ fix_permissions:
 config/pylon.yml:
 	./configure_pylon.sh
 
-up: fix_permissions ip config/pylon.yml
+configure_keycloak_import:
+    ifeq ($(SSL), true)
+		$(eval PARAM=external)
+    else
+		$(eval PARAM=none)
+    endif
+	sed -i -e 's/"sslRequired": ".*"/"sslRequired": "${PARAM}"/' ./config/keycloak/carrier.json
+
+up: fix_permissions ip config/pylon.yml configure_keycloak_import
 	$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
 	@echo Select all the compose files to launch base on your needs
 	@echo By default centry launches with local volumes
-	# to launch with docker volumes use: $(COMPOSE) up -d
+	# to launch with docker volumes use:
+	# $(COMPOSE) up -d
 	
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
@@ -82,7 +92,6 @@ down:
 req:
 	rm -rf ./pylon/requirements/*
 	rm -rf ./pylon_auth/requirements/*
-	rm -rf ./pylon_worker/requirements/*
 
 down_with_mitmproxy: mitmproxy_iptables_remove
 	$(COMPOSE) down
@@ -95,17 +104,12 @@ pylon_auth_state_clean:
 	rm -rf ./pylon_auth/plugins/*
 	rm -rf ./pylon_auth/requirements/*
 
-pylon_worker_state_clean:
-	rm -rf ./pylon_worker/plugins/*
-	rm -rf ./pylon_worker/requirements/*
-
 docker_volumes_prune: down
 	docker volume rm $(GET_CENTRY_VOLUMES)
 
 clean_all:
 	$(MAKE) pylon_state_clean
 	$(MAKE) pylon_auth_state_clean
-	$(MAKE) pylon_worker_state_clean
 	$(MAKE) docker_volumes_prune
 
 docker_system_prune: down
@@ -170,3 +174,5 @@ mitmproxy_prepare_system:
 	@(sudo sysctl -w net.ipv4.ip_forward=1)
 	@(sudo sysctl -w net.ipv6.conf.all.forwarding=1)
 	@(sudo sysctl -w net.ipv4.conf.all.send_redirects=0)
+
+purge: docker_volumes_prune

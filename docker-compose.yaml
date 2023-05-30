@@ -203,10 +203,11 @@ services:
       - postgres
       - traefik
     volumes:
-      - ./config/keycloak/carrier.json:$KEYCLOAK_IMPORT
+      - ./config/keycloak/carrier.json:/tmp/carrier.json
       - ./config/keycloak/admin.json:/opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json:ro
-      - ./config/keycloak/disablessl.sh:/tmp/disablessl.sh
       - ./config/keycloak/themes/src/main/resources/theme:/opt/jboss/keycloak/themes
+      - ./config/keycloak/entrypoint.sh:/opt/jboss/startup-scripts/entrypoint.sh
+      - ./config/keycloak/disable_ssl.sh:/tmp/disable_ssl.sh
     environment:
       - DB_VENDOR=$DATABASE_VENDOR
       - DB_ADDR=postgres
@@ -214,7 +215,9 @@ services:
       - DB_SCHEMA=$KEYCLOAK_DB_SCHEMA
       - DB_USER=$POSTGRES_USER
       - DB_PASSWORD=$POSTGRES_PASSWORD
-      - KEYCLOAK_IMPORT=$KEYCLOAK_IMPORT
+      - KEYCLOAK_IMPORT=/tmp/carrier.json
+      - KU=$KEYCLOAK_USER
+      - KP=$KEYCLOAK_PASSWORD
       - PROXY_ADDRESS_FORWARDING=$PROXY_ADDRESS_FORWARDING
     networks:
       - pylon
@@ -352,35 +355,6 @@ services:
       - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
       - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
       - 'carrier=pylon-auth'
-
-  pylon_worker:
-    image: getcarrier/pylon:1.1.0
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    restart: unless-stopped
-    container_name: carrier-pylon-worker
-#    user: ${UID}
-    depends_on:
-      - traefik
-      - loki
-      - minio
-      - redis
-      - vault
-      - rabbitmq
-      - mongo
-    volumes:
-      - .:/data
-    env_file:
-      - .env
-    environment:
-      - CORE_CONFIG_SEED=file:/data/config/pylon_worker.yml
-    networks:
-      - pylon
-    labels:
-      - 'traefik.enable=false'
 
 networks:
   pylon:

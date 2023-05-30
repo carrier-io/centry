@@ -21,13 +21,9 @@ New Generation of Carrier UI
     * _defaults can be found in `./config/pylon-example.yml`_
     * default for beta is `./config/pylon.yml`
 * Edit `Makefile`:
-  * Force set `DIRECT_IP` in row 1
-  * Find `up:` command and edit it according to your needs. By default it launches centry without ssl and wih docker volumes.
+  * Set `DIRECT_IP` in row 1 
   * _Optionally_: edit your compose cmd by editing `COMPOSE := docker compose` e.g. in your case it may be `COMPOSE := docker-compose`
-### Starting carrier:
-* Run: `make` and **read** instructions carefully
-### Destroy carrier and everything associated:
-* Run: `make down`
+  * Find `up:` command and edit it according to your needs. By default it launches centry without ssl and wih local volumes.
 
 
 ## Creating a new plugin
