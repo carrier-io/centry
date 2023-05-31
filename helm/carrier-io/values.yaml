@@ -5,25 +5,20 @@
 replicaCount: 1
 
 images:
-  nginx:
-    repository: nginx
-    tag: "latest"
-    pullPolicy: Always
-    containerPort: 80
   pylon:
     repository: getcarrier/pylon
     tag: "latest"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     containerPort: 8080
   pylon_auth:
     repository: getcarrier/pylon
     tag: "latest"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     containerPort: 8080
   interceptor:
     repository: getcarrier/interceptor
     tag: "latest"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     containerPort: 8080
 
 services:
@@ -45,6 +40,7 @@ global:
   app:
     # hostname or IP using which the app is accessible from the browser
     host: 172.26.108.95
+
   postgresql:
     auth:
       database: carrier
@@ -56,8 +52,8 @@ global:
     fullnameOverride: postgres-carrier
 
 redis:
-  usePassword: true
-  password: password
+  auth:
+    password: password
   master:
     name: carrier-redis
     persistence:
@@ -151,6 +147,37 @@ grafana-loki:
   fullnameOverride: loki-carrier
   memcached:
     fullnameOverride: memcached-carrier
+
+keycloak:
+  fullnameOverride: keycloak-carrier
+  httpRelativePath: /auth/
+  postgresql:
+    enabled: false
+  externalDatabase:
+    #TODO extract hardcoded password to a secret, find ways to reference the database and user too despite they are not being tpl-ed in the keycloak chart
+    #TODO specify DB schema
+    host: "{{ .Values.global.postgresql.fullnameOverride }}"
+    port: "5432"
+    database: "carrier"
+    user: "carrier"
+    password: "password"
+  extraVolumes:
+    - name: config
+      configMap:
+        name: "{{ .Values.fullnameOverride }}-config-local"
+  extraVolumeMounts:
+    - name: config
+      mountPath: /realm/for_import/carrier.json
+      subPath: carrier.json
+    - name: config
+      mountPath: /opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json
+      subPath: admin.json
+    - name: config
+      mountPath: /tmp/disablessl.sh
+      subPath: disablessl.sh
+  extraEnvVars: #TODO extract
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.import=/realm/for_import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"  #TODO do not overwrite
 
 
 imagePullSecrets: []

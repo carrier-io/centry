@@ -27,7 +27,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.pylon_auth.repository }}:{{ .Values.images.pylon_auth.tag }}"
           imagePullPolicy: {{ .Values.images.pylon_auth.pullPolicy }}
-# to be able to debug, uncomment the following lines:
+# to be able to exec into the container on failure, uncomment the following lines:
 #          command: ["/bin/sh","-c"]
 #          args: ["python -m pylon.main || sleep infinity"]
           ports:

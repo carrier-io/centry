@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.services.pylon_auth.name }}-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/forward-auth"
+        backend:
+          service:
+            name: {{ .Values.services.pylon_auth.name }}
+            port:
+              number: {{ .Values.services.pylon_auth.port }}
+#    host: {{ .Values.global.app.host }}

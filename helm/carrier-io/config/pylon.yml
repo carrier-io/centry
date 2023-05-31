@@ -77,7 +77,7 @@ configs:
 sessions:
   redis:
     host: {{ .Values.redis.fullnameOverride }}-master
-    password: {{ .Values.redis.password }}
+    password: {{ .Values.redis.auth.password }}
   prefix: pylon_session_
 
 # Traefik config

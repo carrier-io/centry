@@ -39,3 +39,6 @@ dependencies:
   - name: grafana-loki
     version: 2.x.x
     repository: https://charts.bitnami.com/bitnami
+  - name: keycloak
+    version: 15.x.x
+    repository: https://charts.bitnami.com/bitnami

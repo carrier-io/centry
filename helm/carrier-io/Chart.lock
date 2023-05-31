@@ -1,27 +1,30 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 17.10.3
+  version: 17.11.3
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 11.15.2
+  version: 11.15.3
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.5.2
+  version: 12.5.5
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
-  version: 13.13.0
+  version: 13.15.1
 - name: vault
   repository: https://charts.bitnami.com/bitnami
-  version: 0.1.2
+  version: 0.2.1
 - name: minio
   repository: https://charts.bitnami.com/bitnami
-  version: 12.6.0
+  version: 12.6.2
 - name: influxdb
   repository: https://charts.bitnami.com/bitnami
-  version: 5.5.2
+  version: 5.6.1
 - name: grafana-loki
   repository: https://charts.bitnami.com/bitnami
-  version: 2.8.1
-digest: sha256:5c28b8822a833cf09cebdfa848d739ac00155b69ff2fa9da56ad70f25b50934e
-generated: "2023-05-17T15:33:46.786160024+02:00"
+  version: 2.9.1
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.1.2
+digest: sha256:0bd38dd4514a195609974d7a88f31f55141e9e5dcfff1be0138d3d42734bdd10
+generated: "2023-05-25T14:45:21.166893788+02:00"

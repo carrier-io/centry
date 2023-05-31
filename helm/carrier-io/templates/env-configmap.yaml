@@ -62,7 +62,7 @@ data:
   RABBITMQ_USER: {{ .Values.rabbitmq.auth.username }}
   RAM_QUOTA: 4g
   REDIS_HOST: {{ .Values.redis.fullnameOverride }}-master
-  REDIS_PASSWORD: {{ .Values.redis.password }}
+  REDIS_PASSWORD: {{ .Values.redis.auth.password }}
   RETENTION_DELETES_ENABLE: "true"
   RETENTION_PERIOD: 4200h
   VAULT_URL: http://{{ .Values.vault.fullnameOverride }}-server:8200
