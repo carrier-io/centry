@@ -32,9 +32,6 @@ services:
       MINIO_SERVER_CA_CERTS_FILE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
-  mongo:
-    volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   interceptor:
     environment:
       SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem

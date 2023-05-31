@@ -12,10 +12,6 @@ services:
     volumes:
       - postgre-data:/var/lib/postgresql/data
 
-  mongo:
-    volumes:
-      - mongo-data:/data/db
-
   minio:
     volumes:
       - minio-data:/data
@@ -36,4 +32,3 @@ volumes:
   minio-data:
   influx-data:
   grafana-data:
-  mongo-data:

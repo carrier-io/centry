@@ -12,10 +12,6 @@ services:
     volumes:
       - ${VOLUMES_PATH}/postgre:/var/lib/postgresql/data
 
-  mongo:
-    volumes:
-      - ${VOLUMES_PATH}/mongo:/data/db
-
   minio:
     volumes:
       - ${VOLUMES_PATH}/minio:/data
