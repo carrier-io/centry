@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: env
 data:
-  APP_HOST: http://{{ .Values.global.app.host }}
+  APP_HOST: "http://{{ .Values.global.app.host }}:{{ .Values.global.app.port }}"
   AUTH_MANAGER_PASSWORD: carrier
   AUTH_MANAGER_USERNAME: carrier
   CARRIER_PATH: /tmp
@@ -28,6 +28,9 @@ data:
   GF_SERVER_ROOT_URL: http://carrier-galloper/grafana
   GF_SERVER_SERVE_FROM_SUB_PATH: "true"
   GL_POSTGRES_SCHEMA: carrier
+  INFLUX_HOST: {{ .Values.influxdb.fullnameOverride }}
+  INFLUX_USER: {{ .Values.influxdb.setDefaultUser.user.username }}
+  INFLUX_PASSWORD: {{ .Values.influxdb.setDefaultUser.user.password }}
   INFLUXDB_DATA_DIR: /var/lib/influxdb/data
   INFLUXDB_DATA_MAX_SERIES_PER_DATABASE: "0"
   INFLUXDB_DATA_WAL_DIR: /var/lib/influxdb/wal

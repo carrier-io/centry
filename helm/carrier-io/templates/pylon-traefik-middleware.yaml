@@ -1,0 +1,12 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Values.services.pylon.name }}-traefik-middleware
+spec:
+  forwardAuth:
+    address: "http://{{ .Values.services.pylon_auth.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.services.pylon_auth.port }}/forward-auth/auth?target=rpc"
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-Type
+      - X-Auth-ID
+      - X-Auth-Reference

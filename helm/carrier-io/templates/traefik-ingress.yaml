@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    notes: Delegates all incoming connections to traefik. Traefik is needed for carrier auth to work properly.
+  name: traefik-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ .Release.Name }}-traefik
+            port:
+              number: {{ .Values.traefik.ports.web.exposedPort }}

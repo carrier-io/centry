@@ -1,6 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
   name: {{ .Values.services.pylon_auth.name }}-ingress
 spec:
   rules:
@@ -13,4 +15,3 @@ spec:
             name: {{ .Values.services.pylon_auth.name }}
             port:
               number: {{ .Values.services.pylon_auth.port }}
-#    host: {{ .Values.global.app.host }}

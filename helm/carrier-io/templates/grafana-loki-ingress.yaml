@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.keycloak.fullnameOverride }}-ingress
+  name: {{ index .Values "grafana-loki" "fullnameOverride" }}-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
     - http:
         paths:
-          - path: "/auth"
+          - path: "/loki"
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.keycloak.fullnameOverride }}
+                name: {{ index .Values "grafana-loki" "fullnameOverride" }}
                 port:
                   name: http

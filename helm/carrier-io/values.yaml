@@ -40,6 +40,7 @@ global:
   app:
     # hostname or IP using which the app is accessible from the browser
     host: 172.26.108.95
+    port: 80
 
   postgresql:
     auth:
@@ -50,6 +51,13 @@ global:
       ports:
         postgresql: 5432
     fullnameOverride: postgres-carrier
+
+traefik:
+  ports:
+    web:
+#      nodePort: 32323 # if you would like to access traefik directly without the main ingress
+      forwardedHeaders:
+        trustedIPs: ['127.0.0.1/32']
 
 redis:
   auth:
@@ -78,7 +86,8 @@ rabbitmq:
     ports:
       amqp: 5672
       manager: 15672
-  fullnameOverride: rabbitmq-carrier
+  fullnameOverride: carrier-rabbit
+#  fullnameOverride: rabbitmq-carrier  # TODO hostname from above is hardcoded in some places in carrier
 
 postgresql:
   primary:
@@ -136,6 +145,11 @@ minio:
   fullnameOverride: minio-carrier
 
 influxdb:
+  setDefaultUser:
+    enabled: true
+    user:
+      username: influx_user
+      password: influx_pass
   env:
     - name: INFLUXDB_HTTP_ENABLED
       value: "true"
@@ -144,7 +158,8 @@ influxdb:
   fullnameOverride: influx-carrier
 
 grafana-loki:
-  fullnameOverride: loki-carrier
+  fullnameOverride: carrier-loki
+#  fullnameOverride: loki-carrier  # TODO hostname from above is hardcoded in carrier
   memcached:
     fullnameOverride: memcached-carrier
 

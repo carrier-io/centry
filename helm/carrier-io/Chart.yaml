@@ -34,11 +34,14 @@ dependencies:
     version: 12.x.x
     repository: https://charts.bitnami.com/bitnami
   - name: influxdb
-    version: 5.x.x
-    repository: https://charts.bitnami.com/bitnami
+    version: 4.12.x
+    repository: https://helm.influxdata.com/
   - name: grafana-loki
     version: 2.x.x
     repository: https://charts.bitnami.com/bitnami
   - name: keycloak
     version: 15.x.x
     repository: https://charts.bitnami.com/bitnami
+  - name: traefik
+    version: 23.x.x
+    repository: https://traefik.github.io/charts

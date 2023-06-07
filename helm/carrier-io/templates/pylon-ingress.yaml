@@ -3,10 +3,8 @@ kind: Ingress
 metadata:
   name: {{ .Values.services.pylon.name }}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: http://{{ .Values.services.pylon_auth.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.services.pylon_auth.port }}/forward-auth/auth?target=rpc
-{{/*    nginx.ingress.kubernetes.io/auth-signin: http://{{ .Values.services.pylon_auth.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.services.pylon_auth.port }}/forward-auth/oidc/login?target_to=$request_uri*/}}
-    # TODO BLOCKER above: nginx cannot handle dynamic redirects received from auth-url
-    nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Type,X-Auth-ID,X-Auth-Reference
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ .Values.services.pylon.name }}-traefik-middleware@kubernetescrd
 spec:
   rules:
   - http:
@@ -18,4 +16,4 @@ spec:
             name: {{ .Values.services.pylon.name }}
             port:
               number: {{ .Values.services.pylon.port }}
-#    host: {{ .Values.global.app.host }}
+
