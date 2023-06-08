@@ -12,7 +12,7 @@ images:
     containerPort: 8080
   pylon_auth:
     repository: getcarrier/pylon
-    tag: "latest"
+    tag: "1.1.0"
     pullPolicy: IfNotPresent
     containerPort: 8080
   interceptor:
@@ -98,16 +98,6 @@ postgresql:
       - name: POSTGRES_SCHEMAS
         value: "carrier,keycloak"
   fullnameOverride: postgres-carrier
-
-mongodb:
-  auth:
-    enabled: true
-    rootUser: carrier
-    rootPassword: password
-    database: carrier
-    username: carrier-user
-    password: carrier-user-password
-  fullnameOverride: mongo-carrier
 
 vault:
   server:

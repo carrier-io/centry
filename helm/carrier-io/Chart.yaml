@@ -24,9 +24,6 @@ dependencies:
   - name: postgresql
     version: "12.x.x"
     repository: https://charts.bitnami.com/bitnami
-  - name: mongodb
-    version: "13.x.x"
-    repository: https://charts.bitnami.com/bitnami
   - name: vault
     version: 0.x.x
     repository: https://charts.bitnami.com/bitnami

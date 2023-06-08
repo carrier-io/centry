@@ -1,4 +1,3 @@
-# General server config
 server:
   #  path: /
   #  proxy: true
@@ -30,30 +29,22 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
+      branch: beta-1.0
 #  skip:
 #    - ui_performance
 
 configs:
   market:
-#    plugin_repo:
-#      - type: config_key
-#        name: local_repo
-#      - type: config_key
-#        name: customer_repo
-#      - type: resource
-#        name: data/plugins.json
     local_preordered_plugins:
       - design-system
       - auth
       - projects
       - shared
       - tasks
-      - security
       - secrets
       - backend_performance
       - artifacts
       - theme
-      - security_scanner_zap
       - integrations
       - reporter_email
       - reporter_jira
@@ -61,17 +52,21 @@ configs:
       - scheduling
       - admin
       - ui_performance
-      - tasklets
+      - system_reporter_email
       - aws_integration
       - azure_devops
       - kubernetes
-      - shared_orch
-      - engagements
-      - kanban
-      - issues
-      - kb
-      - reporter_engagement
+      - gcp_integration
       - performance_analysis
+#      - security
+#      - security_scanner_zap
+#      - tasklets
+#      - shared_orch
+#      - engagements
+#      - kanban
+#      - issues
+#      - kb
+#      - reporter_engagement
 
 # Session storage
 sessions:
@@ -80,6 +75,7 @@ sessions:
     password: {{ .Values.redis.auth.password }}
   prefix: pylon_session_
 
+# TODO sync with latest version from beta branch
 # Traefik config
 # traefik:
 #   redis:
@@ -144,6 +140,7 @@ loki:
 application:
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
+#  PREFERRED_URL_SCHEME: https
   SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
   SESSION_COOKIE_NAME: session_id
 

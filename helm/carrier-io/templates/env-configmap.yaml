@@ -50,10 +50,6 @@ data:
   MINIO_HOST: http://{{ .Values.minio.fullnameOverride }}:9000
   MINIO_REGION: us-east-1
   MODULES_PATH: plugins
-  MONGO_DB: {{ .Values.mongodb.auth.database }}
-  MONGO_HOST: {{ .Values.mongodb.fullnameOverride }}
-  MONGO_PASSWORD: {{ .Values.mongodb.auth.rootPassword }}  # TODO discuss with carrier team, should not be using root user+pass
-  MONGO_USER: {{ .Values.mongodb.auth.rootUser }}
   POSTGRES_DB: {{ .Values.global.postgresql.auth.database }}
   POSTGRES_HOST: {{ .Values.postgresql.fullnameOverride }}
   POSTGRES_PASSWORD: {{ .Values.global.postgresql.auth.password }}
