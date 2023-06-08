@@ -7,7 +7,7 @@ replicaCount: 1
 images:
   pylon:
     repository: getcarrier/pylon
-    tag: "latest"
+    tag: "1.1.0"
     pullPolicy: IfNotPresent
     containerPort: 8080
   pylon_auth:
