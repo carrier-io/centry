@@ -18,13 +18,6 @@ services:
       CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
-  pylon_worker:
-    environment:
-      SSL_CERT_FILE: /etc/ssl/certs/custom-ca-cert.pem
-      REQUESTS_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
-      CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
-    volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   grafana:
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
@@ -37,9 +30,6 @@ services:
   minio:
     environment:
       MINIO_SERVER_CA_CERTS_FILE: /etc/ssl/certs/custom-ca-cert.pem
-    volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
-  mongo:
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   interceptor:

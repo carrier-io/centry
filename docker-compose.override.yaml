@@ -1,0 +1,34 @@
+version: '3'
+services:
+  redis:
+    volumes:
+      - redis-data:/data
+
+  rabbitmq:
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
+
+  postgres:
+    volumes:
+      - postgre-data:/var/lib/postgresql/data
+
+  minio:
+    volumes:
+      - minio-data:/data
+
+  influx:
+    volumes:
+      - influx-data:/var/lib/influxdb
+
+
+  grafana:
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  postgre-data:
+  rabbit-data:
+  redis-data:
+  minio-data:
+  influx-data:
+  grafana-data:

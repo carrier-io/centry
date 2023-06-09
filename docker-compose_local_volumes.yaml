@@ -1,0 +1,25 @@
+version: '3'
+services:
+  redis:
+    volumes:
+      - ${VOLUMES_PATH}/redis:/data
+
+  rabbitmq:
+    volumes:
+      - ${VOLUMES_PATH}/rabbitmq:/var/lib/rabbitmq/mnesia
+
+  postgres:
+    volumes:
+      - ${VOLUMES_PATH}/postgre:/var/lib/postgresql/data
+
+  minio:
+    volumes:
+      - ${VOLUMES_PATH}/minio:/data
+
+  influx:
+    volumes:
+      - ${VOLUMES_PATH}/influx:/var/lib/influxdb
+
+  grafana:
+    volumes:
+      - ${VOLUMES_PATH}/grafana:/var/lib/grafana
