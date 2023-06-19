@@ -124,7 +124,7 @@ services:
 
   interceptor:
     platform: linux/amd64
-    image: getcarrier/interceptor:beta-1.0
+    image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
       options:
@@ -149,7 +149,7 @@ services:
 
   interceptor_internal:
     platform: linux/amd64
-    image: getcarrier/interceptor:beta-1.0
+    image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
       options:
