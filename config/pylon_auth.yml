@@ -32,7 +32,7 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
-      branch: beta-1.0
+      branch: main
 
 configs:
   market:
