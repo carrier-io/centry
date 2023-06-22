@@ -20,6 +20,11 @@ images:
     tag: "beta-1.0"
     pullPolicy: IfNotPresent
     containerPort: 8080
+  loki:
+    repository: grafana/loki
+    tag: "2.3.0"
+    pullPolicy: IfNotPresent
+    containerPort: 3100
 
 services:
   pylon:
@@ -34,6 +39,11 @@ services:
     targetPort: 8080
   interceptor:
     name: interceptor-carrier
+  loki:
+    name: carrier-loki  # TODO hostname is hardcoded in carrier
+    type: ClusterIP
+    port: 3100
+    targetPort: 3100
 
 
 global:
@@ -146,12 +156,6 @@ influxdb:
     - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
       value: "0"
   fullnameOverride: influx-carrier
-
-grafana-loki:
-  fullnameOverride: carrier-loki
-#  fullnameOverride: loki-carrier  # TODO hostname from above is hardcoded in carrier
-  memcached:
-    fullnameOverride: memcached-carrier
 
 keycloak:
   fullnameOverride: keycloak-carrier

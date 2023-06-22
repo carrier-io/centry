@@ -1,30 +1,27 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 17.11.3
+  version: 17.11.6
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 11.16.2
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.5.6
+  version: 12.5.8
 - name: vault
   repository: https://charts.bitnami.com/bitnami
-  version: 0.2.2
+  version: 0.2.4
 - name: minio
   repository: https://charts.bitnami.com/bitnami
   version: 12.6.4
 - name: influxdb
   repository: https://helm.influxdata.com/
-  version: 4.12.1
-- name: grafana-loki
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.9.1
+  version: 4.12.2
 - name: keycloak
   repository: https://charts.bitnami.com/bitnami
-  version: 15.1.3
+  version: 15.1.4
 - name: traefik
   repository: https://traefik.github.io/charts
   version: 23.1.0
-digest: sha256:c0ded739875b17b890061c5b841c8945e7b1e123ab97cf497f75c53d70c5d25a
-generated: "2023-06-08T12:42:06.300304883+02:00"
+digest: sha256:c414deeeb964ba2efd1f465b78ea08584043208213549871bfe09dd15488824d
+generated: "2023-06-22T13:18:00.461847427+02:00"

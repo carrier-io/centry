@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.loki.name }}-deployment
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "carrier-io.specificSelectorLabels" (dict "name" "loki" "release" .Release.Name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrier-io.specificSelectorLabels" (dict "name" "loki" "release" .Release.Name) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "carrier-io.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.services.loki.name }}-container
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.loki.repository }}:{{ .Values.images.loki.tag }}"
+          imagePullPolicy: {{ .Values.images.loki.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.images.loki.containerPort }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: env
+# TODO
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 80
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: 80
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

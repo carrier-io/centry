@@ -133,7 +133,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: http://{{ .Values.global.app.host }}:3100/loki/api/v1/push
+  url: http://{{ .Values.services.loki.name }}:{{ .Values.services.loki.port }}/loki/api/v1/push
 
 
 # Settings for Flask application

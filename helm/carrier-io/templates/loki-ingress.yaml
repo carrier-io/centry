@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ index .Values "grafana-loki" "fullnameOverride" }}-ingress
+  name: {{ .Values.services.loki.name }}-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
@@ -12,6 +12,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ index .Values "grafana-loki" "fullnameOverride" }}
+                name: {{ .Values.services.loki.name }}
                 port:
-                  name: http
+                  number: {{ .Values.services.loki.port }}
