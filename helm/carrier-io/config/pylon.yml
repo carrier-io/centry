@@ -52,12 +52,15 @@ configs:
       - scheduling
       - admin
       - ui_performance
-      - system_reporter_email
       - aws_integration
       - azure_devops
       - kubernetes
       - gcp_integration
       - performance_analysis
+      - s3_integration
+      - email_base
+      - email_template
+#      - system_reporter_email
 #      - security
 #      - security_scanner_zap
 #      - tasklets
