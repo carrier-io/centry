@@ -1,14 +1,14 @@
 #DIRECT_IP=YOUR_IP_HERE
-#DIRECT_IP=192.168.88.13
-INTERFACE ?= en0
+INTERFACE ?= lo
 SSL=false
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
 UID := $(shell id -u)
-COMPOSE := docker compose
+COMPOSE := docker-compose
 export UID
 
+#SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
 SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep 'inet ' | cut -d ' ' -f 2)
 GET_CENTRY_VOLUMES=$(shell docker volume ls -q | grep centry)
 
@@ -66,11 +66,11 @@ configure_keycloak_import:
 	sed -i -e 's/"sslRequired": ".*"/"sslRequired": "${PARAM}"/' ./config/keycloak/carrier.json
 
 up: fix_permissions ip config/pylon.yml configure_keycloak_import
-	#$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
+	$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
 	@echo Select all the compose files to launch base on your needs
 	@echo By default centry launches with local volumes
 	# to launch with docker volumes use:
-	$(COMPOSE) up -d
+	#$(COMPOSE) up -d
 	
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
