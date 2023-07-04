@@ -8,7 +8,8 @@ UID := $(shell id -u)
 COMPOSE := docker-compose
 export UID
 
-SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
+#SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep -P -o "$(REGEX_IPV4)")
+SET_IP=$(shell $(IFCONFIG_CMD) $(INTERFACE) | grep 'inet ' | cut -d ' ' -f 2)
 GET_CENTRY_VOLUMES=$(shell docker volume ls -q | grep centry)
 
 .PHONY: all list_interfaces ip fix_permissions up down docker_volumes_prune
@@ -69,7 +70,7 @@ up: fix_permissions ip config/pylon.yml configure_keycloak_import
 	@echo Select all the compose files to launch base on your needs
 	@echo By default centry launches with local volumes
 	# to launch with docker volumes use:
-	# $(COMPOSE) up -d
+	#$(COMPOSE) up -d
 	
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
