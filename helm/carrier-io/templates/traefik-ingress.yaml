@@ -4,6 +4,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     notes: Delegates all incoming connections to traefik. Traefik is needed for carrier auth to work properly.
+    nginx.ingress.kubernetes.io/proxy-body-size: "40m"
   name: traefik-ingress
 spec:
   rules:
