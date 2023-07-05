@@ -78,7 +78,6 @@ sessions:
     password: {{ .Values.redis.auth.password }}
   prefix: pylon_session_
 
-# TODO sync with latest version from beta branch
 # Traefik config
 # traefik:
 #   redis:

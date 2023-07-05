@@ -44,15 +44,6 @@ spec:
           env:
             - name: CORE_CONFIG_SEED
               value: "file:/data/config/pylon_auth.yml"
-# TODO
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 80
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: 80
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:

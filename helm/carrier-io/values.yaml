@@ -40,7 +40,7 @@ services:
   interceptor:
     name: interceptor-carrier
   loki:
-    name: carrier-loki  # TODO hostname is hardcoded in carrier
+    name: carrier-loki  # hostname is hardcoded in carrier, don't change this value until it's fixed
     type: ClusterIP
     port: 3100
     targetPort: 3100
@@ -96,8 +96,7 @@ rabbitmq:
     ports:
       amqp: 5672
       manager: 15672
-  fullnameOverride: carrier-rabbit
-#  fullnameOverride: rabbitmq-carrier  # TODO hostname from above is hardcoded in some places in carrier
+  fullnameOverride: carrier-rabbit  # hostname is hardcoded in some places in carrier, don't change here until it's fixed
 
 postgresql:
   primary:
@@ -163,8 +162,6 @@ keycloak:
   postgresql:
     enabled: false
   externalDatabase:
-    #TODO extract hardcoded password to a secret, find ways to reference the database and user too despite they are not being tpl-ed in the keycloak chart
-    #TODO specify DB schema
     host: "{{ .Values.global.postgresql.fullnameOverride }}"
     port: "5432"
     database: "carrier"
@@ -184,9 +181,9 @@ keycloak:
     - name: config
       mountPath: /tmp/disablessl.sh
       subPath: disablessl.sh
-  extraEnvVars: #TODO extract
+  extraEnvVars:
     - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.import=/realm/for_import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"  #TODO do not overwrite
+      value: "-Dkeycloak.import=/realm/for_import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
 
 
 imagePullSecrets: []

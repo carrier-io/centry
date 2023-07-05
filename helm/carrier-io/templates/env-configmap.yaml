@@ -11,7 +11,6 @@ data:
   CORE_DEVELOPMENT_MODE: "true"
   CPU_QUOTA: "1"
   DATABASE_VENDOR: postgres
-#{{/*  DB_POSTGRES_SCHEMAS: {{ .Values.postgresql.primary.extraEnvVars[0].value }}*/}}
   GF_API_KEY: api_key
   GF_AUTH_DISABLE_LOGIN_FORM: "true"
   GF_AUTH_PROXY_AUTO_SIGN_UP: "true"

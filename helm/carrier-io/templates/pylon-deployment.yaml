@@ -27,9 +27,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.pylon.repository }}:{{ .Values.images.pylon.tag }}"
           imagePullPolicy: {{ .Values.images.pylon.pullPolicy }}
-# to be able to debug, uncomment the following lines:
-#          command: ["/bin/sh","-c"]
-#          args: ["python -m pylon.main || sleep infinity"]
           ports:
             - containerPort: {{ .Values.images.pylon.containerPort }}
               protocol: TCP
@@ -44,15 +41,22 @@ spec:
           env:
             - name: CORE_CONFIG_SEED
               value: "file:/data/config/pylon.yml"
-# TODO
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 80
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: 80
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.images.pylon.containerPort }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.images.pylon.containerPort }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
