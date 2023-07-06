@@ -32,7 +32,7 @@ services:
     container_name: carrier-redis
 
   rabbitmq:
-    image: rabbitmq:3.11-management
+    image: rabbitmq:3.12-management
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
@@ -42,6 +42,8 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    volumes:
+      - ./config/rabbitmq/advanced.config:/etc/rabbitmq/advanced.config
     depends_on:
       - redis
     container_name: carrier-rabbit
@@ -124,7 +126,7 @@ services:
 
   interceptor:
     platform: linux/amd64
-    image: getcarrier/interceptor:beta-1.0
+    image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
       options:
@@ -149,7 +151,7 @@ services:
 
   interceptor_internal:
     platform: linux/amd64
-    image: getcarrier/interceptor:beta-1.0
+    image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
       options:
