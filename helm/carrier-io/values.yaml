@@ -48,8 +48,8 @@ services:
 
 global:
   app:
-    # hostname or IP using which the app is accessible from the browser
-    host: 172.26.108.95
+    # hostname or IP using which the app is accessible from the browser - CHANGE THIS TO MATCH YOUR SETUP
+    host: >>PUT HOSTNAME OR IP HERE<<
     port: 80
 
   postgresql:
