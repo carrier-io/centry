@@ -54,6 +54,7 @@ ip:
 
 fix_permissions:
 	chmod -R a+rx ./config
+	chmod -R 600 ./config/traefik/
 
 config/pylon.yml:
 	./configure_pylon.sh
