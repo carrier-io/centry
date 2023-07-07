@@ -29,37 +29,80 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
-      branch: beta-1.0
+      branch: platform
 #  skip:
 #    - ui_performance
 
 configs:
   market:
     local_preordered_plugins:
-      - design-system
-      - auth
-      - projects
-      - shared
-      - tasks
-      - secrets
-      - backend_performance
-      - artifacts
-      - theme
-      - integrations
-      - reporter_email
-      - reporter_jira
-      - processing_severity_filter
-      - scheduling
       - admin
-      - ui_performance
+      - artifacts
+      - audit_logs
+      - auth
+      - auth_manager
+      - auth_root
       - aws_integration
-      - azure_devops
-      - kubernetes
-      - gcp_integration
-      - performance_analysis
-      - s3_integration
+      - azure_devops_integration
+      - backend_performance
+      - design-system
       - email_base
       - email_template
+      - engagements
+      - gcp_integration
+      - hugging_face
+      - integrations
+      - issues
+      - kanban
+      - kb
+      - kubernetes
+      - open_ai
+      - performance_analysis
+      - processing_severity_filter
+      - projects
+      - prompts
+      - reporter_email
+      - reporter_engagement
+      - reporter_jira
+      - s3_integration
+      - scheduling
+      - secrets
+      - security
+      - security_dependency
+      - security_sast
+      - security_scanner_aem
+      - security_scanner_bandit
+      - security_scanner_brakeman
+      - security_scanner_csharp
+      - security_scanner_dependencycheck
+      - security_scanner_gitleaks
+      - security_scanner_golang
+      - security_scanner_gosec
+      - security_scanner_insider
+      - security_scanner_java
+      - security_scanner_masscan
+      - security_scanner_nikto
+      - security_scanner_nmap
+      - security_scanner_nodejs
+      - security_scanner_nodejsscan
+      - security_scanner_npm
+      - security_scanner_python
+      - security_scanner_qualys
+      - security_scanner_retirejs
+      - security_scanner_ruby
+      - security_scanner_safety
+      - security_scanner_semgrep
+      - security_scanner_spotbugs
+      - security_scanner_sslyze
+      - security_scanner_trivy
+      - security_scanner_w3af
+      - security_scanner_zap
+      - shared
+      - shared_orch
+      - tasks
+      - theme
+      - ui_performance
+      - vertex_ai
 
 # Session storage
 sessions:
