@@ -29,7 +29,7 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
-      branch: beta-1.0
+      branch: main
 #  skip:
 #    - ui_performance
 
@@ -135,7 +135,7 @@ loki:
   include_level_name: true
   include_logger_name: true
   verify: true
-  url: http://{{ .Values.services.loki.name }}:{{ .Values.services.loki.port }}/loki/api/v1/push
+  url: http://{{ .Values.services.loki.name }}:{{ .Values.services.loki.port }}
 
 
 # Settings for Flask application
