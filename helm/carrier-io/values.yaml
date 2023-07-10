@@ -17,7 +17,7 @@ images:
     containerPort: 8080
   interceptor:
     repository: getcarrier/interceptor
-    tag: "beta-1.0"
+    tag: "latest"
     pullPolicy: IfNotPresent
     containerPort: 8080
   loki:
