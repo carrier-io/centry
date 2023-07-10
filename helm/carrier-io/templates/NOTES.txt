@@ -1,0 +1,1 @@
+The application has been published on the root URL of the main ingress. Don't forget to set the same hostname/IP in the `values.yaml` file under the `global.app.host` entry. If access to carrier does not work, as a workaround, try to set up NodePort for traefik and connect to it directly (see the values.yaml for the traefik config).

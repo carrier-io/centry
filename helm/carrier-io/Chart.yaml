@@ -1,0 +1,41 @@
+apiVersion: v2
+name: carrier-io
+description: Helping organization to benefit from continuous non-functional testing
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - carrier-io
+  - pylon
+  - testing
+  - non-functional-testing
+  - performance-testing
+  - backend
+  - UI
+
+
+dependencies:
+  - name: redis
+    version: "17.x.x"
+    repository: https://charts.bitnami.com/bitnami
+  - name: rabbitmq
+    version: "11.x.x"
+    repository: https://charts.bitnami.com/bitnami
+  - name: postgresql
+    version: "12.x.x"
+    repository: https://charts.bitnami.com/bitnami
+  - name: vault
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami
+  - name: minio
+    version: 12.x.x
+    repository: https://charts.bitnami.com/bitnami
+  - name: influxdb
+    version: 4.12.x
+    repository: https://helm.influxdata.com/
+  - name: keycloak
+    version: 15.x.x
+    repository: https://charts.bitnami.com/bitnami
+  - name: traefik
+    version: 23.x.x
+    repository: https://traefik.github.io/charts

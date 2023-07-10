@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.pylon.name }}
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.services.pylon.type }}
+  ports:
+    - port: {{ .Values.services.pylon.port }}
+      {{- if .Values.services.pylon.nodePort }}
+      nodePort: {{ .Values.services.pylon.nodePort }}
+      {{- end }}
+      targetPort: {{ .Values.services.pylon.targetPort }}
+      protocol: TCP
+  selector:
+    {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon" "release" .Release.Name) | nindent 4 }}

@@ -1,0 +1,27 @@
+dependencies:
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.11.6
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.16.2
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.5.8
+- name: vault
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.2.4
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.6.4
+- name: influxdb
+  repository: https://helm.influxdata.com/
+  version: 4.12.2
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.1.4
+- name: traefik
+  repository: https://traefik.github.io/charts
+  version: 23.1.0
+digest: sha256:c414deeeb964ba2efd1f465b78ea08584043208213549871bfe09dd15488824d
+generated: "2023-06-22T13:18:00.461847427+02:00"

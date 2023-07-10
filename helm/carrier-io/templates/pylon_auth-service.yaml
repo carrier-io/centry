@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.pylon_auth.name }}
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.services.pylon_auth.type }}
+  ports:
+    - port: {{ .Values.services.pylon_auth.port }}
+      {{- if .Values.services.pylon_auth.nodePort }}
+      nodePort: {{ .Values.services.pylon_auth.nodePort }}
+      {{- end }}
+      targetPort: {{ .Values.services.pylon_auth.targetPort }}
+      protocol: TCP
+  selector:
+    {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon_auth" "release" .Release.Name) | nindent 4 }}

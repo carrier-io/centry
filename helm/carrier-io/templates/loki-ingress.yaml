@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.services.loki.name }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - http:
+        paths:
+          - path: "/loki"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.loki.name }}
+                port:
+                  number: {{ .Values.services.loki.port }}

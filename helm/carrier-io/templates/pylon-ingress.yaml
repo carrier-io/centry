@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.services.pylon.name }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ .Values.services.pylon.name }}-traefik-middleware@kubernetescrd
+    nginx.ingress.kubernetes.io/proxy-body-size: "40m"
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ .Values.services.pylon.name }}
+            port:
+              number: {{ .Values.services.pylon.port }}
+

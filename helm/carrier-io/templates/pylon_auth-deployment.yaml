@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.pylon_auth.name }}-deployment
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon_auth" "release" .Release.Name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrier-io.specificSelectorLabels" (dict "name" "pylon_auth" "release" .Release.Name) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "carrier-io.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.services.pylon_auth.name }}-container
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.pylon_auth.repository }}:{{ .Values.images.pylon_auth.tag }}"
+          imagePullPolicy: {{ .Values.images.pylon_auth.pullPolicy }}
+# to be able to exec into the container on failure, uncomment the following lines:
+#          command: ["/bin/sh","-c"]
+#          args: ["python -m pylon.main || sleep infinity"]
+          ports:
+            - containerPort: {{ .Values.images.pylon_auth.containerPort }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/pylon_auth
+              name: claim0
+            - mountPath: /data/config
+              name: config
+          envFrom:
+            - configMapRef:
+                name: env
+          env:
+            - name: CORE_CONFIG_SEED
+              value: "file:/data/config/pylon_auth.yml"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: claim0
+          persistentVolumeClaim:
+            claimName: {{ .Values.services.pylon_auth.name }}-claim0
+        - name: config
+          configMap:
+            name: {{ .Values.services.pylon_auth.name }}-config-local
