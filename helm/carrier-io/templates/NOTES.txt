@@ -1,1 +1,32 @@
-The application has been published on the root URL of the main ingress. Don't forget to set the same hostname/IP in the `values.yaml` file under the `global.app.host` entry. If access to carrier does not work, as a workaround, try to set up NodePort for traefik and connect to it directly (see the values.yaml for the traefik config).
+Carrier.io has been published on the root URL of the main ingress:
+------------------------------------
+    http://{{ .Values.global.app.host }}:{{ .Values.global.app.port }}/
+------------------------------------
+(If this is not correct, set the correct hostname/IP and port in the `values.yaml` file under the `global.app.host` and `global.app.port` entries.)
+
+
+In order to make this setup fully functional, some manual workarounds are required (until the codebase is potentially patched to change these defaults):
+
+1)
+Make components connect internally inside the cluster.
+In the Administration -> Secrets view, change the following secrets to the provided values:
+---------------------------------------------------------------------------------------------
+influx_ip       {{ .Values.influxdb.fullnameOverride }}
+loki_host       http://{{ .Values.services.loki.name }}   # it really has to be like this!
+rabbit_host     {{ .Values.rabbitmq.fullnameOverride }}
+
+2)
+For EACH project which is created, change the rabbitmq credentials so that job execution can correctly connect to it.
+After creating a project, in the Project -> Configuration -> Secrets view, change the following secrets to the provided values:
+-------------------------------------------------------------------------------------------------------------------------------
+rabbit_project_user         {{ .Values.rabbitmq.auth.username }}
+rabbit_project_password     {{ .Values.rabbitmq.auth.password }}
+rabbit_project_vhost        carrier
+
+3)
+Set up a new kubernetes integration in the Adminitration -> Integrations view or in the Project -> Configuration -> Integrations view
+in order to be able to execute jobs in your cluster, which requires dynamic provisioning through k8s API.
+For this, a new service account has to be created with adequate permissions and roles (or simply as an admin for testing purposes).
+Additionally, a new token is required for this service account, that can be provided to carrier.io.
+
+Happy continuous testing with carrier.io!

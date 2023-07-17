@@ -39,6 +39,8 @@ services:
     targetPort: 8080
   interceptor:
     name: interceptor-carrier
+  interceptor_internal:
+    name: interceptor-internal-carrier
   loki:
     name: carrier-loki  # hostname is hardcoded in carrier, don't change this value until it's fixed
     type: ClusterIP
@@ -142,6 +144,10 @@ minio:
     - name: MINIO_API_SELECT_PARQUET
       value: "on"
   fullnameOverride: minio-carrier
+  persistence:
+    enabled: true
+    annotations:
+      "helm.sh/resource-policy": "keep"
 
 influxdb:
   setDefaultUser:
