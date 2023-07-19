@@ -18,9 +18,6 @@ services:
       CURL_CA_BUNDLE: /etc/ssl/certs/custom-ca-cert.pem
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
-  grafana:
-    volumes:
-      - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro
   traefik:
     volumes:
       - $CUSTOM_CA_CERT:/etc/ssl/certs/custom-ca-cert.pem:ro

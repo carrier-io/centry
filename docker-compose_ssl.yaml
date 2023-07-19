@@ -20,12 +20,6 @@ services:
       - 'traefik.http.routers.loki.tls=true'
       - 'traefik.http.routers.loki.tls.certresolver=le'
 
-  grafana:
-    labels:
-      - 'traefik.http.routers.grafana.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/grafana`)'
-      - 'traefik.http.routers.grafana.tls=true'
-      - 'traefik.http.routers.grafana.tls.certresolver=le'
-
   pylon:
     labels:
       - 'traefik.http.routers.pylon.rule=Host(`$APP_DOMAIN`) && PathPrefix(`/`)'

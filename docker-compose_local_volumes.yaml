@@ -19,7 +19,3 @@ services:
   influx:
     volumes:
       - ${VOLUMES_PATH}/influx:/var/lib/influxdb
-
-  grafana:
-    volumes:
-      - ${VOLUMES_PATH}/grafana:/var/lib/grafana
