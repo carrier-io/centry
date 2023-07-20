@@ -115,6 +115,7 @@ rpc:
     hmac_digest: sha512
     callback_workers: 16
   id_prefix: "core_"
+  # trace: true
 
 # Module/config storage
 storage:
@@ -129,7 +130,9 @@ storage:
 # Loki logging settings
 loki:
   buffering: true
-  buffer_capacity: 70
+  buffer_capacity: 1000
+  buffer_flush_interval: 120
+  buffer_flush_deadline: 300
   include_node_name: true
   include_level_name: true
   include_logger_name: true
