@@ -1,6 +1,7 @@
 #DIRECT_IP=YOUR_IP_HERE
 INTERFACE ?= lo
 SSL=false
+LOCAL_VOLUMES=false
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
@@ -24,7 +25,7 @@ all:
 	@echo If needed change conifguration in config/pylon.yml
 	@echo More in README.md
 	@echo ----------------------------------------
-	@echo 2. Configure external DEV_IP in .env file
+	@echo 2. Configure external APP_IP in .env file
 	@echo To do so run \`make list_interfaces\`
 	@echo This will show list of interfaces and their corresponding ipv4
 	@echo Choose the interface through which you have access
@@ -38,21 +39,22 @@ ip:
 	@echo DIRECT_IP = $(DIRECT_IP)
 	@echo INTERFACE = $(INTERFACE)
     ifneq ($(DIRECT_IP),)
-		@echo  Setting DEV_IP in .env to \`$(DIRECT_IP)\`
+		@echo  Setting APP_IP in .env to \`$(DIRECT_IP)\`
 		$(eval IP=$(DIRECT_IP))
     else
     ifneq ($(INTERFACE),)
-		@echo  Setting DEV_IP in .env with ipv4 for \`$(INTERFACE)\` interface
+		@echo  Setting APP_IP in .env with ipv4 for \`$(INTERFACE)\` interface
 		$(eval IP=$(SET_IP))
     else
 		$(error "It is mandatory to set at least one of DIRECT_IP or INTERFACE environment variables! (e.g. `export INTERFACE=eth0` before calling `make up...`)")
     endif
     endif
-	sed -i -e "s+DEV_IP=.*+DEV_IP=$(IP)+g" .env
+	sed -i -e "s+APP_IP=.*+APP_IP=$(IP)+g" .env
 	@echo DONE with IP=$(IP)
 
 fix_permissions:
 	chmod -R a+rx ./config
+	chmod -R 700 ./config/traefik/
 
 config/pylon.yml:
 	./configure_pylon.sh
@@ -66,12 +68,13 @@ configure_keycloak_import:
 	sed -i -e 's/"sslRequired": ".*"/"sslRequired": "${PARAM}"/' ./config/keycloak/carrier.json
 
 up: fix_permissions ip config/pylon.yml configure_keycloak_import
-	$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
-	@echo Select all the compose files to launch base on your needs
+	@echo Edit command based on your needs
 	@echo By default centry launches with local volumes
-	# to launch with docker volumes use:
-	#$(COMPOSE) up -d
-	
+    ifeq ($(LOCAL_VOLUMES), true)
+		$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
+    else
+		$(COMPOSE) up -d
+    endif
 
 up_with_custom_CA_cert: fix_permissions ip config/pylon.yml
     ifneq ($(CUSTOM_CA_CERT),)
