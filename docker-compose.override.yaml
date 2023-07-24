@@ -20,11 +20,6 @@ services:
     volumes:
       - influx-data:/var/lib/influxdb
 
-
-  grafana:
-    volumes:
-      - grafana-data:/var/lib/grafana
-
 volumes:
   postgre-data:
   rabbit-data:
