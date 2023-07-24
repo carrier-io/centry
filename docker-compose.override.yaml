@@ -26,4 +26,3 @@ volumes:
   redis-data:
   minio-data:
   influx-data:
-  grafana-data:
