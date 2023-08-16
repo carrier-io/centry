@@ -29,7 +29,7 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
-      branch: main
+      branch: beta-1.0
 #  skip:
 #    - ui_performance
 
@@ -60,16 +60,6 @@ configs:
       - s3_integration
       - email_base
       - email_template
-#      - system_reporter_email
-#      - security
-#      - security_scanner_zap
-#      - tasklets
-#      - shared_orch
-#      - engagements
-#      - kanban
-#      - issues
-#      - kb
-#      - reporter_engagement
 
 # Session storage
 sessions:
@@ -127,14 +117,14 @@ storage:
     config: config
 
 # Loki logging settings
-loki:
-  buffering: true
-  buffer_capacity: 70
-  include_node_name: true
-  include_level_name: true
-  include_logger_name: true
-  verify: true
-  url: ${LOKI_HOST}
+#loki:
+#  buffering: true
+#  buffer_capacity: 70
+#  include_node_name: true
+#  include_level_name: true
+#  include_logger_name: true
+#  verify: true
+#  url: ${LOKI_HOST}
 
 
 # Settings for Flask application
