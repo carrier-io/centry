@@ -1,0 +1,227 @@
+# Default values for carrier-io.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+images:
+  pylon:
+    repository: getcarrier/pylon
+    tag: "1.1.0"
+    pullPolicy: IfNotPresent
+    containerPort: 8080
+  pylon_auth:
+    repository: getcarrier/pylon
+    tag: "1.1.0"
+    pullPolicy: IfNotPresent
+    containerPort: 8080
+  interceptor:
+    repository: getcarrier/interceptor
+    tag: "beta-1.0"
+    pullPolicy: IfNotPresent
+    containerPort: 8080
+  loki:
+    repository: grafana/loki
+    tag: "2.3.0"
+    pullPolicy: IfNotPresent
+    containerPort: 3100
+
+services:
+  pylon:
+    name: pylon-carrier
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  pylon_auth:
+    name: pylon-auth-carrier
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  interceptor:
+    name: interceptor-carrier
+  interceptor_internal:
+    name: interceptor-internal-carrier
+  loki:
+    name: carrier-loki  # hostname is hardcoded in carrier, don't change this value until it's fixed
+    type: ClusterIP
+    port: 3100
+    targetPort: 3100
+
+
+global:
+  app:
+    # hostname or IP using which the app is accessible from the browser - CHANGE THIS TO MATCH YOUR SETUP
+    host: >>PUT HOSTNAME OR IP HERE<<
+    port: 80
+
+  postgresql:
+    auth:
+      database: carrier
+      username: carrier
+      password: password
+    service:
+      ports:
+        postgresql: 5432
+    fullnameOverride: postgres-carrier
+
+traefik:
+  ports:
+    web:
+#      nodePort: 32323 # if you would like to access traefik directly without the main ingress
+      forwardedHeaders:
+        trustedIPs: ['127.0.0.1/32']
+
+redis:
+  auth:
+    password: password
+  master:
+    name: carrier-redis
+    persistence:
+      enabled: true
+    extraArgs:
+      - "--appendonly"
+      - "yes"
+  replica:
+    replicaCount: 0
+  fullnameOverride: redis-carrier
+
+rabbitmq:
+  auth:
+    username: user
+    password: password
+  extraConfiguration: |-
+    default_vhost = carrier
+    default_permissions.configure = .*
+    default_permissions.read = .*
+    default_permissions.write = .*
+  service:
+    ports:
+      amqp: 5672
+      manager: 15672
+  fullnameOverride: carrier-rabbit  # hostname is hardcoded in some places in carrier, don't change here until it's fixed
+
+postgresql:
+  primary:
+    initdb:
+      args: "--data-checksums"
+      scriptsConfigMap: postgresql-scripts
+    extraEnvVars:
+      - name: POSTGRES_SCHEMAS
+        value: "carrier,keycloak"
+  fullnameOverride: postgres-carrier
+
+vault:
+  server:
+    readinessProbe:
+      enabled: false  # otherwise pylon is unable to initialize vault
+    containerPorts:
+      http: 8200
+      internal: 8201
+    config: |
+      {
+        "disable_mlock": true,
+        "listener": {
+          "tcp": {
+            "address": "[::]:{{ .Values.server.containerPorts.http }}",
+            "cluster_address": "[::]:{{ .Values.server.containerPorts.internal }}",
+            "tls_disable": 1
+          }
+        },
+        "storage": {
+          "postgresql": {
+            "connection_url": "postgres://{{ .Values.global.postgresql.auth.username }}:{{ .Values.global.postgresql.auth.password }}@{{ .Values.global.postgresql.fullnameOverride }}:{{ .Values.global.postgresql.service.ports.postgresql }}/{{ .Values.global.postgresql.auth.database }}?sslmode=disable"
+          }
+        },
+        "ui": false
+      }
+  fullnameOverride: vault-carrier
+
+minio:
+  auth:
+    rootUser: admin
+    rootPassword: password
+  extraEnvVars:
+    - name: MINIO_API_SELECT_PARQUET
+      value: "on"
+  fullnameOverride: minio-carrier
+  persistence:
+    enabled: true
+    annotations:
+      "helm.sh/resource-policy": "keep"
+
+influxdb:
+  setDefaultUser:
+    enabled: true
+    user:
+      username: influx_user
+      password: influx_pass
+  env:
+    - name: INFLUXDB_HTTP_ENABLED
+      value: "true"
+    - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
+      value: "0"
+  fullnameOverride: influx-carrier
+
+keycloak:
+  fullnameOverride: keycloak-carrier
+  httpRelativePath: /auth/
+  postgresql:
+    enabled: false
+  externalDatabase:
+    host: "{{ .Values.global.postgresql.fullnameOverride }}"
+    port: "5432"
+    database: "carrier"
+    user: "carrier"
+    password: "password"
+  extraVolumes:
+    - name: config
+      configMap:
+        name: "{{ .Values.fullnameOverride }}-config-local"
+  extraVolumeMounts:
+    - name: config
+      mountPath: /realm/for_import/carrier.json
+      subPath: carrier.json
+    - name: config
+      mountPath: /opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json
+      subPath: admin.json
+    - name: config
+      mountPath: /tmp/disablessl.sh
+      subPath: disablessl.sh
+  extraEnvVars:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.import=/realm/for_import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+
+
+imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

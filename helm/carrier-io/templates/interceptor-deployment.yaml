@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.interceptor.name }}-deployment
+  labels:
+    {{- include "carrier-io.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "carrier-io.specificSelectorLabels" (dict "name" "interceptor" "release" .Release.Name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrier-io.specificSelectorLabels" (dict "name" "interceptor" "release" .Release.Name) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "carrier-io.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.services.interceptor.name }}-container
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.interceptor.repository }}:{{ .Values.images.interceptor.tag }}"
+          imagePullPolicy: {{ .Values.images.interceptor.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.images.interceptor.containerPort }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: env
+          env:
+            - name: CPU_CORES
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: INTERPECTOR_TASKS
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: RABBITMQ_PASSWORD
+            - name: RABBIT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: RABBITMQ_USER
+            - name: LOKI_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: APP_HOST
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
