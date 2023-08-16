@@ -137,3 +137,5 @@ tmp
 /pylon_worker
 pylon.yml
 /volumes
+
+/helm/carrier-io/charts
