@@ -1,7 +1,7 @@
 #DIRECT_IP=YOUR_IP_HERE
 INTERFACE ?= lo
 SSL=false
-LOCAL_VOLUMES=false
+LOCAL_VOLUMES=true
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig

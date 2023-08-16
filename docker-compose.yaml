@@ -90,7 +90,7 @@ services:
     container_name: carrier-vault
 
   minio:
-    image: minio/minio:latest
+    image: minio/minio:RELEASE.2023-06-29T05-12-28Z
     command: server /data
     logging:
       driver: "json-file"
@@ -126,7 +126,7 @@ services:
 
   interceptor:
     platform: linux/amd64
-    image: getcarrier/interceptor:latest
+    image: getcarrier/interceptor:beta-1.0
     logging:
       driver: "json-file"
       options:
@@ -151,7 +151,7 @@ services:
 
   interceptor_internal:
     platform: linux/amd64
-    image: getcarrier/interceptor:latest
+    image: getcarrier/interceptor:beta-1.0
     logging:
       driver: "json-file"
       options:
