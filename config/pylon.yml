@@ -35,31 +35,31 @@ modules:
 
 configs:
   market:
-    local_preordered_plugins:
+    preordered_plugins:
       - design-system
       - auth
       - projects
       - shared
       - tasks
       - secrets
-      - backend_performance
       - artifacts
       - theme
       - integrations
       - reporter_email
       - reporter_jira
-      - processing_severity_filter
       - scheduling
       - admin
-      - ui_performance
       - aws_integration
       - azure_devops
       - kubernetes
       - gcp_integration
-      - performance_analysis
       - s3_integration
       - email_base
       - email_template
+      - prompts
+      - open_ai
+      - vertex_ai
+      - open_ai_azure
 #      - system_reporter_email
 #      - security
 #      - security_scanner_zap

@@ -36,7 +36,7 @@ modules:
 
 configs:
   market:
-    local_preordered_plugins:
+    preordered_plugins:
       - design-system
       - auth
       - projects
