@@ -126,7 +126,6 @@ services:
     container_name: carrier-influx
 
   interceptor:
-    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
@@ -153,7 +152,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   interceptor_internal:
-    platform: linux/amd64
     image: getcarrier/interceptor:latest
     logging:
       driver: "json-file"
