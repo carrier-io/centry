@@ -31,6 +31,7 @@ modules:
         type: git
         delete_git_dir: false
         depth: null
+        branch: main
       source: https://github.com/carrier-io/market.git
 
 configs:
@@ -63,6 +64,15 @@ configs:
     client_id: "carrier-oidc"
     client_secret: "${KEYCLOAK_SECRET}"
   #
+#  auth_saml:
+#    url_prefix: "/saml"
+#    authn_destination: "https://access-staging.epam.com/auth/realms/plusx/protocol/saml"
+#    logout_destination: "https://access-staging.epam.com/auth/realms/plusx/protocol/saml"
+#    saml_issuer: "https://public.getcarrier.io/forward-auth/"
+#    sp_key: ""
+#    sp_cert: ""
+#    idp_cert: ""
+    
   auth_init:
     initial_global_admins:
     - admin
@@ -135,18 +145,19 @@ storage:
     config: config
 
 # Loki logging settings
-loki:
-  buffering: true
-  buffer_capacity: 20
-  include_node_name: true
-  include_level_name: true
-  include_logger_name: true
-  verify: true
-  url: ${LOKI_HOST}
+#loki:
+#  buffering: true
+#  buffer_capacity: 20
+#  include_node_name: true
+#  include_level_name: true
+#  include_logger_name: true
+#  verify: true
+#  url: ${LOKI_HOST}
 
 
 # Settings for Flask application
 application:
+  # SERVER_NAME: our.domain.here
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
   SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd

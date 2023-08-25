@@ -1,7 +1,7 @@
 #DIRECT_IP=YOUR_IP_HERE
 INTERFACE ?= lo
-SSL=false
-LOCAL_VOLUMES=false
+SSL=true
+LOCAL_VOLUMES=true
 REGEX_IFACE := ^[^[:space:]]*:
 REGEX_IPV4 := inet \K([0-9]{1,3}[\.]){3}[0-9]{1,3}
 IFCONFIG_CMD := /sbin/ifconfig
@@ -71,7 +71,7 @@ up: fix_permissions ip config/pylon.yml configure_keycloak_import
 	@echo Edit command based on your needs
 	@echo By default centry launches with local volumes
     ifeq ($(LOCAL_VOLUMES), true)
-		$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml up -d
+		$(COMPOSE) -f docker-compose.yaml -f docker-compose_local_volumes.yaml -f docker-compose_ssl.yaml up -d
     else
 		$(COMPOSE) up -d
     endif
