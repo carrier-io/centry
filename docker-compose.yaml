@@ -235,7 +235,7 @@ services:
     container_name: carrier-loki
 
   pylon:
-    image: getcarrier/pylon:1.1.0
+    image: getcarrier/pylon:latest
     logging:
       driver: "json-file"
       options:
@@ -269,7 +269,7 @@ services:
       - 'carrier=pylon'
 
   pylon_auth:
-    image: getcarrier/pylon:1.1.0
+    image: getcarrier/pylon:latest
     logging:
       driver: "json-file"
       options:
