@@ -42,7 +42,6 @@ configs:
       - projects
       - shared
       - tasks
-      - security
       - secrets
       - artifacts
       - theme
@@ -53,6 +52,9 @@ configs:
       - aws_integration
       - azure_devops
       - kubernetes
+      - s3_integration
+      - email_base
+      - email_template
       - prompts
       - open_ai
       - vertex_ai
