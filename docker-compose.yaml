@@ -243,8 +243,11 @@ services:
       - 8081:8080
     labels:
       - 'traefik.enable=true'
+      - 'traefik.http.routers.keycloak.entrypoints=https'
       - 'traefik.http.routers.keycloak.rule=PathPrefix(`/auth`)'
       - 'traefik.http.routers.keycloak.tls=true'
+      - 'traefik.http.routers.keycloak-http.entrypoints=http'
+      - 'traefik.http.routers.keycloak-http.rule=PathPrefix(`/auth`)'
       - 'traefik.http.services.keycloak.loadbalancer.server.port=8080'
       - 'carrier=keycloak'
 
@@ -265,8 +268,11 @@ services:
     command: -config.file=/etc/loki/local-config.yaml -table-manager.retention-period=$RETENTION_PERIOD -table-manager.retention-deletes-enabled=$RETENTION_DELETES_ENABLE
     labels:
       - 'traefik.enable=true'
+      - 'traefik.http.routers.loki.entrypoints=https'
       - 'traefik.http.routers.loki.rule=PathPrefix(`/loki`)'
       - 'traefik.http.routers.loki.tls=true'
+      - 'traefik.http.routers.loki-http.entrypoints=http'
+      - 'traefik.http.routers.loki-http.rule=PathPrefix(`/loki`)'
       - 'traefik.http.services.loki.loadbalancer.server.port=3100'
       - 'carrier=loki'
     container_name: carrier-loki
@@ -299,8 +305,11 @@ services:
       - pylon
     labels:
       - 'traefik.enable=true'
+      - 'traefik.http.routers.pylon.entrypoints=https'
       - 'traefik.http.routers.pylon.rule=PathPrefix(`/`)'
       - 'traefik.http.routers.pylon.tls=true'
+      - 'traefik.http.routers.pylon-http.entrypoints=http'
+      - 'traefik.http.routers.pylon-http.rule=PathPrefix(`/`)'
       - 'traefik.http.services.pylon.loadbalancer.server.port=8080'
       - 'traefik.http.middlewares.pylon-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=rpc'
       - 'traefik.http.middlewares.pylon-auth.forwardauth.authResponseHeaders=X-Auth-Type,X-Auth-ID,X-Auth-Reference'
@@ -337,8 +346,11 @@ services:
       - pylon
     labels:
       - 'traefik.enable=true'
+      - 'traefik.http.routers.pylon-auth.entrypoints=https'
       - 'traefik.http.routers.pylon-auth.rule=PathPrefix(`/forward-auth`)'
       - 'traefik.http.routers.pylon-auth.tls=true'
+      - 'traefik.http.routers.pylon-auth-http.entrypoints=http'
+      - 'traefik.http.routers.pylon-auth-http.rule=PathPrefix(`/forward-auth`)'
       - 'traefik.http.services.pylon-auth.loadbalancer.server.port=8080'
       - 'carrier=pylon-auth'
 
