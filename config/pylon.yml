@@ -115,6 +115,8 @@ configs:
   security_dependency:
     sca_image: "getcarrier/sast@sha256:97c8c4f0eca1e99968a9f2cbed12a4ace1b5056452f0cf5ec001ab1824efec57"
     control_tower_image: "getcarrier/control_tower@sha256:68c4c2effdc100a824b475208b1ef0d1037bc021718c7542594f9dc4f30dc849"
+  theme:
+    change_password_url: "/auth/realms/carrier/account/password"
 
 # Session storage
 sessions:
