@@ -179,8 +179,8 @@ loki:
 # Settings for Flask application
 application:
   # EXPLAIN_TEMPLATE_LOADING: true
+  # PREFERRED_URL_SCHEME: https
   # Sessions
-  PREFERRED_URL_SCHEME: https
   SECRET_KEY: $APP_SECRET_KEY
   SESSION_COOKIE_NAME: session_id
 
