@@ -205,8 +205,7 @@ services:
 
 
   keycloak:
-    # image: aspect13/keycloak:9.0.0
-    image: quay.io/keycloak/keycloak@sha256:cff31dc6fbb0ab0b66176b990e6b9e262fa74a501abb9a4bfa4a529cbc8a526a
+    image: aspect13/keycloak@sha256:8ab8593ddfd5c15678bbda3a039078cf504807d1541456d71f03df28f26d692c
     security_opt:
       - seccomp:unconfined
     logging:
@@ -234,6 +233,7 @@ services:
       - DB_PASSWORD=$POSTGRES_PASSWORD
       - KEYCLOAK_IMPORT=/tmp/carrier.json
       - KC_SPI_THEME_DEFAULT=carrier
+      - KEYCLOAK_DEFAULT_THEME=carrier
       - KU=$KEYCLOAK_USER
       - KP=$KEYCLOAK_PASSWORD
       - PROXY_ADDRESS_FORWARDING=$PROXY_ADDRESS_FORWARDING
