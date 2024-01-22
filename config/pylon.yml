@@ -106,6 +106,12 @@ configs:
 #      - issues
 #      - kb
 #      - reporter_engagement
+  security:
+    dast_image: "getcarrier/dast@sha256:768d1ab89f5b44f668072d19778e6f4b46a632bcd01ea6a7d6202dfa07cee4dd"
+  security_sast:
+    sast_image: "getcarrier/sast@sha256:97c8c4f0eca1e99968a9f2cbed12a4ace1b5056452f0cf5ec001ab1824efec57"
+  security_dependency:
+    sca_image: "getcarrier/sast@sha256:97c8c4f0eca1e99968a9f2cbed12a4ace1b5056452f0cf5ec001ab1824efec57"
 
 # Session storage
 sessions:
