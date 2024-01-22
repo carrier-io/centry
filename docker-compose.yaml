@@ -150,7 +150,7 @@ services:
 
   interceptor:
     platform: linux/amd64
-    image: getcarrier/interceptor@sha256:b38c1d97972f08680b7f1894780a369f8cad8c160fe66e35a7da258ca70acc8c
+    image: getcarrier/interceptor@sha256:7ff91ee34bb29f80bf1f5967fb672f3dfbc4f910262849287633297886f8244d
     security_opt:
       - seccomp:unconfined
     logging:
@@ -179,7 +179,7 @@ services:
 
   interceptor_internal:
     platform: linux/amd64
-    image: getcarrier/interceptor@sha256:b38c1d97972f08680b7f1894780a369f8cad8c160fe66e35a7da258ca70acc8c
+    image: getcarrier/interceptor@sha256:7ff91ee34bb29f80bf1f5967fb672f3dfbc4f910262849287633297886f8244d
     security_opt:
       - seccomp:unconfined
     logging:
