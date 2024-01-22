@@ -177,7 +177,7 @@ loki:
 application:
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
-#  PREFERRED_URL_SCHEME: https
+  PREFERRED_URL_SCHEME: https
   SECRET_KEY: $APP_SECRET_KEY
   SESSION_COOKIE_NAME: session_id
 
