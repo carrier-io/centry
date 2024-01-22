@@ -19,6 +19,7 @@ modules:
   #
   requirements:
     mode: relaxed
+    activation: bulk
     provider:
       type: folder
       path: /data/pylon_auth/requirements
@@ -58,6 +59,7 @@ configs:
   #
   auth_oidc:
     url_prefix: "/oidc"
+    url_mode: "request"
     authorization_endpoint: "${APP_HOST}/auth/realms/carrier/protocol/openid-connect/auth"
     token_endpoint: "http://keycloak:8080/auth/realms/carrier/protocol/openid-connect/token"
     token_endpoint_verify: false
@@ -86,14 +88,14 @@ configs:
 sessions:
   redis:
     host: redis
-    password: password
+    password: $REDIS_PASSWORD
   prefix: pylon_auth_session_
 
 # Traefik config
 # traefik:
 #   redis:
 #     host: redis
-#     password: password
+#     password: $REDIS_PASSWORD
 #   rootkey: traefik
 #   entrypoint: http
 #   rule: PathPrefix(`/forward-auth`)
@@ -107,7 +109,7 @@ events:
     host: rabbitmq
     port: 5672
     user: user
-    password: password
+    password: $RABBIT_PASSWORD
     vhost: carrier
     queue: events
     hmac_key: key
@@ -120,7 +122,7 @@ rpc:
     host: rabbitmq
     port: 5672
     user: user
-    password: password
+    password: $RABBIT_PASSWORD
     vhost: carrier
     queue: rpc
     hmac_key: key
@@ -132,7 +134,7 @@ rpc:
 storage:
   endpoint: minio:9000
   access_key: admin
-  secret_key: password
+  secret_key: $MINIO_SECRET_KEY
   secure: false
   buckets:
     module: module
@@ -155,7 +157,7 @@ loki:
 application:
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
-  SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
+  SECRET_KEY: $APP_SECRET_KEY
   SESSION_COOKIE_NAME: auth_session_id
 
 # dulwich git manager

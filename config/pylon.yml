@@ -13,6 +13,7 @@ modules:
   #
   requirements:
     mode: relaxed
+    activation: bulk
     provider:
       type: folder
       path: /data/pylon/requirements
@@ -107,14 +108,14 @@ configs:
 sessions:
   redis:
     host: redis
-    password: password
+    password: $REDIS_PASSWORD
   prefix: pylon_session_
 
 # Traefik config
 #traefik:
 #  redis:
 #    host: redis
-#    password: password
+#    password: $REDIS_PASSWORD
 #  rootkey: traefik
 #  entrypoint: https
 #  rule: PathPrefix(`/`)
@@ -127,7 +128,7 @@ events:
     host: rabbitmq
     port: 5672
     user: user
-    password: password
+    password: $RABBIT_PASSWORD
     vhost: carrier
     queue: events
     hmac_key: key
@@ -140,7 +141,7 @@ rpc:
     host: rabbitmq
     port: 5672
     user: user
-    password: password
+    password: $RABBIT_PASSWORD
     vhost: carrier
     queue: rpc
     hmac_key: key
@@ -153,7 +154,7 @@ rpc:
 storage:
   endpoint: minio:9000
   access_key: admin
-  secret_key: password
+  secret_key: $MINIO_SECRET_KEY
   secure: false
   buckets:
     module: module
@@ -177,7 +178,7 @@ application:
   # EXPLAIN_TEMPLATE_LOADING: true
   # Sessions
 #  PREFERRED_URL_SCHEME: https
-  SECRET_KEY: SecretDevKeyForLocalUseOnlyChangedOnProd
+  SECRET_KEY: $APP_SECRET_KEY
   SESSION_COOKIE_NAME: session_id
 
 # dulwich git manager

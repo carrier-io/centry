@@ -21,7 +21,8 @@
     address = ":443"
     [entryPoints.https.forwardedHeaders]
       insecure = true
-[certificatesResolvers.le.acme]
-  email = "some@email.com"
-  storage = "/config/acme.json"
-  [certificatesResolvers.le.acme.tlsChallenge]
+
+# [certificatesResolvers.le.acme]
+#   email = "some@email.com"
+#   storage = "/config/acme.json"
+#   [certificatesResolvers.le.acme.tlsChallenge]
