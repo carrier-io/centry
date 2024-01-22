@@ -6,3 +6,5 @@ CREATE TABLE vault_kv_store (
   CONSTRAINT pkey PRIMARY KEY (path, key)
 );
 CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
+
+CREATE SCHEMA IF NOT EXISTS "keycloak" AUTHORIZATION "carrier";
