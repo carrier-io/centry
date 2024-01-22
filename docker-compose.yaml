@@ -314,6 +314,7 @@ services:
       - 'traefik.http.middlewares.pylon-auth.forwardauth.address=http://pylon_auth:8080/forward-auth/auth?target=rpc'
       - 'traefik.http.middlewares.pylon-auth.forwardauth.authResponseHeaders=X-Auth-Type,X-Auth-ID,X-Auth-Reference'
       - 'traefik.http.routers.pylon.middlewares=pylon-auth@docker'
+      - 'traefik.http.routers.pylon-http.middlewares=pylon-auth@docker'
       - 'carrier=pylon'
 
   pylon_auth:
