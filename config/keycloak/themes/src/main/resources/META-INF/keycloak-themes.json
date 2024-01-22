@@ -1,6 +1,6 @@
 {
     "themes": [{
-        "name" : "carrier-login",
-        "types": [ "login" ]
+        "name" : "carrier",
+        "types": [ "account", "admin", "email", "login" ]
     }]
 }
