@@ -60,7 +60,7 @@ configs:
   auth_oidc:
     url_prefix: "/oidc"
     url_mode: "request"
-    logout_mode: "post"
+    logout_mode: "get"
     authorization_endpoint: "${APP_HOST}/auth/realms/carrier/protocol/openid-connect/auth"
     token_endpoint: "http://keycloak:8080/auth/realms/carrier/protocol/openid-connect/token"
     token_endpoint_verify: false
