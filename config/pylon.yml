@@ -106,13 +106,13 @@ configs:
       # - kb
       # - reporter_engagement
   security:
-    dast_image: "getcarrier/dast@sha256:768d1ab89f5b44f668072d19778e6f4b46a632bcd01ea6a7d6202dfa07cee4dd"
+    dast_image: "getcarrier/dast@sha256:3ed2c1302ad26ccd3a0efac879cd2b96caede16ff0cecca0b73729ea9718e1ab"
     control_tower_image: "getcarrier/control_tower@sha256:68c4c2effdc100a824b475208b1ef0d1037bc021718c7542594f9dc4f30dc849"
   security_sast:
-    sast_image: "getcarrier/sast@sha256:97c8c4f0eca1e99968a9f2cbed12a4ace1b5056452f0cf5ec001ab1824efec57"
+    sast_image: "getcarrier/sast@sha256:ce648c18b87a47dd32356a7dd49b32595f413eaa128a98baa6635d0d7faa40d9"
     control_tower_image: "getcarrier/control_tower@sha256:68c4c2effdc100a824b475208b1ef0d1037bc021718c7542594f9dc4f30dc849"
   security_dependency:
-    sca_image: "getcarrier/sast@sha256:97c8c4f0eca1e99968a9f2cbed12a4ace1b5056452f0cf5ec001ab1824efec57"
+    sca_image: "getcarrier/sast@sha256:ce648c18b87a47dd32356a7dd49b32595f413eaa128a98baa6635d0d7faa40d9"
     control_tower_image: "getcarrier/control_tower@sha256:68c4c2effdc100a824b475208b1ef0d1037bc021718c7542594f9dc4f30dc849"
   theme:
     change_password_url: "/auth/realms/carrier/account/password"
