@@ -278,7 +278,7 @@ services:
     container_name: carrier-loki
 
   pylon:
-    image: getcarrier/pylon@sha256:f4e2cbea500c613d4e1b4f930a587cf42cf49c676fcda30b1289456f7edaee09
+    image: getcarrier/pylon@sha256:f7048c3ec936d0b22f9906223ffaf058514863f50544549794e9afbcc5bf2a90
     security_opt:
       - seccomp:unconfined
     logging:
@@ -318,7 +318,7 @@ services:
       - 'carrier=pylon'
 
   pylon_auth:
-    image: getcarrier/pylon@sha256:f4e2cbea500c613d4e1b4f930a587cf42cf49c676fcda30b1289456f7edaee09
+    image: getcarrier/pylon@sha256:f7048c3ec936d0b22f9906223ffaf058514863f50544549794e9afbcc5bf2a90
     security_opt:
       - seccomp:unconfined
     logging:
