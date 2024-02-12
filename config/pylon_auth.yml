@@ -36,7 +36,7 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
-      branch: main
+      branch: cc03b0ea16fa436613f68e8a962f551ebe41c5d0
 
 configs:
   market:
@@ -160,7 +160,7 @@ application:
   # PREFERRED_URL_SCHEME: https
   # Sessions
   SECRET_KEY: $APP_SECRET_KEY
-  SESSION_COOKIE_NAME: auth_session_id
+  SESSION_COOKIE_NAME: carrier_auth_session_id
 
 # dulwich git manager
 git_manager:
