@@ -39,6 +39,8 @@ configs:
     local_preordered_plugins:
       - design-system
       - auth
+      - auth_manager
+      - auth_root
       - projects
       - shared
       - tasks
