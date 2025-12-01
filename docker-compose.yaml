@@ -125,7 +125,7 @@ services:
 
   interceptor:
     platform: linux/amd64
-    image: getcarrier/interceptor:latest
+    image: getcarrier/interceptor:beta-3.1
     logging:
       driver: "json-file"
       options:
@@ -152,7 +152,7 @@ services:
 
   interceptor_internal:
     platform: linux/amd64
-    image: getcarrier/interceptor:latest
+    image: getcarrier/interceptor:beta-3.1
     logging:
       driver: "json-file"
       options:
@@ -235,7 +235,8 @@ services:
     container_name: carrier-loki
 
   pylon:
-    image: getcarrier/pylon:latest
+    platform: linux/amd64
+    image: getcarrier/pylon:beta-3.1
     logging:
       driver: "json-file"
       options:
@@ -269,7 +270,8 @@ services:
       - 'carrier=pylon'
 
   pylon_auth:
-    image: getcarrier/pylon:latest
+    platform: linux/amd64
+    image: getcarrier/pylon:beta-3.1
     logging:
       driver: "json-file"
       options:

@@ -30,6 +30,7 @@ modules:
         delete_git_dir: false
         depth: null
       source: https://github.com/carrier-io/market.git
+      branch: beta-3.1
 #  skip:
 #    - ui_performance
 
@@ -38,65 +39,35 @@ configs:
     local_preordered_plugins:
       - design-system
       - auth
+      - auth_manager
+      - auth_root
       - projects
       - shared
       - tasks
-      - security
       - secrets
       - backend_performance
       - artifacts
       - theme
-      - security_scanner_zap
       - integrations
       - reporter_email
       - reporter_jira
-      - processing_severity_filter
       - scheduling
       - admin
       - ui_performance
-      - tasklets
       - aws_integration
-      - azure_devops
       - kubernetes
+      - gcp_integration
+      - performance_analysis
+      - s3_integration
+      - email_base
+      - email_template
       - shared_orch
+      - performance_test_suite
       - engagements
       - kanban
       - issues
-      - kb
       - reporter_engagement
-      - performance_analysis
-      - shared_orch
-      - security
-      - security_sast
-      - security_dependency
-      - security_analysis
-      - security_scanner_qualys
-      - security_scanner_nikto
-      - security_scanner_nmap
-      - security_scanner_sslyze
-      - security_scanner_w3af
-      - security_scanner_masscan
-      - security_scanner_aem
-      - security_scanner_zap
-      - security_scanner_trivy
-      - security_scanner_retirejs
-      - security_scanner_ruby
-      - security_scanner_safety
-      - security_scanner_python
-      - security_scanner_npm
-      - security_scanner_nodejsscan
-      - security_scanner_nodejs
-      - security_scanner_java
-      - security_scanner_insider
-      - security_scanner_gosec
-      - security_scanner_golang
-      - security_scanner_gitleaks
-      - security_scanner_dependencycheck
-      - security_scanner_csharp
-      - security_scanner_brakeman
-      - security_scanner_bandit
-      - security_scanner_spotbugs
-      - security_scanner_semgrep
+      - audit_logs
 
 # Session storage
 sessions:
