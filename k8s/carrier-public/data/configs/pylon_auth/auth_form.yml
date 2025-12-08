@@ -1,0 +1,3 @@
+users:
+- login: admin
+  password: ${DEFAULT_ADMIN_PASSWORD}

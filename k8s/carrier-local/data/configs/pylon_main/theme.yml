@@ -1,0 +1,2 @@
+logout_url: ${APP_PROTO}://${APP_HOST}/forward-auth/logout
+change_password_url: "#"

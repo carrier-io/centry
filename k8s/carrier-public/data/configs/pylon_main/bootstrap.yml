@@ -1,0 +1,119 @@
+plugin_repo:
+- type: github
+  namespace: centry-core
+  branch: carrier
+  #
+  metadata_provider:
+    type: pylon.core.providers.metadata.http
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+  #
+  source_provider:
+    type: pylon.core.providers.source.git
+    delete_git_dir: false
+    branch: carrier
+    depth: null
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+#
+- type: github
+  namespace: carrier-io
+  branch: main
+  #
+  metadata_provider:
+    type: pylon.core.providers.metadata.http
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+  #
+  source_provider:
+    type: pylon.core.providers.source.git
+    delete_git_dir: false
+    branch: main
+    depth: null
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+
+
+preordered_plugins:
+- shared
+- auth
+- admin
+- projects
+- secrets
+- artifacts
+- integrations
+- tasks
+- scheduling
+#
+- theme
+- design-system
+#
+- s3_integration
+#
+- usage
+#
+- logging_hub
+- eventnode_hub
+#
+# - prompts
+# - embeddings
+# - flows
+# - open_ai
+# - pgvector
+# - ai_dial
+# - open_ai_azure
+# - vertex_ai
+#
+- performance_analysis
+- backend_performance
+- ui_performance
+- aws_integration
+- kubernetes
+- gcp_integration
+- azure_devops_integration
+- reporter_jira
+- reporter_email
+- email_base
+- email_template
+#
+- shared_orch
+#- security
+# - security_sast
+# - security_dependency
+#- security_analysis
+# - security_scanner_qualys
+# - security_scanner_nikto
+# - security_scanner_nmap
+# - security_scanner_sslyze
+# - security_scanner_w3af
+# - security_scanner_masscan
+# - security_scanner_aem
+#- security_scanner_zap
+# - security_scanner_trivy
+# - security_scanner_retirejs
+# - security_scanner_ruby
+# - security_scanner_safety
+# - security_scanner_python
+# - security_scanner_npm
+# - security_scanner_nodejsscan
+# - security_scanner_nodejs
+# - security_scanner_java
+# - security_scanner_insider
+# - security_scanner_gosec
+# - security_scanner_golang
+# - security_scanner_gitleaks
+# - security_scanner_dependencycheck
+# - security_scanner_csharp
+# - security_scanner_brakeman
+# - security_scanner_bandit
+# - security_scanner_spotbugs
+# - security_scanner_semgrep
+#- processing_severity_filter
+#
+# - tasklets
+# - engagements
+# - kanban
+# - issues
+# - kb
+# - system_reporter_email
+# - reporter_engagement

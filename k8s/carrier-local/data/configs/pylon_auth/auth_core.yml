@@ -1,0 +1,11 @@
+db_url: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
+db_options:  # DB options
+  pool_pre_ping: true
+  pool_size: 100
+  max_overflow: 200
+
+auth_provider: form  # Main auth provider
+auth_denied_url: "${APP_PROTO}://${APP_HOST}/access_denied"  # URL for application-specific 'access denied' page
+
+default_login_url: "${APP_PROTO}://${APP_HOST}/"  # URL to redirect on login with no target set
+default_logout_url: "${APP_PROTO}://${APP_HOST}/"  # URL to redirect on logout with no target set

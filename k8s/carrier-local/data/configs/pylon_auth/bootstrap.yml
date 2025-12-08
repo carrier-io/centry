@@ -1,0 +1,45 @@
+plugin_repo:
+- type: github
+  namespace: centry-core
+  branch: carrier
+  #
+  metadata_provider:
+    type: pylon.core.providers.metadata.http
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+  #
+  source_provider:
+    type: pylon.core.providers.source.git
+    delete_git_dir: false
+    branch: carrier
+    depth: null
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+#
+- type: github
+  namespace: carrier-io
+  branch: main
+  #
+  metadata_provider:
+    type: pylon.core.providers.metadata.http
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+  #
+  source_provider:
+    type: pylon.core.providers.source.git
+    delete_git_dir: false
+    branch: main
+    depth: null
+    username: ${LICENSE_USERNAME}
+    password: ${LICENSE_PASSWORD}
+
+
+preordered_plugins:
+- auth_core
+#
+- auth_init
+- auth_mappers
+#
+- auth_form
+#
+- auth_idp_rpc

@@ -1,0 +1,30 @@
+settings:
+  app_ip: ${APP_HOST}
+  app_host: ${APP_PROTO}://${APP_HOST}
+  app_scheme: ${APP_PROTO}
+  #
+  arbiter_runtime: redis
+  redis_host: ${REDIS_HOST}
+  redis_password: ${REDIS_PASSWORD}
+  #
+  centry_use_influx: true
+  #
+  database_vendor: postgres
+  database_engine_options:
+    pool_pre_ping: true
+    pool_size: 100
+    max_overflow: 200
+  postgres_host: ${POSTGRES_HOST}
+  postgres_user: ${POSTGRES_USER}
+  postgres_password: ${POSTGRES_PASSWORD}
+  postgres_db: ${POSTGRES_DB}
+  #
+  secrets_engine: database
+  secrets_master_key: ${SECRETS_MASTER_KEY}
+  #
+  storage_engine: libcloud
+  storage_libcloud_driver: LOCAL
+  storage_libcloud_params:
+    kwargs:
+      key: /data/libcloud/storage
+  storage_libcloud_encoder: base64

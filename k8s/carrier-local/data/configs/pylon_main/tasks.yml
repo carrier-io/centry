@@ -1,0 +1,3 @@
+control_tower_task_path: https://github.com/carrier-io/control_tower/releases/download/tasknode/control-tower.zip
+executor_runtime: kubernetes
+use_logging_hub: true

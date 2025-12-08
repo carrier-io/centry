@@ -1,0 +1,5 @@
+event_node:
+  host: ${REDIS_HOST}
+  port: 6379
+  password: ${REDIS_PASSWORD}
+  event_queue: centry_logs

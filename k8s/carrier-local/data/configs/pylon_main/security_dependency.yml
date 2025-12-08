@@ -1,0 +1,2 @@
+use_sio_logs: true
+control_tower_image: "getcarrier/control_tower:tasknode"
