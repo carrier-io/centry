@@ -1,4 +1,4 @@
-#DIRECT_IP=YOUR_IP_HERE
+DIRECT_IP=localhost
 INTERFACE ?= lo
 SSL=false
 LOCAL_VOLUMES=false
