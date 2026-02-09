@@ -132,4 +132,58 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Confirm the implementation follows the technical plan
    - Report final status with summary of completed work
 
+10. **Capture Lessons Learned** (Post-Implementation Review):
+
+   After completing implementation, ask the user:
+
+   ```
+   ## Post-Implementation Review
+
+   Implementation complete! During this implementation, did you encounter any:
+
+   1. **Constitution Issues**:
+      - Repeated mistakes or confusion about principles?
+      - Missing guidance in the constitution?
+      - Unclear requirements that should be added to governance?
+
+   2. **Specification Issues**:
+      - Ambiguous requirements that caused rework?
+      - Missing acceptance criteria that should be standard?
+      - Edge cases not covered in the spec template?
+
+   3. **Planning Issues**:
+      - Technical decisions that were harder than expected?
+      - Missing research areas that should be standard?
+      - Architecture patterns that should be documented?
+
+   4. **Common Pitfalls**:
+      - Bugs or mistakes that happened repeatedly?
+      - Steps that were forgotten or overlooked?
+      - Integration issues that should be highlighted?
+
+   Would you like to document any lessons learned for future constitution updates?
+
+   Options:
+   - Reply "yes" - I'll help you format and add to lessons-learned.md
+   - Reply "no" - Skip this step
+   - Reply with specific lesson - I'll add it directly
+   ```
+
+   **If user provides lesson learned**:
+   - Help format it according to `.specify/memory/lessons-learned.md` template
+   - Read the lessons-learned.md file
+   - Add the new entry under "Pending Amendments" section
+   - Write the updated file back
+   - Suggest: "You can run `/speckit.amend` later to apply these lessons to the constitution"
+
+   **Format for lessons-learned.md**:
+   ```markdown
+   ### [TODAY's DATE] - [Feature Name from spec]
+   **Context**: [What feature was being implemented]
+   **Problem**: [What went wrong or was unclear]
+   **Root Cause**: [Why it happened - which principle/process gap]
+   **Proposed Amendment**: [Which principle/section should be updated and how]
+   **Priority**: [High/Medium/Low based on impact and frequency]
+   ```
+
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit.tasks` first to regenerate the task list.
