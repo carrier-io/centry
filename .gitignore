@@ -137,3 +137,6 @@ tmp
 /pylon_worker
 pylon.yml
 /volumes
+
+# Speckit generated specifications (keep templates in .specify/ but not generated specs)
+/specs/
