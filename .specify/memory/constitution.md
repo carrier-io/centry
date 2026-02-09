@@ -1,23 +1,22 @@
 <!--
 Sync Impact Report:
-Version: 1.0.0 → 1.1.0 (Documentation Integration Amendment)
+Version: 1.1.0 → 1.2.0 (Branch Strategy Amendment)
 Modified Principles:
-  - Principle I: Added documentation reference (PLUGIN_SYSTEM.md, PLUGINS_REFERENCE.md)
-  - Principle II: Added documentation reference (FRONTEND_BACKEND.md)
-  - Principle III: Added documentation reference (DEVELOPMENT_GUIDE.md)
-  - Principle IV: Added documentation reference (DEVELOPMENT_GUIDE.md)
+  - Principle I: Added "Branch Strategy for Plugin Development" section (CRITICAL workflow rule)
 Added Sections:
-  - "Development Documentation" section with mandatory reading requirements
-  - Enhanced "Feature Development Process" with documentation integration
-  - Documentation maintenance requirements in Governance
+  - Branch Strategy for Plugin Development (dual-repository model: Centry on speckit-dev, plugins on feature branches)
 Removed Sections: N/A
+Reason: Lesson learned from feature 001-ui-quality-gate-metrics - incorrect feature branch created in Centry repo instead of plugin repo
 Templates Status:
-  ✅ plan-template.md - Verified constitution check section aligns with principles
-  ✅ spec-template.md - Verified requirements align with plugin-first and testing principles
-  ✅ tasks-template.md - Verified task structure reflects test-first and independent deployment principles
-  ⚠️ agent-file-template.md - Generic template, no updates needed but should be monitored
-Follow-up TODOs: Consider adding dedicated TESTING.md and MIGRATIONS.md to docs/
-Version Bump Rationale: MINOR - New section added (Development Documentation) and materially expanded guidance without changing existing principles
+  ⚠️ tasks-template.md - T001 needs updated validation and plugin repository navigation commands
+  ⚠️ speckit.implement.md - Needs branch validation step before Phase 1 execution
+  ✅ plan-template.md - No changes needed (constitution check references principles)
+  ✅ spec-template.md - No changes needed (user-focused, no branching details)
+Follow-up TODOs:
+  - Update tasks-template.md T001 with dual-repository workflow
+  - Add branch validation to speckit.implement command
+  - Consider adding pre-flight check script for branch verification
+Version Bump Rationale: MINOR - New critical section added to existing principle, significantly expands workflow guidance affecting all plugin development
 -->
 
 # Centry Platform Constitution
@@ -38,6 +37,36 @@ Every feature MUST be implemented as a standalone plugin with clear boundaries a
 **Rationale:** Plugin architecture ensures modularity, independent deployment, and marketplace distribution. It enables teams to work in parallel without merge conflicts and supports gradual feature rollout.
 
 **Resources:** Complete plugin structure guide in `docs/PLUGIN_SYSTEM.md` with lifecycle, dependencies, and communication patterns. Study existing plugins in `docs/PLUGINS_REFERENCE.md` (32+ examples) before creating new plugins.
+
+**Branch Strategy for Plugin Development:**
+
+⚠️ **CRITICAL**: The Centry repository MUST remain on the `speckit-dev` branch for all speckit-based development work.
+
+**Dual Repository Model:**
+```
+Centry Repository (Main Project):
+  - Branch: speckit-dev (ALWAYS - NEVER create feature branches)
+  - Purpose: Contains speckit templates (.specify/), generated specs (specs/), and documentation
+  - Commits: Speckit configuration, lessons learned, constitution amendments
+
+Plugin Repository (pylon/plugins/<plugin_name>/):
+  - Branch: Create feature branches here (e.g., 001-feature-name)
+  - Purpose: Plugin implementation code
+  - Commits: All feature implementation changes
+  - Independent: Separate Git history from Centry repo
+```
+
+**Workflow Rules:**
+1. **Before starting implementation**: Verify Centry repo is on `speckit-dev` branch
+2. **Feature branch creation**: Navigate to plugin directory first
+   ```bash
+   cd pylon/plugins/<plugin_name>
+   git checkout -b 001-feature-name
+   ```
+3. **Commits**: Implementation code commits go to plugin repo, spec/config commits go to Centry repo
+4. **Never**: Create feature branches in Centry repo during speckit workflows
+
+**Rationale**: This dual-repository model separates speckit governance (templates, specs) from implementation code (plugins). The `speckit-dev` branch serves as the stable base for all speckit work, while plugin repositories maintain independent feature branches for code changes.
 
 ### II. Contract-Based Integration
 
@@ -428,4 +457,4 @@ Runtime development guidance for AI agents and developers is maintained in:
 
 Refer to the agent file for technology-specific conventions; refer to technical documentation for implementation patterns; refer to this constitution for architectural principles and governance.
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-09 | **Last Amended**: 2026-02-09
+**Version**: 1.2.0 | **Ratified**: 2026-02-09 | **Last Amended**: 2026-02-09
